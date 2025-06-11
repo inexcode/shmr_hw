@@ -2,8 +2,10 @@ import 'package:decimal/decimal.dart';
 import 'package:shmr_hw/logic/models/account.dart';
 import 'package:shmr_hw/logic/models/category.dart';
 import 'package:shmr_hw/logic/models/transaction.dart';
+import 'package:shmr_hw/logic/repositories/abstract/transactions.dart';
 
-abstract class FakeTransactionsRepository {
+class FakeTransactionsRepository implements TransactionsRepository {
+  @override
   Future<Transaction> createTransaction({
     required final TransactionRequest request,
   }) async {
@@ -20,6 +22,7 @@ abstract class FakeTransactionsRepository {
     );
   }
 
+  @override
   Future<TransactionResponse> getTransaction({
     required final int id,
   }) async {
@@ -46,6 +49,7 @@ abstract class FakeTransactionsRepository {
     );
   }
 
+  @override
   Future<TransactionResponse> updateTransaction({
     required final int id,
     required final TransactionRequest request,
@@ -73,6 +77,7 @@ abstract class FakeTransactionsRepository {
     );
   }
 
+  @override
   Future<void> deleteTransaction({
     required final int id,
   }) async {
@@ -81,6 +86,7 @@ abstract class FakeTransactionsRepository {
     return;
   }
 
+  @override
   Future<List<TransactionResponse>> fetchTransactions({
     required final int accountId,
     final DateTime? startDate,

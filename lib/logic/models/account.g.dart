@@ -98,7 +98,7 @@ Map<String, dynamic> _$AccountHistoryToJson(_AccountHistory instance) =>
 
 const _$AccountHistoryChangeTypeEnumMap = {
   AccountHistoryChangeType.creation: 'CREATION',
-  AccountHistoryChangeType.modification: 'DELETION',
+  AccountHistoryChangeType.modification: 'MODIFICATION',
 };
 
 _AccountHistoryResponse _$AccountHistoryResponseFromJson(

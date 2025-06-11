@@ -74,7 +74,7 @@ typedef AccountBrief = AccountState;
 enum AccountHistoryChangeType {
   @JsonValue('CREATION')
   creation,
-  @JsonValue('DELETION')
+  @JsonValue('MODIFICATION')
   modification,
 }
 

@@ -1,6 +1,8 @@
 import 'package:shmr_hw/logic/models/category.dart';
+import 'package:shmr_hw/logic/repositories/abstract/categories.dart';
 
-abstract class FakeCategoriesRepository {
+class FakeCategoriesRepository implements CategoriesRepository {
+  @override
   Future<List<Category>> fetchCategories() async {
     await Future.delayed(const Duration(seconds: 1));
     return [
@@ -19,6 +21,7 @@ abstract class FakeCategoriesRepository {
     ];
   }
 
+  @override
   Future<List<Category>> fetchCategoriesByType({
     required final bool isIncome,
   }) async {
