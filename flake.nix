@@ -17,7 +17,7 @@
           config.android_sdk.accept_license = true;
         };
 
-        spFlutter = pkgs.flutter324;
+        spFlutter = pkgs.flutter332;
 
         androidComposition = pkgs.androidenv.composeAndroidPackages {
           platformToolsVersion = "34.0.4";

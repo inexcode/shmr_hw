@@ -1,0 +1,55 @@
+{
+  "common": {
+    "account": "Account",
+    "сategory": "Category",
+    "categories": "Categories",
+    "amount": "Amount",
+    "date": "Date",
+    "time": "Time",
+    "start": "Start",
+    "end": "End",
+    "currency": "Currency",
+    "balance": "Balance",
+    "cancel": "Cancel"
+  },
+  "currencies": {
+    "russian_ruble": "Russian ruble ₽",
+    "american_dollar": "American dollar $",
+    "euro": "Euro €"
+  },
+  "account": {
+    "title": "Account",
+    "my_account": "My account",
+    "delete_account": "Delete account"
+  },
+  "categories": {
+    "title": "Categories",
+    "my_categories": "My categories",
+    "find_category": "Find category"
+  },
+  "expenses": {
+    "title": "Expenses",
+    "total": "Total",
+    "expenses_today": "Expenses today",
+    "my_expenses": "My expenses",
+    "delete_expense": "Delete expense",
+    "analysis": "Expense analysis",
+    "period_start": "Period: start",
+    "period_end": "Period: end"
+  },
+  "income": {
+    "title": "Income",
+    "income_today": "Income today"
+  },
+  "settings": {
+    "title": "Settings",
+    "dark_mode": "Dark mode",
+    "primary_color": "Primary color",
+    "sounds": "Sounds",
+    "haptics": "Haptics",
+    "code_password": "Passcode",
+    "synchronization": "Synchronization",
+    "language": "Language",
+    "about": "About"
+  }
+}
