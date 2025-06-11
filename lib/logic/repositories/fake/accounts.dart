@@ -57,8 +57,8 @@ class FakeAccountsRepository implements AccountsRepository {
       expenseStats: [
         StatItem(
           categoryId: 1,
-          categoryName: 'Зарплата',
-          emoji: '💰',
+          categoryName: 'Еда',
+          emoji: '🍔',
           amount: Decimal.parse('500.00'),
         ),
       ],

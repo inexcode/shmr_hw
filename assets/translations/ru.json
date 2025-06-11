@@ -1,7 +1,7 @@
 {
   "common": {
     "account": "Счёт",
-    "сategory": "Статья",
+    "category": "Статья",
     "categories": "Статьи",
     "amount": "Сумма",
     "date": "Дата",

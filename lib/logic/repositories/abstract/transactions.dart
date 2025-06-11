@@ -19,7 +19,7 @@ abstract class TransactionsRepository {
   });
 
   Future<List<TransactionResponse>> fetchTransactions({
-    final int accountId,
+    required final int accountId,
     final DateTime? startDate,
     final DateTime? endDate,
   });
