@@ -22,16 +22,17 @@ abstract class Transaction with _$Transaction {
   factory Transaction.fromJson(final Map<String, dynamic> json) =>
       _$TransactionFromJson(json);
 
-  factory Transaction.fromResponse(final TransactionResponse response) => Transaction(
-      id: response.id,
-      accountId: response.account.id,
-      categoryId: response.category.id,
-      amount: response.amount,
-      transactionDate: response.transactionDate,
-      comment: response.comment,
-      createdAt: response.createdAt,
-      updatedAt: response.updatedAt,
-    );
+  factory Transaction.fromResponse(final TransactionResponse response) =>
+      Transaction(
+        id: response.id,
+        accountId: response.account.id,
+        categoryId: response.category.id,
+        amount: response.amount,
+        transactionDate: response.transactionDate,
+        comment: response.comment,
+        createdAt: response.createdAt,
+        updatedAt: response.updatedAt,
+      );
 }
 
 @freezed
