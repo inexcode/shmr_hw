@@ -6,7 +6,7 @@ A homework project for shmr
 
 I use Gradle 8.4 and Java 21 for this project. Make sure you have the correct versions installed.
 
-Project is built against Flutter 3.24.
+Project is built against Flutter 3.32.
 
 ## Running with Nix
 
