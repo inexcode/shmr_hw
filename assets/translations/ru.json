@@ -1,0 +1,55 @@
+{
+  "common": {
+    "account": "Счёт",
+    "сategory": "Статья",
+    "categories": "Статьи",
+    "amount": "Сумма",
+    "date": "Дата",
+    "time": "Время",
+    "start": "Начало",
+    "end": "Конец",
+    "currency": "Валюта",
+    "balance": "Баланс",
+    "cancel": "Отмена"
+  },
+  "currencies": {
+    "russian_ruble": "Российский рубль ₽",
+    "american_dollar": "Американский доллар $",
+    "euro": "Евро €"
+  },
+  "account": {
+    "title": "Счёт",
+    "my_account": "Мой счёт",
+    "delete_account": "Удалить счёт"
+  },
+  "categories": {
+    "title": "Статьи",
+    "my_categories": "Мои статьи",
+    "find_category": "Найти статью"
+  },
+  "expenses": {
+    "title": "Расходы",
+    "total": "Всего",
+    "expenses_today": "Расходы сегодня",
+    "my_expenses": "Мои расходы",
+    "delete_expense": "Удалить расход",
+    "analysis": "Анализ расходов",
+    "period_start": "Период: начало",
+    "period_end": "Период: конец"
+  },
+  "income": {
+    "title": "Доходы",
+    "income_today": "Доходы сегодня"
+  },
+  "settings": {
+    "title": "Настройки",
+    "dark_mode": "Тёмная тема",
+    "primary_color": "Основной цвет",
+    "sounds": "Звуки",
+    "haptics": "Хаптики",
+    "code_password": "Код-пароль",
+    "synchronization": "Синхронизация",
+    "language": "Язык",
+    "about": "О программе"
+  }
+}

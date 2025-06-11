@@ -12,7 +12,7 @@ linter:
     always_declare_return_types: true
     always_put_control_body_on_new_line: true
     always_put_required_named_parameters_first: true
-    always_specify_types: true
+    always_specify_types: false
     always_use_package_imports: true
     annotate_overrides: true
     annotate_redeclares: true
@@ -63,7 +63,7 @@ linter:
     dangling_library_doc_comments: true
     depend_on_referenced_packages: true
     deprecated_consistency: true
-    diagnostic_describe_all_properties: true
+    diagnostic_describe_all_properties: false
     directives_ordering: true
     discarded_futures: true
     do_not_use_environment: true
