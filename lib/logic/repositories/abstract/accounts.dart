@@ -1,6 +1,6 @@
 import 'package:shmr_hw/logic/models/account.dart';
 
-abstract class AccountsRepository {
+abstract interface class AccountsRepository {
   Future<List<Account>> fetchAccounts();
 
   Future<Account> createAccount({

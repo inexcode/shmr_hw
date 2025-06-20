@@ -1,6 +1,6 @@
 import 'package:shmr_hw/logic/models/transaction.dart';
 
-abstract class TransactionsRepository {
+abstract interface class TransactionsRepository {
   Future<Transaction> createTransaction({
     required final TransactionRequest request,
   });
