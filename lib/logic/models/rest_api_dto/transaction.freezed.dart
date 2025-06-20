@@ -14,7 +14,7 @@ part of 'transaction.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Transaction {
+mixin _$TransactionDto {
   int get id;
   int get accountId;
   int get categoryId;
@@ -24,18 +24,22 @@ mixin _$Transaction {
   DateTime get createdAt;
   DateTime get updatedAt;
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TransactionCopyWith<Transaction> get copyWith =>
-      _$TransactionCopyWithImpl<Transaction>(this as Transaction, _$identity);
+  $TransactionDtoCopyWith<TransactionDto> get copyWith =>
+      _$TransactionDtoCopyWithImpl<TransactionDto>(
+          this as TransactionDto, _$identity);
+
+  /// Serializes this TransactionDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is Transaction &&
+            other is TransactionDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
@@ -51,21 +55,22 @@ mixin _$Transaction {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, accountId, categoryId,
       amount, transactionDate, comment, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'Transaction(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TransactionDto(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class $TransactionCopyWith<$Res> {
-  factory $TransactionCopyWith(
-          Transaction value, $Res Function(Transaction) _then) =
-      _$TransactionCopyWithImpl;
+abstract mixin class $TransactionDtoCopyWith<$Res> {
+  factory $TransactionDtoCopyWith(
+          TransactionDto value, $Res Function(TransactionDto) _then) =
+      _$TransactionDtoCopyWithImpl;
   @useResult
   $Res call(
       {int id,
@@ -79,13 +84,14 @@ abstract mixin class $TransactionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
-  _$TransactionCopyWithImpl(this._self, this._then);
+class _$TransactionDtoCopyWithImpl<$Res>
+    implements $TransactionDtoCopyWith<$Res> {
+  _$TransactionDtoCopyWithImpl(this._self, this._then);
 
-  final Transaction _self;
-  final $Res Function(Transaction) _then;
+  final TransactionDto _self;
+  final $Res Function(TransactionDto) _then;
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -137,9 +143,9 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
 }
 
 /// @nodoc
-
-class _Transaction implements Transaction {
-  const _Transaction(
+@JsonSerializable()
+class _TransactionDto implements TransactionDto {
+  const _TransactionDto(
       {required this.id,
       required this.accountId,
       required this.categoryId,
@@ -148,6 +154,8 @@ class _Transaction implements Transaction {
       required this.comment,
       required this.createdAt,
       required this.updatedAt});
+  factory _TransactionDto.fromJson(Map<String, dynamic> json) =>
+      _$TransactionDtoFromJson(json);
 
   @override
   final int id;
@@ -166,19 +174,26 @@ class _Transaction implements Transaction {
   @override
   final DateTime updatedAt;
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TransactionCopyWith<_Transaction> get copyWith =>
-      __$TransactionCopyWithImpl<_Transaction>(this, _$identity);
+  _$TransactionDtoCopyWith<_TransactionDto> get copyWith =>
+      __$TransactionDtoCopyWithImpl<_TransactionDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$TransactionDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Transaction &&
+            other is _TransactionDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
@@ -194,22 +209,23 @@ class _Transaction implements Transaction {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, accountId, categoryId,
       amount, transactionDate, comment, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'Transaction(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TransactionDto(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$TransactionCopyWith<$Res>
-    implements $TransactionCopyWith<$Res> {
-  factory _$TransactionCopyWith(
-          _Transaction value, $Res Function(_Transaction) _then) =
-      __$TransactionCopyWithImpl;
+abstract mixin class _$TransactionDtoCopyWith<$Res>
+    implements $TransactionDtoCopyWith<$Res> {
+  factory _$TransactionDtoCopyWith(
+          _TransactionDto value, $Res Function(_TransactionDto) _then) =
+      __$TransactionDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -224,13 +240,14 @@ abstract mixin class _$TransactionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
-  __$TransactionCopyWithImpl(this._self, this._then);
+class __$TransactionDtoCopyWithImpl<$Res>
+    implements _$TransactionDtoCopyWith<$Res> {
+  __$TransactionDtoCopyWithImpl(this._self, this._then);
 
-  final _Transaction _self;
-  final $Res Function(_Transaction) _then;
+  final _TransactionDto _self;
+  final $Res Function(_TransactionDto) _then;
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -244,7 +261,7 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_Transaction(
+    return _then(_TransactionDto(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -282,26 +299,29 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
 }
 
 /// @nodoc
-mixin _$TransactionRequest {
+mixin _$TransactionRequestDto {
   int get accountId;
   int get categoryId;
   Decimal get amount;
   DateTime get transactionDate;
   String? get comment;
 
-  /// Create a copy of TransactionRequest
+  /// Create a copy of TransactionRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TransactionRequestCopyWith<TransactionRequest> get copyWith =>
-      _$TransactionRequestCopyWithImpl<TransactionRequest>(
-          this as TransactionRequest, _$identity);
+  $TransactionRequestDtoCopyWith<TransactionRequestDto> get copyWith =>
+      _$TransactionRequestDtoCopyWithImpl<TransactionRequestDto>(
+          this as TransactionRequestDto, _$identity);
+
+  /// Serializes this TransactionRequestDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is TransactionRequest &&
+            other is TransactionRequestDto &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
             (identical(other.categoryId, categoryId) ||
@@ -312,21 +332,22 @@ mixin _$TransactionRequest {
             (identical(other.comment, comment) || other.comment == comment));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, accountId, categoryId, amount, transactionDate, comment);
 
   @override
   String toString() {
-    return 'TransactionRequest(accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment)';
+    return 'TransactionRequestDto(accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment)';
   }
 }
 
 /// @nodoc
-abstract mixin class $TransactionRequestCopyWith<$Res> {
-  factory $TransactionRequestCopyWith(
-          TransactionRequest value, $Res Function(TransactionRequest) _then) =
-      _$TransactionRequestCopyWithImpl;
+abstract mixin class $TransactionRequestDtoCopyWith<$Res> {
+  factory $TransactionRequestDtoCopyWith(TransactionRequestDto value,
+          $Res Function(TransactionRequestDto) _then) =
+      _$TransactionRequestDtoCopyWithImpl;
   @useResult
   $Res call(
       {int accountId,
@@ -337,14 +358,14 @@ abstract mixin class $TransactionRequestCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TransactionRequestCopyWithImpl<$Res>
-    implements $TransactionRequestCopyWith<$Res> {
-  _$TransactionRequestCopyWithImpl(this._self, this._then);
+class _$TransactionRequestDtoCopyWithImpl<$Res>
+    implements $TransactionRequestDtoCopyWith<$Res> {
+  _$TransactionRequestDtoCopyWithImpl(this._self, this._then);
 
-  final TransactionRequest _self;
-  final $Res Function(TransactionRequest) _then;
+  final TransactionRequestDto _self;
+  final $Res Function(TransactionRequestDto) _then;
 
-  /// Create a copy of TransactionRequest
+  /// Create a copy of TransactionRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -381,14 +402,16 @@ class _$TransactionRequestCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-class _TransactionRequest implements TransactionRequest {
-  const _TransactionRequest(
+@JsonSerializable()
+class _TransactionRequestDto implements TransactionRequestDto {
+  const _TransactionRequestDto(
       {required this.accountId,
       required this.categoryId,
       required this.amount,
       required this.transactionDate,
       required this.comment});
+  factory _TransactionRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$TransactionRequestDtoFromJson(json);
 
   @override
   final int accountId;
@@ -401,19 +424,27 @@ class _TransactionRequest implements TransactionRequest {
   @override
   final String? comment;
 
-  /// Create a copy of TransactionRequest
+  /// Create a copy of TransactionRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TransactionRequestCopyWith<_TransactionRequest> get copyWith =>
-      __$TransactionRequestCopyWithImpl<_TransactionRequest>(this, _$identity);
+  _$TransactionRequestDtoCopyWith<_TransactionRequestDto> get copyWith =>
+      __$TransactionRequestDtoCopyWithImpl<_TransactionRequestDto>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$TransactionRequestDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _TransactionRequest &&
+            other is _TransactionRequestDto &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
             (identical(other.categoryId, categoryId) ||
@@ -424,22 +455,23 @@ class _TransactionRequest implements TransactionRequest {
             (identical(other.comment, comment) || other.comment == comment));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, accountId, categoryId, amount, transactionDate, comment);
 
   @override
   String toString() {
-    return 'TransactionRequest(accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment)';
+    return 'TransactionRequestDto(accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$TransactionRequestCopyWith<$Res>
-    implements $TransactionRequestCopyWith<$Res> {
-  factory _$TransactionRequestCopyWith(
-          _TransactionRequest value, $Res Function(_TransactionRequest) _then) =
-      __$TransactionRequestCopyWithImpl;
+abstract mixin class _$TransactionRequestDtoCopyWith<$Res>
+    implements $TransactionRequestDtoCopyWith<$Res> {
+  factory _$TransactionRequestDtoCopyWith(_TransactionRequestDto value,
+          $Res Function(_TransactionRequestDto) _then) =
+      __$TransactionRequestDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -451,14 +483,14 @@ abstract mixin class _$TransactionRequestCopyWith<$Res>
 }
 
 /// @nodoc
-class __$TransactionRequestCopyWithImpl<$Res>
-    implements _$TransactionRequestCopyWith<$Res> {
-  __$TransactionRequestCopyWithImpl(this._self, this._then);
+class __$TransactionRequestDtoCopyWithImpl<$Res>
+    implements _$TransactionRequestDtoCopyWith<$Res> {
+  __$TransactionRequestDtoCopyWithImpl(this._self, this._then);
 
-  final _TransactionRequest _self;
-  final $Res Function(_TransactionRequest) _then;
+  final _TransactionRequestDto _self;
+  final $Res Function(_TransactionRequestDto) _then;
 
-  /// Create a copy of TransactionRequest
+  /// Create a copy of TransactionRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -469,7 +501,7 @@ class __$TransactionRequestCopyWithImpl<$Res>
     Object? transactionDate = null,
     Object? comment = freezed,
   }) {
-    return _then(_TransactionRequest(
+    return _then(_TransactionRequestDto(
       accountId: null == accountId
           ? _self.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
@@ -495,29 +527,32 @@ class __$TransactionRequestCopyWithImpl<$Res>
 }
 
 /// @nodoc
-mixin _$TransactionResponse {
+mixin _$TransactionResponseDto {
   int get id;
-  AccountState get account;
-  Category get category;
+  AccountBriefDto get account;
+  CategoryDto get category;
   Decimal get amount;
   DateTime get transactionDate;
   String? get comment;
   DateTime get createdAt;
   DateTime get updatedAt;
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TransactionResponseCopyWith<TransactionResponse> get copyWith =>
-      _$TransactionResponseCopyWithImpl<TransactionResponse>(
-          this as TransactionResponse, _$identity);
+  $TransactionResponseDtoCopyWith<TransactionResponseDto> get copyWith =>
+      _$TransactionResponseDtoCopyWithImpl<TransactionResponseDto>(
+          this as TransactionResponseDto, _$identity);
+
+  /// Serializes this TransactionResponseDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is TransactionResponse &&
+            other is TransactionResponseDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.account, account) || other.account == account) &&
             (identical(other.category, category) ||
@@ -532,45 +567,46 @@ mixin _$TransactionResponse {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, account, category, amount,
       transactionDate, comment, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'TransactionResponse(id: $id, account: $account, category: $category, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TransactionResponseDto(id: $id, account: $account, category: $category, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class $TransactionResponseCopyWith<$Res> {
-  factory $TransactionResponseCopyWith(
-          TransactionResponse value, $Res Function(TransactionResponse) _then) =
-      _$TransactionResponseCopyWithImpl;
+abstract mixin class $TransactionResponseDtoCopyWith<$Res> {
+  factory $TransactionResponseDtoCopyWith(TransactionResponseDto value,
+          $Res Function(TransactionResponseDto) _then) =
+      _$TransactionResponseDtoCopyWithImpl;
   @useResult
   $Res call(
       {int id,
-      AccountState account,
-      Category category,
+      AccountBriefDto account,
+      CategoryDto category,
       Decimal amount,
       DateTime transactionDate,
       String? comment,
       DateTime createdAt,
       DateTime updatedAt});
 
-  $AccountStateCopyWith<$Res> get account;
-  $CategoryCopyWith<$Res> get category;
+  $AccountStateDtoCopyWith<$Res> get account;
+  $CategoryDtoCopyWith<$Res> get category;
 }
 
 /// @nodoc
-class _$TransactionResponseCopyWithImpl<$Res>
-    implements $TransactionResponseCopyWith<$Res> {
-  _$TransactionResponseCopyWithImpl(this._self, this._then);
+class _$TransactionResponseDtoCopyWithImpl<$Res>
+    implements $TransactionResponseDtoCopyWith<$Res> {
+  _$TransactionResponseDtoCopyWithImpl(this._self, this._then);
 
-  final TransactionResponse _self;
-  final $Res Function(TransactionResponse) _then;
+  final TransactionResponseDto _self;
+  final $Res Function(TransactionResponseDto) _then;
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -592,11 +628,11 @@ class _$TransactionResponseCopyWithImpl<$Res>
       account: null == account
           ? _self.account
           : account // ignore: cast_nullable_to_non_nullable
-              as AccountState,
+              as AccountBriefDto,
       category: null == category
           ? _self.category
           : category // ignore: cast_nullable_to_non_nullable
-              as Category,
+              as CategoryDto,
       amount: null == amount
           ? _self.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -620,31 +656,31 @@ class _$TransactionResponseCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AccountStateCopyWith<$Res> get account {
-    return $AccountStateCopyWith<$Res>(_self.account, (value) {
+  $AccountStateDtoCopyWith<$Res> get account {
+    return $AccountStateDtoCopyWith<$Res>(_self.account, (value) {
       return _then(_self.copyWith(account: value));
     });
   }
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $CategoryCopyWith<$Res> get category {
-    return $CategoryCopyWith<$Res>(_self.category, (value) {
+  $CategoryDtoCopyWith<$Res> get category {
+    return $CategoryDtoCopyWith<$Res>(_self.category, (value) {
       return _then(_self.copyWith(category: value));
     });
   }
 }
 
 /// @nodoc
-
-class _TransactionResponse implements TransactionResponse {
-  const _TransactionResponse(
+@JsonSerializable()
+class _TransactionResponseDto implements TransactionResponseDto {
+  const _TransactionResponseDto(
       {required this.id,
       required this.account,
       required this.category,
@@ -653,13 +689,15 @@ class _TransactionResponse implements TransactionResponse {
       required this.comment,
       required this.createdAt,
       required this.updatedAt});
+  factory _TransactionResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$TransactionResponseDtoFromJson(json);
 
   @override
   final int id;
   @override
-  final AccountState account;
+  final AccountBriefDto account;
   @override
-  final Category category;
+  final CategoryDto category;
   @override
   final Decimal amount;
   @override
@@ -671,20 +709,27 @@ class _TransactionResponse implements TransactionResponse {
   @override
   final DateTime updatedAt;
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TransactionResponseCopyWith<_TransactionResponse> get copyWith =>
-      __$TransactionResponseCopyWithImpl<_TransactionResponse>(
+  _$TransactionResponseDtoCopyWith<_TransactionResponseDto> get copyWith =>
+      __$TransactionResponseDtoCopyWithImpl<_TransactionResponseDto>(
           this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$TransactionResponseDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _TransactionResponse &&
+            other is _TransactionResponseDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.account, account) || other.account == account) &&
             (identical(other.category, category) ||
@@ -699,28 +744,29 @@ class _TransactionResponse implements TransactionResponse {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, account, category, amount,
       transactionDate, comment, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'TransactionResponse(id: $id, account: $account, category: $category, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TransactionResponseDto(id: $id, account: $account, category: $category, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$TransactionResponseCopyWith<$Res>
-    implements $TransactionResponseCopyWith<$Res> {
-  factory _$TransactionResponseCopyWith(_TransactionResponse value,
-          $Res Function(_TransactionResponse) _then) =
-      __$TransactionResponseCopyWithImpl;
+abstract mixin class _$TransactionResponseDtoCopyWith<$Res>
+    implements $TransactionResponseDtoCopyWith<$Res> {
+  factory _$TransactionResponseDtoCopyWith(_TransactionResponseDto value,
+          $Res Function(_TransactionResponseDto) _then) =
+      __$TransactionResponseDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
       {int id,
-      AccountState account,
-      Category category,
+      AccountBriefDto account,
+      CategoryDto category,
       Decimal amount,
       DateTime transactionDate,
       String? comment,
@@ -728,20 +774,20 @@ abstract mixin class _$TransactionResponseCopyWith<$Res>
       DateTime updatedAt});
 
   @override
-  $AccountStateCopyWith<$Res> get account;
+  $AccountStateDtoCopyWith<$Res> get account;
   @override
-  $CategoryCopyWith<$Res> get category;
+  $CategoryDtoCopyWith<$Res> get category;
 }
 
 /// @nodoc
-class __$TransactionResponseCopyWithImpl<$Res>
-    implements _$TransactionResponseCopyWith<$Res> {
-  __$TransactionResponseCopyWithImpl(this._self, this._then);
+class __$TransactionResponseDtoCopyWithImpl<$Res>
+    implements _$TransactionResponseDtoCopyWith<$Res> {
+  __$TransactionResponseDtoCopyWithImpl(this._self, this._then);
 
-  final _TransactionResponse _self;
-  final $Res Function(_TransactionResponse) _then;
+  final _TransactionResponseDto _self;
+  final $Res Function(_TransactionResponseDto) _then;
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -755,7 +801,7 @@ class __$TransactionResponseCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_TransactionResponse(
+    return _then(_TransactionResponseDto(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -763,11 +809,11 @@ class __$TransactionResponseCopyWithImpl<$Res>
       account: null == account
           ? _self.account
           : account // ignore: cast_nullable_to_non_nullable
-              as AccountState,
+              as AccountBriefDto,
       category: null == category
           ? _self.category
           : category // ignore: cast_nullable_to_non_nullable
-              as Category,
+              as CategoryDto,
       amount: null == amount
           ? _self.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -791,22 +837,22 @@ class __$TransactionResponseCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AccountStateCopyWith<$Res> get account {
-    return $AccountStateCopyWith<$Res>(_self.account, (value) {
+  $AccountStateDtoCopyWith<$Res> get account {
+    return $AccountStateDtoCopyWith<$Res>(_self.account, (value) {
       return _then(_self.copyWith(account: value));
     });
   }
 
-  /// Create a copy of TransactionResponse
+  /// Create a copy of TransactionResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $CategoryCopyWith<$Res> get category {
-    return $CategoryCopyWith<$Res>(_self.category, (value) {
+  $CategoryDtoCopyWith<$Res> get category {
+    return $CategoryDtoCopyWith<$Res>(_self.category, (value) {
       return _then(_self.copyWith(category: value));
     });
   }

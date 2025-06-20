@@ -1,9 +1,10 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shmr_hw/logic/models/enums.dart';
+import 'package:shmr_hw/logic/models/rest_api_dto/account.dart';
 import 'package:shmr_hw/logic/models/stat_item.dart';
 
 part 'account.freezed.dart';
-part 'account.g.dart';
 
 @freezed
 abstract class Account with _$Account {
@@ -17,8 +18,15 @@ abstract class Account with _$Account {
     required final DateTime updatedAt,
   }) = _Account;
 
-  factory Account.fromJson(final Map<String, dynamic> json) =>
-      _$AccountFromJson(json);
+  factory Account.fromDto(final AccountDto dto) => Account(
+        id: dto.id,
+        userId: dto.userId,
+        name: dto.name,
+        balance: dto.balance,
+        currency: dto.currency,
+        createdAt: dto.createdAt,
+        updatedAt: dto.updatedAt,
+      );
 }
 
 // API defines AccountCreateRequest and AccountUpdateRequest that are
@@ -33,8 +41,8 @@ abstract class AccountRequest with _$AccountRequest {
 }
 
 @freezed
-abstract class AccountResponse with _$AccountResponse {
-  const factory AccountResponse({
+abstract class AccountDetails with _$AccountDetails {
+  const factory AccountDetails({
     required final int id,
     required final String name,
     required final Decimal balance,
@@ -43,17 +51,20 @@ abstract class AccountResponse with _$AccountResponse {
     required final List<StatItem> expenseStats,
     required final DateTime createdAt,
     required final DateTime updatedAt,
-  }) = _AccountResponse;
+  }) = _AccountDetails;
 
-  factory AccountResponse.fromJson(final Map<String, dynamic> json) =>
-      _$AccountResponseFromJson(json);
+  factory AccountDetails.fromDto(final AccountResponseDto dto) =>
+      AccountDetails(
+        id: dto.id,
+        name: dto.name,
+        balance: dto.balance,
+        currency: dto.currency,
+        incomeStats: dto.incomeStats.map(StatItem.fromDto).toList(),
+        expenseStats: dto.expenseStats.map(StatItem.fromDto).toList(),
+        createdAt: dto.createdAt,
+        updatedAt: dto.updatedAt,
+      );
 }
-
-// I feel like AccountResponse should have been Account,
-// but we can't cast because AccountResponse has StatItems,
-// but doesn't have userId.
-// So let's call it AccountDetails for clarity.
-typedef AccountDetails = AccountResponse;
 
 @freezed
 abstract class AccountState with _$AccountState {
@@ -64,47 +75,58 @@ abstract class AccountState with _$AccountState {
     required final String currency,
   }) = _AccountState;
 
-  factory AccountState.fromJson(final Map<String, dynamic> json) =>
-      _$AccountStateFromJson(json);
+  factory AccountState.fromDto(final AccountStateDto dto) => AccountState(
+        id: dto.id,
+        name: dto.name,
+        balance: dto.balance,
+        currency: dto.currency,
+      );
 }
 
-// AccountBrief right now is the same as AccountState.
-typedef AccountBrief = AccountState;
+@freezed
+abstract class AccountHistoryElement with _$AccountHistoryElement {
+  const factory AccountHistoryElement({
+    required final int id,
+    required final int accountId,
+    required final String name,
+    required final AccountHistoryChangeType changeType,
+    required final AccountState? previousState,
+    required final AccountState newState,
+    required final DateTime changeTimestamp,
+    required final DateTime createdAt,
+  }) = _AccountHistoryElement;
 
-enum AccountHistoryChangeType {
-  @JsonValue('CREATION')
-  creation,
-  @JsonValue('MODIFICATION')
-  modification,
+  factory AccountHistoryElement.fromDto(final AccountHistoryDto dto) =>
+      AccountHistoryElement(
+        id: dto.id,
+        accountId: dto.accountId,
+        name: dto.name,
+        changeType: dto.changeType,
+        previousState: dto.previousState != null
+            ? AccountState.fromDto(dto.previousState!)
+            : null,
+        newState: AccountState.fromDto(dto.newState),
+        changeTimestamp: dto.changeTimestamp,
+        createdAt: dto.createdAt,
+      );
 }
 
 @freezed
 abstract class AccountHistory with _$AccountHistory {
   const factory AccountHistory({
-    required final int id,
-    required final int accountId,
-    required final String name,
-    required final AccountHistoryChangeType changeType,
-    required final AccountState previousState,
-    required final AccountState newState,
-    required final DateTime changeTimestamp,
-    required final DateTime createdAt,
-  }) = _AccountHistory;
-
-  factory AccountHistory.fromJson(final Map<String, dynamic> json) =>
-      _$AccountHistoryFromJson(json);
-}
-
-@freezed
-abstract class AccountHistoryResponse with _$AccountHistoryResponse {
-  const factory AccountHistoryResponse({
     required final int accountId,
     required final String accountName,
     required final String currency,
     required final Decimal currentBalance,
-    required final List<AccountHistory> history,
-  }) = _AccountHistoryResponse;
+    required final List<AccountHistoryElement> history,
+  }) = _AccountHistory;
 
-  factory AccountHistoryResponse.fromJson(final Map<String, dynamic> json) =>
-      _$AccountHistoryResponseFromJson(json);
+  factory AccountHistory.fromDto(final AccountHistoryDtoResponse dto) =>
+      AccountHistory(
+        accountId: dto.accountId,
+        accountName: dto.accountName,
+        currency: dto.currency,
+        currentBalance: dto.currentBalance,
+        history: dto.history.map(AccountHistoryElement.fromDto).toList(),
+      );
 }

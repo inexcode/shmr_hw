@@ -1,8 +1,8 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shmr_hw/logic/models/rest_api_dto/stat_item.dart';
 
 part 'stat_item.freezed.dart';
-part 'stat_item.g.dart';
 
 @freezed
 abstract class StatItem with _$StatItem {
@@ -13,6 +13,10 @@ abstract class StatItem with _$StatItem {
     required final Decimal amount,
   }) = _StatItem;
 
-  factory StatItem.fromJson(final Map<String, dynamic> json) =>
-      _$StatItemFromJson(json);
+  factory StatItem.fromDto(final StatItemDto dto) => StatItem(
+        categoryId: dto.categoryId,
+        categoryName: dto.categoryName,
+        emoji: dto.emoji,
+        amount: dto.amount,
+      );
 }

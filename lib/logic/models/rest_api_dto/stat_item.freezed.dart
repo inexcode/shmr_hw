@@ -14,24 +14,27 @@ part of 'stat_item.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$StatItem {
+mixin _$StatItemDto {
   int get categoryId;
   String get categoryName;
   String get emoji;
   Decimal get amount;
 
-  /// Create a copy of StatItem
+  /// Create a copy of StatItemDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $StatItemCopyWith<StatItem> get copyWith =>
-      _$StatItemCopyWithImpl<StatItem>(this as StatItem, _$identity);
+  $StatItemDtoCopyWith<StatItemDto> get copyWith =>
+      _$StatItemDtoCopyWithImpl<StatItemDto>(this as StatItemDto, _$identity);
+
+  /// Serializes this StatItemDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is StatItem &&
+            other is StatItemDto &&
             (identical(other.categoryId, categoryId) ||
                 other.categoryId == categoryId) &&
             (identical(other.categoryName, categoryName) ||
@@ -40,33 +43,35 @@ mixin _$StatItem {
             (identical(other.amount, amount) || other.amount == amount));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, categoryId, categoryName, emoji, amount);
 
   @override
   String toString() {
-    return 'StatItem(categoryId: $categoryId, categoryName: $categoryName, emoji: $emoji, amount: $amount)';
+    return 'StatItemDto(categoryId: $categoryId, categoryName: $categoryName, emoji: $emoji, amount: $amount)';
   }
 }
 
 /// @nodoc
-abstract mixin class $StatItemCopyWith<$Res> {
-  factory $StatItemCopyWith(StatItem value, $Res Function(StatItem) _then) =
-      _$StatItemCopyWithImpl;
+abstract mixin class $StatItemDtoCopyWith<$Res> {
+  factory $StatItemDtoCopyWith(
+          StatItemDto value, $Res Function(StatItemDto) _then) =
+      _$StatItemDtoCopyWithImpl;
   @useResult
   $Res call(
       {int categoryId, String categoryName, String emoji, Decimal amount});
 }
 
 /// @nodoc
-class _$StatItemCopyWithImpl<$Res> implements $StatItemCopyWith<$Res> {
-  _$StatItemCopyWithImpl(this._self, this._then);
+class _$StatItemDtoCopyWithImpl<$Res> implements $StatItemDtoCopyWith<$Res> {
+  _$StatItemDtoCopyWithImpl(this._self, this._then);
 
-  final StatItem _self;
-  final $Res Function(StatItem) _then;
+  final StatItemDto _self;
+  final $Res Function(StatItemDto) _then;
 
-  /// Create a copy of StatItem
+  /// Create a copy of StatItemDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -98,13 +103,15 @@ class _$StatItemCopyWithImpl<$Res> implements $StatItemCopyWith<$Res> {
 }
 
 /// @nodoc
-
-class _StatItem implements StatItem {
-  const _StatItem(
+@JsonSerializable()
+class _StatItemDto implements StatItemDto {
+  const _StatItemDto(
       {required this.categoryId,
       required this.categoryName,
       required this.emoji,
       required this.amount});
+  factory _StatItemDto.fromJson(Map<String, dynamic> json) =>
+      _$StatItemDtoFromJson(json);
 
   @override
   final int categoryId;
@@ -115,19 +122,26 @@ class _StatItem implements StatItem {
   @override
   final Decimal amount;
 
-  /// Create a copy of StatItem
+  /// Create a copy of StatItemDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$StatItemCopyWith<_StatItem> get copyWith =>
-      __$StatItemCopyWithImpl<_StatItem>(this, _$identity);
+  _$StatItemDtoCopyWith<_StatItemDto> get copyWith =>
+      __$StatItemDtoCopyWithImpl<_StatItemDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$StatItemDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _StatItem &&
+            other is _StatItemDto &&
             (identical(other.categoryId, categoryId) ||
                 other.categoryId == categoryId) &&
             (identical(other.categoryName, categoryName) ||
@@ -136,21 +150,23 @@ class _StatItem implements StatItem {
             (identical(other.amount, amount) || other.amount == amount));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, categoryId, categoryName, emoji, amount);
 
   @override
   String toString() {
-    return 'StatItem(categoryId: $categoryId, categoryName: $categoryName, emoji: $emoji, amount: $amount)';
+    return 'StatItemDto(categoryId: $categoryId, categoryName: $categoryName, emoji: $emoji, amount: $amount)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$StatItemCopyWith<$Res>
-    implements $StatItemCopyWith<$Res> {
-  factory _$StatItemCopyWith(_StatItem value, $Res Function(_StatItem) _then) =
-      __$StatItemCopyWithImpl;
+abstract mixin class _$StatItemDtoCopyWith<$Res>
+    implements $StatItemDtoCopyWith<$Res> {
+  factory _$StatItemDtoCopyWith(
+          _StatItemDto value, $Res Function(_StatItemDto) _then) =
+      __$StatItemDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -158,13 +174,13 @@ abstract mixin class _$StatItemCopyWith<$Res>
 }
 
 /// @nodoc
-class __$StatItemCopyWithImpl<$Res> implements _$StatItemCopyWith<$Res> {
-  __$StatItemCopyWithImpl(this._self, this._then);
+class __$StatItemDtoCopyWithImpl<$Res> implements _$StatItemDtoCopyWith<$Res> {
+  __$StatItemDtoCopyWithImpl(this._self, this._then);
 
-  final _StatItem _self;
-  final $Res Function(_StatItem) _then;
+  final _StatItemDto _self;
+  final $Res Function(_StatItemDto) _then;
 
-  /// Create a copy of StatItem
+  /// Create a copy of StatItemDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -174,7 +190,7 @@ class __$StatItemCopyWithImpl<$Res> implements _$StatItemCopyWith<$Res> {
     Object? emoji = null,
     Object? amount = null,
   }) {
-    return _then(_StatItem(
+    return _then(_StatItemDto(
       categoryId: null == categoryId
           ? _self.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable

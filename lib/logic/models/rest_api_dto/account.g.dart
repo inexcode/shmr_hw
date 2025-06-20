@@ -6,7 +6,7 @@ part of 'account.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_Account _$AccountFromJson(Map<String, dynamic> json) => _Account(
+_AccountDto _$AccountDtoFromJson(Map<String, dynamic> json) => _AccountDto(
       id: (json['id'] as num).toInt(),
       userId: (json['userId'] as num).toInt(),
       name: json['name'] as String,
@@ -16,7 +16,8 @@ _Account _$AccountFromJson(Map<String, dynamic> json) => _Account(
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$AccountToJson(_Account instance) => <String, dynamic>{
+Map<String, dynamic> _$AccountDtoToJson(_AccountDto instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
       'name': instance.name,
@@ -26,23 +27,37 @@ Map<String, dynamic> _$AccountToJson(_Account instance) => <String, dynamic>{
       'updatedAt': instance.updatedAt.toIso8601String(),
     };
 
-_AccountResponse _$AccountResponseFromJson(Map<String, dynamic> json) =>
-    _AccountResponse(
+_AccountRequestDto _$AccountRequestDtoFromJson(Map<String, dynamic> json) =>
+    _AccountRequestDto(
+      name: json['name'] as String,
+      balance: Decimal.fromJson(json['balance'] as String),
+      currency: json['currency'] as String,
+    );
+
+Map<String, dynamic> _$AccountRequestDtoToJson(_AccountRequestDto instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'balance': instance.balance,
+      'currency': instance.currency,
+    };
+
+_AccountResponseDto _$AccountResponseDtoFromJson(Map<String, dynamic> json) =>
+    _AccountResponseDto(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       balance: Decimal.fromJson(json['balance'] as String),
       currency: json['currency'] as String,
       incomeStats: (json['incomeStats'] as List<dynamic>)
-          .map((e) => StatItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => StatItemDto.fromJson(e as Map<String, dynamic>))
           .toList(),
       expenseStats: (json['expenseStats'] as List<dynamic>)
-          .map((e) => StatItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => StatItemDto.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$AccountResponseToJson(_AccountResponse instance) =>
+Map<String, dynamic> _$AccountResponseDtoToJson(_AccountResponseDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -54,15 +69,15 @@ Map<String, dynamic> _$AccountResponseToJson(_AccountResponse instance) =>
       'updatedAt': instance.updatedAt.toIso8601String(),
     };
 
-_AccountState _$AccountStateFromJson(Map<String, dynamic> json) =>
-    _AccountState(
+_AccountStateDto _$AccountStateDtoFromJson(Map<String, dynamic> json) =>
+    _AccountStateDto(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       balance: Decimal.fromJson(json['balance'] as String),
       currency: json['currency'] as String,
     );
 
-Map<String, dynamic> _$AccountStateToJson(_AccountState instance) =>
+Map<String, dynamic> _$AccountStateDtoToJson(_AccountStateDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -70,21 +85,24 @@ Map<String, dynamic> _$AccountStateToJson(_AccountState instance) =>
       'currency': instance.currency,
     };
 
-_AccountHistory _$AccountHistoryFromJson(Map<String, dynamic> json) =>
-    _AccountHistory(
+_AccountHistoryDto _$AccountHistoryDtoFromJson(Map<String, dynamic> json) =>
+    _AccountHistoryDto(
       id: (json['id'] as num).toInt(),
       accountId: (json['accountId'] as num).toInt(),
       name: json['name'] as String,
       changeType:
           $enumDecode(_$AccountHistoryChangeTypeEnumMap, json['changeType']),
-      previousState:
-          AccountState.fromJson(json['previousState'] as Map<String, dynamic>),
-      newState: AccountState.fromJson(json['newState'] as Map<String, dynamic>),
+      previousState: json['previousState'] == null
+          ? null
+          : AccountStateDto.fromJson(
+              json['previousState'] as Map<String, dynamic>),
+      newState:
+          AccountStateDto.fromJson(json['newState'] as Map<String, dynamic>),
       changeTimestamp: DateTime.parse(json['changeTimestamp'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
 
-Map<String, dynamic> _$AccountHistoryToJson(_AccountHistory instance) =>
+Map<String, dynamic> _$AccountHistoryDtoToJson(_AccountHistoryDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'accountId': instance.accountId,
@@ -101,20 +119,20 @@ const _$AccountHistoryChangeTypeEnumMap = {
   AccountHistoryChangeType.modification: 'MODIFICATION',
 };
 
-_AccountHistoryResponse _$AccountHistoryResponseFromJson(
+_AccountHistoryDtoResponse _$AccountHistoryDtoResponseFromJson(
         Map<String, dynamic> json) =>
-    _AccountHistoryResponse(
+    _AccountHistoryDtoResponse(
       accountId: (json['accountId'] as num).toInt(),
       accountName: json['accountName'] as String,
       currency: json['currency'] as String,
       currentBalance: Decimal.fromJson(json['currentBalance'] as String),
       history: (json['history'] as List<dynamic>)
-          .map((e) => AccountHistory.fromJson(e as Map<String, dynamic>))
+          .map((e) => AccountHistoryDto.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$AccountHistoryResponseToJson(
-        _AccountHistoryResponse instance) =>
+Map<String, dynamic> _$AccountHistoryDtoResponseToJson(
+        _AccountHistoryDtoResponse instance) =>
     <String, dynamic>{
       'accountId': instance.accountId,
       'accountName': instance.accountName,

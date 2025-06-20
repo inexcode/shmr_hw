@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shmr_hw/logic/models/rest_api_dto/category.dart';
 
 part 'category.freezed.dart';
-part 'category.g.dart';
 
 @freezed
 abstract class Category with _$Category {
@@ -12,6 +12,10 @@ abstract class Category with _$Category {
     required final bool isIncome,
   }) = _Category;
 
-  factory Category.fromJson(final Map<String, dynamic> json) =>
-      _$CategoryFromJson(json);
+  factory Category.fromDto(final CategoryDto dto) => Category(
+        id: dto.id,
+        name: dto.name,
+        emoji: dto.emoji,
+        isIncome: dto.isIncome,
+      );
 }

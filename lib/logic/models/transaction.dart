@@ -2,9 +2,9 @@ import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr_hw/logic/models/account.dart';
 import 'package:shmr_hw/logic/models/category.dart';
+import 'package:shmr_hw/logic/models/rest_api_dto/transaction.dart';
 
 part 'transaction.freezed.dart';
-part 'transaction.g.dart';
 
 @freezed
 abstract class Transaction with _$Transaction {
@@ -14,13 +14,21 @@ abstract class Transaction with _$Transaction {
     required final int categoryId,
     required final Decimal amount,
     required final DateTime transactionDate,
-    required final String comment,
+    required final String? comment,
     required final DateTime createdAt,
     required final DateTime updatedAt,
   }) = _Transaction;
 
-  factory Transaction.fromJson(final Map<String, dynamic> json) =>
-      _$TransactionFromJson(json);
+  factory Transaction.fromDto(final TransactionDto dto) => Transaction(
+        id: dto.id,
+        accountId: dto.accountId,
+        categoryId: dto.categoryId,
+        amount: dto.amount,
+        transactionDate: dto.transactionDate,
+        comment: dto.comment,
+        createdAt: dto.createdAt,
+        updatedAt: dto.updatedAt,
+      );
 
   factory Transaction.fromResponse(final TransactionResponse response) =>
       Transaction(
@@ -42,8 +50,8 @@ abstract class TransactionRequest with _$TransactionRequest {
     required final int categoryId,
     required final Decimal amount,
     required final DateTime transactionDate,
-    required final String comment,
-  }) = _Create;
+    required final String? comment,
+  }) = _TransactionRequest;
 
   factory TransactionRequest.fromTransaction(final Transaction transaction) =>
       TransactionRequest(
@@ -55,23 +63,28 @@ abstract class TransactionRequest with _$TransactionRequest {
       );
 }
 
-// Only returned by API when updating a transaction.
-// But when we create one, it returns Transaction.
-// wut?
-// We also get TransactionResponse when we fetch a history of transactions.
 @freezed
 abstract class TransactionResponse with _$TransactionResponse {
   const factory TransactionResponse({
     required final int id,
-    required final AccountBrief account,
+    required final AccountState account,
     required final Category category,
     required final Decimal amount,
     required final DateTime transactionDate,
-    required final String comment,
+    required final String? comment,
     required final DateTime createdAt,
     required final DateTime updatedAt,
   }) = _TransactionResponse;
 
-  factory TransactionResponse.fromJson(final Map<String, dynamic> json) =>
-      _$TransactionResponseFromJson(json);
+  factory TransactionResponse.fromDto(final TransactionResponseDto dto) =>
+      TransactionResponse(
+        id: dto.id,
+        account: AccountState.fromDto(dto.account),
+        category: Category.fromDto(dto.category),
+        amount: dto.amount,
+        transactionDate: dto.transactionDate,
+        comment: dto.comment,
+        createdAt: dto.createdAt,
+        updatedAt: dto.updatedAt,
+      );
 }

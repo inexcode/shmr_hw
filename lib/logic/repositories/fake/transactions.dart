@@ -29,7 +29,7 @@ class FakeTransactionsRepository implements TransactionsRepository {
     await Future.delayed(const Duration(seconds: 1));
     return TransactionResponse(
       id: id,
-      account: AccountBrief(
+      account: AccountState(
         id: 1,
         name: 'Основной счёт',
         balance: Decimal.parse('1000.00'),
@@ -57,7 +57,7 @@ class FakeTransactionsRepository implements TransactionsRepository {
     await Future.delayed(const Duration(seconds: 1));
     return TransactionResponse(
       id: id,
-      account: AccountBrief(
+      account: AccountState(
         id: request.accountId,
         name: 'Основной счёт',
         balance: Decimal.parse('1000.00'),
@@ -96,7 +96,7 @@ class FakeTransactionsRepository implements TransactionsRepository {
     return [
       TransactionResponse(
         id: 1,
-        account: AccountBrief(
+        account: AccountState(
           id: accountId,
           name: 'Основной счёт',
           balance: Decimal.parse('1000.00'),

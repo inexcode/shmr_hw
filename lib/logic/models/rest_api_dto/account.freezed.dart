@@ -14,7 +14,7 @@ part of 'account.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Account {
+mixin _$AccountDto {
   int get id;
   int get userId;
   String get name;
@@ -23,18 +23,21 @@ mixin _$Account {
   DateTime get createdAt;
   DateTime get updatedAt;
 
-  /// Create a copy of Account
+  /// Create a copy of AccountDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $AccountCopyWith<Account> get copyWith =>
-      _$AccountCopyWithImpl<Account>(this as Account, _$identity);
+  $AccountDtoCopyWith<AccountDto> get copyWith =>
+      _$AccountDtoCopyWithImpl<AccountDto>(this as AccountDto, _$identity);
+
+  /// Serializes this AccountDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is Account &&
+            other is AccountDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.name, name) || other.name == name) &&
@@ -47,20 +50,22 @@ mixin _$Account {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, userId, name, balance, currency, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'Account(id: $id, userId: $userId, name: $name, balance: $balance, currency: $currency, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'AccountDto(id: $id, userId: $userId, name: $name, balance: $balance, currency: $currency, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class $AccountCopyWith<$Res> {
-  factory $AccountCopyWith(Account value, $Res Function(Account) _then) =
-      _$AccountCopyWithImpl;
+abstract mixin class $AccountDtoCopyWith<$Res> {
+  factory $AccountDtoCopyWith(
+          AccountDto value, $Res Function(AccountDto) _then) =
+      _$AccountDtoCopyWithImpl;
   @useResult
   $Res call(
       {int id,
@@ -73,13 +78,13 @@ abstract mixin class $AccountCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AccountCopyWithImpl<$Res> implements $AccountCopyWith<$Res> {
-  _$AccountCopyWithImpl(this._self, this._then);
+class _$AccountDtoCopyWithImpl<$Res> implements $AccountDtoCopyWith<$Res> {
+  _$AccountDtoCopyWithImpl(this._self, this._then);
 
-  final Account _self;
-  final $Res Function(Account) _then;
+  final AccountDto _self;
+  final $Res Function(AccountDto) _then;
 
-  /// Create a copy of Account
+  /// Create a copy of AccountDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -126,9 +131,9 @@ class _$AccountCopyWithImpl<$Res> implements $AccountCopyWith<$Res> {
 }
 
 /// @nodoc
-
-class _Account implements Account {
-  const _Account(
+@JsonSerializable()
+class _AccountDto implements AccountDto {
+  const _AccountDto(
       {required this.id,
       required this.userId,
       required this.name,
@@ -136,6 +141,8 @@ class _Account implements Account {
       required this.currency,
       required this.createdAt,
       required this.updatedAt});
+  factory _AccountDto.fromJson(Map<String, dynamic> json) =>
+      _$AccountDtoFromJson(json);
 
   @override
   final int id;
@@ -152,19 +159,26 @@ class _Account implements Account {
   @override
   final DateTime updatedAt;
 
-  /// Create a copy of Account
+  /// Create a copy of AccountDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$AccountCopyWith<_Account> get copyWith =>
-      __$AccountCopyWithImpl<_Account>(this, _$identity);
+  _$AccountDtoCopyWith<_AccountDto> get copyWith =>
+      __$AccountDtoCopyWithImpl<_AccountDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$AccountDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Account &&
+            other is _AccountDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.name, name) || other.name == name) &&
@@ -177,20 +191,23 @@ class _Account implements Account {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, userId, name, balance, currency, createdAt, updatedAt);
 
   @override
   String toString() {
-    return 'Account(id: $id, userId: $userId, name: $name, balance: $balance, currency: $currency, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'AccountDto(id: $id, userId: $userId, name: $name, balance: $balance, currency: $currency, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
-  factory _$AccountCopyWith(_Account value, $Res Function(_Account) _then) =
-      __$AccountCopyWithImpl;
+abstract mixin class _$AccountDtoCopyWith<$Res>
+    implements $AccountDtoCopyWith<$Res> {
+  factory _$AccountDtoCopyWith(
+          _AccountDto value, $Res Function(_AccountDto) _then) =
+      __$AccountDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -204,13 +221,13 @@ abstract mixin class _$AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$AccountCopyWithImpl<$Res> implements _$AccountCopyWith<$Res> {
-  __$AccountCopyWithImpl(this._self, this._then);
+class __$AccountDtoCopyWithImpl<$Res> implements _$AccountDtoCopyWith<$Res> {
+  __$AccountDtoCopyWithImpl(this._self, this._then);
 
-  final _Account _self;
-  final $Res Function(_Account) _then;
+  final _AccountDto _self;
+  final $Res Function(_AccountDto) _then;
 
-  /// Create a copy of Account
+  /// Create a copy of AccountDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -223,7 +240,7 @@ class __$AccountCopyWithImpl<$Res> implements _$AccountCopyWith<$Res> {
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_Account(
+    return _then(_AccountDto(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -257,57 +274,61 @@ class __$AccountCopyWithImpl<$Res> implements _$AccountCopyWith<$Res> {
 }
 
 /// @nodoc
-mixin _$AccountRequest {
+mixin _$AccountRequestDto {
   String get name;
   Decimal get balance;
   String get currency;
 
-  /// Create a copy of AccountRequest
+  /// Create a copy of AccountRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $AccountRequestCopyWith<AccountRequest> get copyWith =>
-      _$AccountRequestCopyWithImpl<AccountRequest>(
-          this as AccountRequest, _$identity);
+  $AccountRequestDtoCopyWith<AccountRequestDto> get copyWith =>
+      _$AccountRequestDtoCopyWithImpl<AccountRequestDto>(
+          this as AccountRequestDto, _$identity);
+
+  /// Serializes this AccountRequestDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AccountRequest &&
+            other is AccountRequestDto &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.currency, currency) ||
                 other.currency == currency));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, name, balance, currency);
 
   @override
   String toString() {
-    return 'AccountRequest(name: $name, balance: $balance, currency: $currency)';
+    return 'AccountRequestDto(name: $name, balance: $balance, currency: $currency)';
   }
 }
 
 /// @nodoc
-abstract mixin class $AccountRequestCopyWith<$Res> {
-  factory $AccountRequestCopyWith(
-          AccountRequest value, $Res Function(AccountRequest) _then) =
-      _$AccountRequestCopyWithImpl;
+abstract mixin class $AccountRequestDtoCopyWith<$Res> {
+  factory $AccountRequestDtoCopyWith(
+          AccountRequestDto value, $Res Function(AccountRequestDto) _then) =
+      _$AccountRequestDtoCopyWithImpl;
   @useResult
   $Res call({String name, Decimal balance, String currency});
 }
 
 /// @nodoc
-class _$AccountRequestCopyWithImpl<$Res>
-    implements $AccountRequestCopyWith<$Res> {
-  _$AccountRequestCopyWithImpl(this._self, this._then);
+class _$AccountRequestDtoCopyWithImpl<$Res>
+    implements $AccountRequestDtoCopyWith<$Res> {
+  _$AccountRequestDtoCopyWithImpl(this._self, this._then);
 
-  final AccountRequest _self;
-  final $Res Function(AccountRequest) _then;
+  final AccountRequestDto _self;
+  final $Res Function(AccountRequestDto) _then;
 
-  /// Create a copy of AccountRequest
+  /// Create a copy of AccountRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -334,10 +355,12 @@ class _$AccountRequestCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-class _Create implements AccountRequest {
-  const _Create(
+@JsonSerializable()
+class _AccountRequestDto implements AccountRequestDto {
+  const _AccountRequestDto(
       {required this.name, required this.balance, required this.currency});
+  factory _AccountRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$AccountRequestDtoFromJson(json);
 
   @override
   final String name;
@@ -346,52 +369,62 @@ class _Create implements AccountRequest {
   @override
   final String currency;
 
-  /// Create a copy of AccountRequest
+  /// Create a copy of AccountRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CreateCopyWith<_Create> get copyWith =>
-      __$CreateCopyWithImpl<_Create>(this, _$identity);
+  _$AccountRequestDtoCopyWith<_AccountRequestDto> get copyWith =>
+      __$AccountRequestDtoCopyWithImpl<_AccountRequestDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$AccountRequestDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Create &&
+            other is _AccountRequestDto &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.currency, currency) ||
                 other.currency == currency));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, name, balance, currency);
 
   @override
   String toString() {
-    return 'AccountRequest(name: $name, balance: $balance, currency: $currency)';
+    return 'AccountRequestDto(name: $name, balance: $balance, currency: $currency)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$CreateCopyWith<$Res>
-    implements $AccountRequestCopyWith<$Res> {
-  factory _$CreateCopyWith(_Create value, $Res Function(_Create) _then) =
-      __$CreateCopyWithImpl;
+abstract mixin class _$AccountRequestDtoCopyWith<$Res>
+    implements $AccountRequestDtoCopyWith<$Res> {
+  factory _$AccountRequestDtoCopyWith(
+          _AccountRequestDto value, $Res Function(_AccountRequestDto) _then) =
+      __$AccountRequestDtoCopyWithImpl;
   @override
   @useResult
   $Res call({String name, Decimal balance, String currency});
 }
 
 /// @nodoc
-class __$CreateCopyWithImpl<$Res> implements _$CreateCopyWith<$Res> {
-  __$CreateCopyWithImpl(this._self, this._then);
+class __$AccountRequestDtoCopyWithImpl<$Res>
+    implements _$AccountRequestDtoCopyWith<$Res> {
+  __$AccountRequestDtoCopyWithImpl(this._self, this._then);
 
-  final _Create _self;
-  final $Res Function(_Create) _then;
+  final _AccountRequestDto _self;
+  final $Res Function(_AccountRequestDto) _then;
 
-  /// Create a copy of AccountRequest
+  /// Create a copy of AccountRequestDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -400,7 +433,7 @@ class __$CreateCopyWithImpl<$Res> implements _$CreateCopyWith<$Res> {
     Object? balance = null,
     Object? currency = null,
   }) {
-    return _then(_Create(
+    return _then(_AccountRequestDto(
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -418,29 +451,32 @@ class __$CreateCopyWithImpl<$Res> implements _$CreateCopyWith<$Res> {
 }
 
 /// @nodoc
-mixin _$AccountDetails {
+mixin _$AccountResponseDto {
   int get id;
   String get name;
   Decimal get balance;
   String get currency;
-  List<StatItem> get incomeStats;
-  List<StatItem> get expenseStats;
+  List<StatItemDto> get incomeStats;
+  List<StatItemDto> get expenseStats;
   DateTime get createdAt;
   DateTime get updatedAt;
 
-  /// Create a copy of AccountDetails
+  /// Create a copy of AccountResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $AccountDetailsCopyWith<AccountDetails> get copyWith =>
-      _$AccountDetailsCopyWithImpl<AccountDetails>(
-          this as AccountDetails, _$identity);
+  $AccountResponseDtoCopyWith<AccountResponseDto> get copyWith =>
+      _$AccountResponseDtoCopyWithImpl<AccountResponseDto>(
+          this as AccountResponseDto, _$identity);
+
+  /// Serializes this AccountResponseDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AccountDetails &&
+            other is AccountResponseDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
@@ -456,6 +492,7 @@ mixin _$AccountDetails {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -470,36 +507,36 @@ mixin _$AccountDetails {
 
   @override
   String toString() {
-    return 'AccountDetails(id: $id, name: $name, balance: $balance, currency: $currency, incomeStats: $incomeStats, expenseStats: $expenseStats, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'AccountResponseDto(id: $id, name: $name, balance: $balance, currency: $currency, incomeStats: $incomeStats, expenseStats: $expenseStats, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class $AccountDetailsCopyWith<$Res> {
-  factory $AccountDetailsCopyWith(
-          AccountDetails value, $Res Function(AccountDetails) _then) =
-      _$AccountDetailsCopyWithImpl;
+abstract mixin class $AccountResponseDtoCopyWith<$Res> {
+  factory $AccountResponseDtoCopyWith(
+          AccountResponseDto value, $Res Function(AccountResponseDto) _then) =
+      _$AccountResponseDtoCopyWithImpl;
   @useResult
   $Res call(
       {int id,
       String name,
       Decimal balance,
       String currency,
-      List<StatItem> incomeStats,
-      List<StatItem> expenseStats,
+      List<StatItemDto> incomeStats,
+      List<StatItemDto> expenseStats,
       DateTime createdAt,
       DateTime updatedAt});
 }
 
 /// @nodoc
-class _$AccountDetailsCopyWithImpl<$Res>
-    implements $AccountDetailsCopyWith<$Res> {
-  _$AccountDetailsCopyWithImpl(this._self, this._then);
+class _$AccountResponseDtoCopyWithImpl<$Res>
+    implements $AccountResponseDtoCopyWith<$Res> {
+  _$AccountResponseDtoCopyWithImpl(this._self, this._then);
 
-  final AccountDetails _self;
-  final $Res Function(AccountDetails) _then;
+  final AccountResponseDto _self;
+  final $Res Function(AccountResponseDto) _then;
 
-  /// Create a copy of AccountDetails
+  /// Create a copy of AccountResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -533,11 +570,11 @@ class _$AccountDetailsCopyWithImpl<$Res>
       incomeStats: null == incomeStats
           ? _self.incomeStats
           : incomeStats // ignore: cast_nullable_to_non_nullable
-              as List<StatItem>,
+              as List<StatItemDto>,
       expenseStats: null == expenseStats
           ? _self.expenseStats
           : expenseStats // ignore: cast_nullable_to_non_nullable
-              as List<StatItem>,
+              as List<StatItemDto>,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -551,19 +588,21 @@ class _$AccountDetailsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-class _AccountDetails implements AccountDetails {
-  const _AccountDetails(
+@JsonSerializable()
+class _AccountResponseDto implements AccountResponseDto {
+  const _AccountResponseDto(
       {required this.id,
       required this.name,
       required this.balance,
       required this.currency,
-      required final List<StatItem> incomeStats,
-      required final List<StatItem> expenseStats,
+      required final List<StatItemDto> incomeStats,
+      required final List<StatItemDto> expenseStats,
       required this.createdAt,
       required this.updatedAt})
       : _incomeStats = incomeStats,
         _expenseStats = expenseStats;
+  factory _AccountResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$AccountResponseDtoFromJson(json);
 
   @override
   final int id;
@@ -573,17 +612,17 @@ class _AccountDetails implements AccountDetails {
   final Decimal balance;
   @override
   final String currency;
-  final List<StatItem> _incomeStats;
+  final List<StatItemDto> _incomeStats;
   @override
-  List<StatItem> get incomeStats {
+  List<StatItemDto> get incomeStats {
     if (_incomeStats is EqualUnmodifiableListView) return _incomeStats;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_incomeStats);
   }
 
-  final List<StatItem> _expenseStats;
+  final List<StatItemDto> _expenseStats;
   @override
-  List<StatItem> get expenseStats {
+  List<StatItemDto> get expenseStats {
     if (_expenseStats is EqualUnmodifiableListView) return _expenseStats;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_expenseStats);
@@ -594,19 +633,26 @@ class _AccountDetails implements AccountDetails {
   @override
   final DateTime updatedAt;
 
-  /// Create a copy of AccountDetails
+  /// Create a copy of AccountResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$AccountDetailsCopyWith<_AccountDetails> get copyWith =>
-      __$AccountDetailsCopyWithImpl<_AccountDetails>(this, _$identity);
+  _$AccountResponseDtoCopyWith<_AccountResponseDto> get copyWith =>
+      __$AccountResponseDtoCopyWithImpl<_AccountResponseDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$AccountResponseDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _AccountDetails &&
+            other is _AccountResponseDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
@@ -622,6 +668,7 @@ class _AccountDetails implements AccountDetails {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -636,16 +683,16 @@ class _AccountDetails implements AccountDetails {
 
   @override
   String toString() {
-    return 'AccountDetails(id: $id, name: $name, balance: $balance, currency: $currency, incomeStats: $incomeStats, expenseStats: $expenseStats, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'AccountResponseDto(id: $id, name: $name, balance: $balance, currency: $currency, incomeStats: $incomeStats, expenseStats: $expenseStats, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$AccountDetailsCopyWith<$Res>
-    implements $AccountDetailsCopyWith<$Res> {
-  factory _$AccountDetailsCopyWith(
-          _AccountDetails value, $Res Function(_AccountDetails) _then) =
-      __$AccountDetailsCopyWithImpl;
+abstract mixin class _$AccountResponseDtoCopyWith<$Res>
+    implements $AccountResponseDtoCopyWith<$Res> {
+  factory _$AccountResponseDtoCopyWith(
+          _AccountResponseDto value, $Res Function(_AccountResponseDto) _then) =
+      __$AccountResponseDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -653,21 +700,21 @@ abstract mixin class _$AccountDetailsCopyWith<$Res>
       String name,
       Decimal balance,
       String currency,
-      List<StatItem> incomeStats,
-      List<StatItem> expenseStats,
+      List<StatItemDto> incomeStats,
+      List<StatItemDto> expenseStats,
       DateTime createdAt,
       DateTime updatedAt});
 }
 
 /// @nodoc
-class __$AccountDetailsCopyWithImpl<$Res>
-    implements _$AccountDetailsCopyWith<$Res> {
-  __$AccountDetailsCopyWithImpl(this._self, this._then);
+class __$AccountResponseDtoCopyWithImpl<$Res>
+    implements _$AccountResponseDtoCopyWith<$Res> {
+  __$AccountResponseDtoCopyWithImpl(this._self, this._then);
 
-  final _AccountDetails _self;
-  final $Res Function(_AccountDetails) _then;
+  final _AccountResponseDto _self;
+  final $Res Function(_AccountResponseDto) _then;
 
-  /// Create a copy of AccountDetails
+  /// Create a copy of AccountResponseDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -681,7 +728,7 @@ class __$AccountDetailsCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_AccountDetails(
+    return _then(_AccountResponseDto(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -701,11 +748,11 @@ class __$AccountDetailsCopyWithImpl<$Res>
       incomeStats: null == incomeStats
           ? _self._incomeStats
           : incomeStats // ignore: cast_nullable_to_non_nullable
-              as List<StatItem>,
+              as List<StatItemDto>,
       expenseStats: null == expenseStats
           ? _self._expenseStats
           : expenseStats // ignore: cast_nullable_to_non_nullable
-              as List<StatItem>,
+              as List<StatItemDto>,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -719,25 +766,28 @@ class __$AccountDetailsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-mixin _$AccountState {
+mixin _$AccountStateDto {
   int get id;
   String get name;
   Decimal get balance;
   String get currency;
 
-  /// Create a copy of AccountState
+  /// Create a copy of AccountStateDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $AccountStateCopyWith<AccountState> get copyWith =>
-      _$AccountStateCopyWithImpl<AccountState>(
-          this as AccountState, _$identity);
+  $AccountStateDtoCopyWith<AccountStateDto> get copyWith =>
+      _$AccountStateDtoCopyWithImpl<AccountStateDto>(
+          this as AccountStateDto, _$identity);
+
+  /// Serializes this AccountStateDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AccountState &&
+            other is AccountStateDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
@@ -745,32 +795,34 @@ mixin _$AccountState {
                 other.currency == currency));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, balance, currency);
 
   @override
   String toString() {
-    return 'AccountState(id: $id, name: $name, balance: $balance, currency: $currency)';
+    return 'AccountStateDto(id: $id, name: $name, balance: $balance, currency: $currency)';
   }
 }
 
 /// @nodoc
-abstract mixin class $AccountStateCopyWith<$Res> {
-  factory $AccountStateCopyWith(
-          AccountState value, $Res Function(AccountState) _then) =
-      _$AccountStateCopyWithImpl;
+abstract mixin class $AccountStateDtoCopyWith<$Res> {
+  factory $AccountStateDtoCopyWith(
+          AccountStateDto value, $Res Function(AccountStateDto) _then) =
+      _$AccountStateDtoCopyWithImpl;
   @useResult
   $Res call({int id, String name, Decimal balance, String currency});
 }
 
 /// @nodoc
-class _$AccountStateCopyWithImpl<$Res> implements $AccountStateCopyWith<$Res> {
-  _$AccountStateCopyWithImpl(this._self, this._then);
+class _$AccountStateDtoCopyWithImpl<$Res>
+    implements $AccountStateDtoCopyWith<$Res> {
+  _$AccountStateDtoCopyWithImpl(this._self, this._then);
 
-  final AccountState _self;
-  final $Res Function(AccountState) _then;
+  final AccountStateDto _self;
+  final $Res Function(AccountStateDto) _then;
 
-  /// Create a copy of AccountState
+  /// Create a copy of AccountStateDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -802,13 +854,15 @@ class _$AccountStateCopyWithImpl<$Res> implements $AccountStateCopyWith<$Res> {
 }
 
 /// @nodoc
-
-class _AccountState implements AccountState {
-  const _AccountState(
+@JsonSerializable()
+class _AccountStateDto implements AccountStateDto {
+  const _AccountStateDto(
       {required this.id,
       required this.name,
       required this.balance,
       required this.currency});
+  factory _AccountStateDto.fromJson(Map<String, dynamic> json) =>
+      _$AccountStateDtoFromJson(json);
 
   @override
   final int id;
@@ -819,19 +873,26 @@ class _AccountState implements AccountState {
   @override
   final String currency;
 
-  /// Create a copy of AccountState
+  /// Create a copy of AccountStateDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$AccountStateCopyWith<_AccountState> get copyWith =>
-      __$AccountStateCopyWithImpl<_AccountState>(this, _$identity);
+  _$AccountStateDtoCopyWith<_AccountStateDto> get copyWith =>
+      __$AccountStateDtoCopyWithImpl<_AccountStateDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$AccountStateDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _AccountState &&
+            other is _AccountStateDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
@@ -839,35 +900,36 @@ class _AccountState implements AccountState {
                 other.currency == currency));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, balance, currency);
 
   @override
   String toString() {
-    return 'AccountState(id: $id, name: $name, balance: $balance, currency: $currency)';
+    return 'AccountStateDto(id: $id, name: $name, balance: $balance, currency: $currency)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$AccountStateCopyWith<$Res>
-    implements $AccountStateCopyWith<$Res> {
-  factory _$AccountStateCopyWith(
-          _AccountState value, $Res Function(_AccountState) _then) =
-      __$AccountStateCopyWithImpl;
+abstract mixin class _$AccountStateDtoCopyWith<$Res>
+    implements $AccountStateDtoCopyWith<$Res> {
+  factory _$AccountStateDtoCopyWith(
+          _AccountStateDto value, $Res Function(_AccountStateDto) _then) =
+      __$AccountStateDtoCopyWithImpl;
   @override
   @useResult
   $Res call({int id, String name, Decimal balance, String currency});
 }
 
 /// @nodoc
-class __$AccountStateCopyWithImpl<$Res>
-    implements _$AccountStateCopyWith<$Res> {
-  __$AccountStateCopyWithImpl(this._self, this._then);
+class __$AccountStateDtoCopyWithImpl<$Res>
+    implements _$AccountStateDtoCopyWith<$Res> {
+  __$AccountStateDtoCopyWithImpl(this._self, this._then);
 
-  final _AccountState _self;
-  final $Res Function(_AccountState) _then;
+  final _AccountStateDto _self;
+  final $Res Function(_AccountStateDto) _then;
 
-  /// Create a copy of AccountState
+  /// Create a copy of AccountStateDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -877,7 +939,7 @@ class __$AccountStateCopyWithImpl<$Res>
     Object? balance = null,
     Object? currency = null,
   }) {
-    return _then(_AccountState(
+    return _then(_AccountStateDto(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -899,29 +961,32 @@ class __$AccountStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-mixin _$AccountHistoryElement {
+mixin _$AccountHistoryDto {
   int get id;
   int get accountId;
   String get name;
   AccountHistoryChangeType get changeType;
-  AccountState? get previousState;
-  AccountState get newState;
+  AccountStateDto? get previousState;
+  AccountStateDto get newState;
   DateTime get changeTimestamp;
   DateTime get createdAt;
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $AccountHistoryElementCopyWith<AccountHistoryElement> get copyWith =>
-      _$AccountHistoryElementCopyWithImpl<AccountHistoryElement>(
-          this as AccountHistoryElement, _$identity);
+  $AccountHistoryDtoCopyWith<AccountHistoryDto> get copyWith =>
+      _$AccountHistoryDtoCopyWithImpl<AccountHistoryDto>(
+          this as AccountHistoryDto, _$identity);
+
+  /// Serializes this AccountHistoryDto to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AccountHistoryElement &&
+            other is AccountHistoryDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
@@ -938,45 +1003,46 @@ mixin _$AccountHistoryElement {
                 other.createdAt == createdAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, accountId, name, changeType,
       previousState, newState, changeTimestamp, createdAt);
 
   @override
   String toString() {
-    return 'AccountHistoryElement(id: $id, accountId: $accountId, name: $name, changeType: $changeType, previousState: $previousState, newState: $newState, changeTimestamp: $changeTimestamp, createdAt: $createdAt)';
+    return 'AccountHistoryDto(id: $id, accountId: $accountId, name: $name, changeType: $changeType, previousState: $previousState, newState: $newState, changeTimestamp: $changeTimestamp, createdAt: $createdAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class $AccountHistoryElementCopyWith<$Res> {
-  factory $AccountHistoryElementCopyWith(AccountHistoryElement value,
-          $Res Function(AccountHistoryElement) _then) =
-      _$AccountHistoryElementCopyWithImpl;
+abstract mixin class $AccountHistoryDtoCopyWith<$Res> {
+  factory $AccountHistoryDtoCopyWith(
+          AccountHistoryDto value, $Res Function(AccountHistoryDto) _then) =
+      _$AccountHistoryDtoCopyWithImpl;
   @useResult
   $Res call(
       {int id,
       int accountId,
       String name,
       AccountHistoryChangeType changeType,
-      AccountState? previousState,
-      AccountState newState,
+      AccountStateDto? previousState,
+      AccountStateDto newState,
       DateTime changeTimestamp,
       DateTime createdAt});
 
-  $AccountStateCopyWith<$Res>? get previousState;
-  $AccountStateCopyWith<$Res> get newState;
+  $AccountStateDtoCopyWith<$Res>? get previousState;
+  $AccountStateDtoCopyWith<$Res> get newState;
 }
 
 /// @nodoc
-class _$AccountHistoryElementCopyWithImpl<$Res>
-    implements $AccountHistoryElementCopyWith<$Res> {
-  _$AccountHistoryElementCopyWithImpl(this._self, this._then);
+class _$AccountHistoryDtoCopyWithImpl<$Res>
+    implements $AccountHistoryDtoCopyWith<$Res> {
+  _$AccountHistoryDtoCopyWithImpl(this._self, this._then);
 
-  final AccountHistoryElement _self;
-  final $Res Function(AccountHistoryElement) _then;
+  final AccountHistoryDto _self;
+  final $Res Function(AccountHistoryDto) _then;
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1010,11 +1076,11 @@ class _$AccountHistoryElementCopyWithImpl<$Res>
       previousState: freezed == previousState
           ? _self.previousState
           : previousState // ignore: cast_nullable_to_non_nullable
-              as AccountState?,
+              as AccountStateDto?,
       newState: null == newState
           ? _self.newState
           : newState // ignore: cast_nullable_to_non_nullable
-              as AccountState,
+              as AccountStateDto,
       changeTimestamp: null == changeTimestamp
           ? _self.changeTimestamp
           : changeTimestamp // ignore: cast_nullable_to_non_nullable
@@ -1026,35 +1092,35 @@ class _$AccountHistoryElementCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AccountStateCopyWith<$Res>? get previousState {
+  $AccountStateDtoCopyWith<$Res>? get previousState {
     if (_self.previousState == null) {
       return null;
     }
 
-    return $AccountStateCopyWith<$Res>(_self.previousState!, (value) {
+    return $AccountStateDtoCopyWith<$Res>(_self.previousState!, (value) {
       return _then(_self.copyWith(previousState: value));
     });
   }
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AccountStateCopyWith<$Res> get newState {
-    return $AccountStateCopyWith<$Res>(_self.newState, (value) {
+  $AccountStateDtoCopyWith<$Res> get newState {
+    return $AccountStateDtoCopyWith<$Res>(_self.newState, (value) {
       return _then(_self.copyWith(newState: value));
     });
   }
 }
 
 /// @nodoc
-
-class _AccountHistoryElement implements AccountHistoryElement {
-  const _AccountHistoryElement(
+@JsonSerializable()
+class _AccountHistoryDto implements AccountHistoryDto {
+  const _AccountHistoryDto(
       {required this.id,
       required this.accountId,
       required this.name,
@@ -1063,6 +1129,8 @@ class _AccountHistoryElement implements AccountHistoryElement {
       required this.newState,
       required this.changeTimestamp,
       required this.createdAt});
+  factory _AccountHistoryDto.fromJson(Map<String, dynamic> json) =>
+      _$AccountHistoryDtoFromJson(json);
 
   @override
   final int id;
@@ -1073,28 +1141,34 @@ class _AccountHistoryElement implements AccountHistoryElement {
   @override
   final AccountHistoryChangeType changeType;
   @override
-  final AccountState? previousState;
+  final AccountStateDto? previousState;
   @override
-  final AccountState newState;
+  final AccountStateDto newState;
   @override
   final DateTime changeTimestamp;
   @override
   final DateTime createdAt;
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$AccountHistoryElementCopyWith<_AccountHistoryElement> get copyWith =>
-      __$AccountHistoryElementCopyWithImpl<_AccountHistoryElement>(
-          this, _$identity);
+  _$AccountHistoryDtoCopyWith<_AccountHistoryDto> get copyWith =>
+      __$AccountHistoryDtoCopyWithImpl<_AccountHistoryDto>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$AccountHistoryDtoToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _AccountHistoryElement &&
+            other is _AccountHistoryDto &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
@@ -1111,22 +1185,23 @@ class _AccountHistoryElement implements AccountHistoryElement {
                 other.createdAt == createdAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, accountId, name, changeType,
       previousState, newState, changeTimestamp, createdAt);
 
   @override
   String toString() {
-    return 'AccountHistoryElement(id: $id, accountId: $accountId, name: $name, changeType: $changeType, previousState: $previousState, newState: $newState, changeTimestamp: $changeTimestamp, createdAt: $createdAt)';
+    return 'AccountHistoryDto(id: $id, accountId: $accountId, name: $name, changeType: $changeType, previousState: $previousState, newState: $newState, changeTimestamp: $changeTimestamp, createdAt: $createdAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$AccountHistoryElementCopyWith<$Res>
-    implements $AccountHistoryElementCopyWith<$Res> {
-  factory _$AccountHistoryElementCopyWith(_AccountHistoryElement value,
-          $Res Function(_AccountHistoryElement) _then) =
-      __$AccountHistoryElementCopyWithImpl;
+abstract mixin class _$AccountHistoryDtoCopyWith<$Res>
+    implements $AccountHistoryDtoCopyWith<$Res> {
+  factory _$AccountHistoryDtoCopyWith(
+          _AccountHistoryDto value, $Res Function(_AccountHistoryDto) _then) =
+      __$AccountHistoryDtoCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -1134,26 +1209,26 @@ abstract mixin class _$AccountHistoryElementCopyWith<$Res>
       int accountId,
       String name,
       AccountHistoryChangeType changeType,
-      AccountState? previousState,
-      AccountState newState,
+      AccountStateDto? previousState,
+      AccountStateDto newState,
       DateTime changeTimestamp,
       DateTime createdAt});
 
   @override
-  $AccountStateCopyWith<$Res>? get previousState;
+  $AccountStateDtoCopyWith<$Res>? get previousState;
   @override
-  $AccountStateCopyWith<$Res> get newState;
+  $AccountStateDtoCopyWith<$Res> get newState;
 }
 
 /// @nodoc
-class __$AccountHistoryElementCopyWithImpl<$Res>
-    implements _$AccountHistoryElementCopyWith<$Res> {
-  __$AccountHistoryElementCopyWithImpl(this._self, this._then);
+class __$AccountHistoryDtoCopyWithImpl<$Res>
+    implements _$AccountHistoryDtoCopyWith<$Res> {
+  __$AccountHistoryDtoCopyWithImpl(this._self, this._then);
 
-  final _AccountHistoryElement _self;
-  final $Res Function(_AccountHistoryElement) _then;
+  final _AccountHistoryDto _self;
+  final $Res Function(_AccountHistoryDto) _then;
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -1167,7 +1242,7 @@ class __$AccountHistoryElementCopyWithImpl<$Res>
     Object? changeTimestamp = null,
     Object? createdAt = null,
   }) {
-    return _then(_AccountHistoryElement(
+    return _then(_AccountHistoryDto(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -1187,11 +1262,11 @@ class __$AccountHistoryElementCopyWithImpl<$Res>
       previousState: freezed == previousState
           ? _self.previousState
           : previousState // ignore: cast_nullable_to_non_nullable
-              as AccountState?,
+              as AccountStateDto?,
       newState: null == newState
           ? _self.newState
           : newState // ignore: cast_nullable_to_non_nullable
-              as AccountState,
+              as AccountStateDto,
       changeTimestamp: null == changeTimestamp
           ? _self.changeTimestamp
           : changeTimestamp // ignore: cast_nullable_to_non_nullable
@@ -1203,52 +1278,55 @@ class __$AccountHistoryElementCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AccountStateCopyWith<$Res>? get previousState {
+  $AccountStateDtoCopyWith<$Res>? get previousState {
     if (_self.previousState == null) {
       return null;
     }
 
-    return $AccountStateCopyWith<$Res>(_self.previousState!, (value) {
+    return $AccountStateDtoCopyWith<$Res>(_self.previousState!, (value) {
       return _then(_self.copyWith(previousState: value));
     });
   }
 
-  /// Create a copy of AccountHistoryElement
+  /// Create a copy of AccountHistoryDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AccountStateCopyWith<$Res> get newState {
-    return $AccountStateCopyWith<$Res>(_self.newState, (value) {
+  $AccountStateDtoCopyWith<$Res> get newState {
+    return $AccountStateDtoCopyWith<$Res>(_self.newState, (value) {
       return _then(_self.copyWith(newState: value));
     });
   }
 }
 
 /// @nodoc
-mixin _$AccountHistory {
+mixin _$AccountHistoryDtoResponse {
   int get accountId;
   String get accountName;
   String get currency;
   Decimal get currentBalance;
-  List<AccountHistoryElement> get history;
+  List<AccountHistoryDto> get history;
 
-  /// Create a copy of AccountHistory
+  /// Create a copy of AccountHistoryDtoResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $AccountHistoryCopyWith<AccountHistory> get copyWith =>
-      _$AccountHistoryCopyWithImpl<AccountHistory>(
-          this as AccountHistory, _$identity);
+  $AccountHistoryDtoResponseCopyWith<AccountHistoryDtoResponse> get copyWith =>
+      _$AccountHistoryDtoResponseCopyWithImpl<AccountHistoryDtoResponse>(
+          this as AccountHistoryDtoResponse, _$identity);
+
+  /// Serializes this AccountHistoryDtoResponse to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AccountHistory &&
+            other is AccountHistoryDtoResponse &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
             (identical(other.accountName, accountName) ||
@@ -1260,39 +1338,40 @@ mixin _$AccountHistory {
             const DeepCollectionEquality().equals(other.history, history));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, accountId, accountName, currency,
       currentBalance, const DeepCollectionEquality().hash(history));
 
   @override
   String toString() {
-    return 'AccountHistory(accountId: $accountId, accountName: $accountName, currency: $currency, currentBalance: $currentBalance, history: $history)';
+    return 'AccountHistoryDtoResponse(accountId: $accountId, accountName: $accountName, currency: $currency, currentBalance: $currentBalance, history: $history)';
   }
 }
 
 /// @nodoc
-abstract mixin class $AccountHistoryCopyWith<$Res> {
-  factory $AccountHistoryCopyWith(
-          AccountHistory value, $Res Function(AccountHistory) _then) =
-      _$AccountHistoryCopyWithImpl;
+abstract mixin class $AccountHistoryDtoResponseCopyWith<$Res> {
+  factory $AccountHistoryDtoResponseCopyWith(AccountHistoryDtoResponse value,
+          $Res Function(AccountHistoryDtoResponse) _then) =
+      _$AccountHistoryDtoResponseCopyWithImpl;
   @useResult
   $Res call(
       {int accountId,
       String accountName,
       String currency,
       Decimal currentBalance,
-      List<AccountHistoryElement> history});
+      List<AccountHistoryDto> history});
 }
 
 /// @nodoc
-class _$AccountHistoryCopyWithImpl<$Res>
-    implements $AccountHistoryCopyWith<$Res> {
-  _$AccountHistoryCopyWithImpl(this._self, this._then);
+class _$AccountHistoryDtoResponseCopyWithImpl<$Res>
+    implements $AccountHistoryDtoResponseCopyWith<$Res> {
+  _$AccountHistoryDtoResponseCopyWithImpl(this._self, this._then);
 
-  final AccountHistory _self;
-  final $Res Function(AccountHistory) _then;
+  final AccountHistoryDtoResponse _self;
+  final $Res Function(AccountHistoryDtoResponse) _then;
 
-  /// Create a copy of AccountHistory
+  /// Create a copy of AccountHistoryDtoResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1323,21 +1402,23 @@ class _$AccountHistoryCopyWithImpl<$Res>
       history: null == history
           ? _self.history
           : history // ignore: cast_nullable_to_non_nullable
-              as List<AccountHistoryElement>,
+              as List<AccountHistoryDto>,
     ));
   }
 }
 
 /// @nodoc
-
-class _AccountHistory implements AccountHistory {
-  const _AccountHistory(
+@JsonSerializable()
+class _AccountHistoryDtoResponse implements AccountHistoryDtoResponse {
+  const _AccountHistoryDtoResponse(
       {required this.accountId,
       required this.accountName,
       required this.currency,
       required this.currentBalance,
-      required final List<AccountHistoryElement> history})
+      required final List<AccountHistoryDto> history})
       : _history = history;
+  factory _AccountHistoryDtoResponse.fromJson(Map<String, dynamic> json) =>
+      _$AccountHistoryDtoResponseFromJson(json);
 
   @override
   final int accountId;
@@ -1347,27 +1428,36 @@ class _AccountHistory implements AccountHistory {
   final String currency;
   @override
   final Decimal currentBalance;
-  final List<AccountHistoryElement> _history;
+  final List<AccountHistoryDto> _history;
   @override
-  List<AccountHistoryElement> get history {
+  List<AccountHistoryDto> get history {
     if (_history is EqualUnmodifiableListView) return _history;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_history);
   }
 
-  /// Create a copy of AccountHistory
+  /// Create a copy of AccountHistoryDtoResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$AccountHistoryCopyWith<_AccountHistory> get copyWith =>
-      __$AccountHistoryCopyWithImpl<_AccountHistory>(this, _$identity);
+  _$AccountHistoryDtoResponseCopyWith<_AccountHistoryDtoResponse>
+      get copyWith =>
+          __$AccountHistoryDtoResponseCopyWithImpl<_AccountHistoryDtoResponse>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$AccountHistoryDtoResponseToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _AccountHistory &&
+            other is _AccountHistoryDtoResponse &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
             (identical(other.accountName, accountName) ||
@@ -1379,22 +1469,23 @@ class _AccountHistory implements AccountHistory {
             const DeepCollectionEquality().equals(other._history, _history));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, accountId, accountName, currency,
       currentBalance, const DeepCollectionEquality().hash(_history));
 
   @override
   String toString() {
-    return 'AccountHistory(accountId: $accountId, accountName: $accountName, currency: $currency, currentBalance: $currentBalance, history: $history)';
+    return 'AccountHistoryDtoResponse(accountId: $accountId, accountName: $accountName, currency: $currency, currentBalance: $currentBalance, history: $history)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$AccountHistoryCopyWith<$Res>
-    implements $AccountHistoryCopyWith<$Res> {
-  factory _$AccountHistoryCopyWith(
-          _AccountHistory value, $Res Function(_AccountHistory) _then) =
-      __$AccountHistoryCopyWithImpl;
+abstract mixin class _$AccountHistoryDtoResponseCopyWith<$Res>
+    implements $AccountHistoryDtoResponseCopyWith<$Res> {
+  factory _$AccountHistoryDtoResponseCopyWith(_AccountHistoryDtoResponse value,
+          $Res Function(_AccountHistoryDtoResponse) _then) =
+      __$AccountHistoryDtoResponseCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -1402,18 +1493,18 @@ abstract mixin class _$AccountHistoryCopyWith<$Res>
       String accountName,
       String currency,
       Decimal currentBalance,
-      List<AccountHistoryElement> history});
+      List<AccountHistoryDto> history});
 }
 
 /// @nodoc
-class __$AccountHistoryCopyWithImpl<$Res>
-    implements _$AccountHistoryCopyWith<$Res> {
-  __$AccountHistoryCopyWithImpl(this._self, this._then);
+class __$AccountHistoryDtoResponseCopyWithImpl<$Res>
+    implements _$AccountHistoryDtoResponseCopyWith<$Res> {
+  __$AccountHistoryDtoResponseCopyWithImpl(this._self, this._then);
 
-  final _AccountHistory _self;
-  final $Res Function(_AccountHistory) _then;
+  final _AccountHistoryDtoResponse _self;
+  final $Res Function(_AccountHistoryDtoResponse) _then;
 
-  /// Create a copy of AccountHistory
+  /// Create a copy of AccountHistoryDtoResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -1424,7 +1515,7 @@ class __$AccountHistoryCopyWithImpl<$Res>
     Object? currentBalance = null,
     Object? history = null,
   }) {
-    return _then(_AccountHistory(
+    return _then(_AccountHistoryDtoResponse(
       accountId: null == accountId
           ? _self.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
@@ -1444,7 +1535,7 @@ class __$AccountHistoryCopyWithImpl<$Res>
       history: null == history
           ? _self._history
           : history // ignore: cast_nullable_to_non_nullable
-              as List<AccountHistoryElement>,
+              as List<AccountHistoryDto>,
     ));
   }
 }
