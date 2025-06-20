@@ -176,7 +176,7 @@ class RestApiClient {
     _checkCommonErrors(response);
   }
 
-  Future<List<TransactionResponseDto>> fetchTransactions({
+  Future<List<TransactionResponseDto>> getTransactions({
     required final int accountId,
     final DateTime? startDate,
     final DateTime? endDate,
