@@ -51,5 +51,12 @@
     "synchronization": "Synchronization",
     "language": "Language",
     "about": "About"
+  },
+  "exceptions": {
+    "unauthorized": "Unauthorized. ${message}",
+    "bad_request": "Bad request. ${message}",
+    "not_found": "Not found. ${message}",
+    "conflict": "Conflict. ${message}",
+    "internal_server_error": "Internal server error. ${message}"
   }
 }
