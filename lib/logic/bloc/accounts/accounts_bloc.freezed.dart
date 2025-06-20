@@ -37,13 +37,13 @@ class $AccountsEventCopyWith<$Res> {
 
 /// @nodoc
 
-class _LoadAccounts implements AccountsEvent {
-  const _LoadAccounts();
+class LoadAccounts implements AccountsEvent {
+  const LoadAccounts();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _LoadAccounts);
+        (other.runtimeType == runtimeType && other is LoadAccounts);
   }
 
   @override
@@ -57,8 +57,8 @@ class _LoadAccounts implements AccountsEvent {
 
 /// @nodoc
 
-class _SelectAccount implements AccountsEvent {
-  const _SelectAccount({required this.account});
+class SelectAccount implements AccountsEvent {
+  const SelectAccount({required this.account});
 
   final Account account;
 
@@ -66,14 +66,14 @@ class _SelectAccount implements AccountsEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$SelectAccountCopyWith<_SelectAccount> get copyWith =>
-      __$SelectAccountCopyWithImpl<_SelectAccount>(this, _$identity);
+  $SelectAccountCopyWith<SelectAccount> get copyWith =>
+      _$SelectAccountCopyWithImpl<SelectAccount>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _SelectAccount &&
+            other is SelectAccount &&
             (identical(other.account, account) || other.account == account));
   }
 
@@ -87,11 +87,11 @@ class _SelectAccount implements AccountsEvent {
 }
 
 /// @nodoc
-abstract mixin class _$SelectAccountCopyWith<$Res>
+abstract mixin class $SelectAccountCopyWith<$Res>
     implements $AccountsEventCopyWith<$Res> {
-  factory _$SelectAccountCopyWith(
-          _SelectAccount value, $Res Function(_SelectAccount) _then) =
-      __$SelectAccountCopyWithImpl;
+  factory $SelectAccountCopyWith(
+          SelectAccount value, $Res Function(SelectAccount) _then) =
+      _$SelectAccountCopyWithImpl;
   @useResult
   $Res call({Account account});
 
@@ -99,12 +99,12 @@ abstract mixin class _$SelectAccountCopyWith<$Res>
 }
 
 /// @nodoc
-class __$SelectAccountCopyWithImpl<$Res>
-    implements _$SelectAccountCopyWith<$Res> {
-  __$SelectAccountCopyWithImpl(this._self, this._then);
+class _$SelectAccountCopyWithImpl<$Res>
+    implements $SelectAccountCopyWith<$Res> {
+  _$SelectAccountCopyWithImpl(this._self, this._then);
 
-  final _SelectAccount _self;
-  final $Res Function(_SelectAccount) _then;
+  final SelectAccount _self;
+  final $Res Function(SelectAccount) _then;
 
   /// Create a copy of AccountsEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -112,7 +112,7 @@ class __$SelectAccountCopyWithImpl<$Res>
   $Res call({
     Object? account = null,
   }) {
-    return _then(_SelectAccount(
+    return _then(SelectAccount(
       account: null == account
           ? _self.account
           : account // ignore: cast_nullable_to_non_nullable
@@ -133,13 +133,13 @@ class __$SelectAccountCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _DeselectAccount implements AccountsEvent {
-  const _DeselectAccount();
+class DeselectAccount implements AccountsEvent {
+  const DeselectAccount();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _DeselectAccount);
+        (other.runtimeType == runtimeType && other is DeselectAccount);
   }
 
   @override
@@ -175,13 +175,13 @@ class $AccountsStateCopyWith<$Res> {
 
 /// @nodoc
 
-class _Initial implements AccountsState {
-  const _Initial();
+class InitialAccountsState implements AccountsState {
+  const InitialAccountsState();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Initial);
+        (other.runtimeType == runtimeType && other is InitialAccountsState);
   }
 
   @override
@@ -195,13 +195,13 @@ class _Initial implements AccountsState {
 
 /// @nodoc
 
-class _Loading implements AccountsState {
-  const _Loading();
+class LoadingAccountsState implements AccountsState {
+  const LoadingAccountsState();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Loading);
+        (other.runtimeType == runtimeType && other is LoadingAccountsState);
   }
 
   @override
@@ -215,8 +215,8 @@ class _Loading implements AccountsState {
 
 /// @nodoc
 
-class _NotSelected implements AccountsState {
-  const _NotSelected({required final List<Account> accounts})
+class NotSelectedAccountsState implements AccountsState {
+  const NotSelectedAccountsState({required final List<Account> accounts})
       : _accounts = accounts;
 
   final List<Account> _accounts;
@@ -230,14 +230,15 @@ class _NotSelected implements AccountsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$NotSelectedCopyWith<_NotSelected> get copyWith =>
-      __$NotSelectedCopyWithImpl<_NotSelected>(this, _$identity);
+  $NotSelectedAccountsStateCopyWith<NotSelectedAccountsState> get copyWith =>
+      _$NotSelectedAccountsStateCopyWithImpl<NotSelectedAccountsState>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _NotSelected &&
+            other is NotSelectedAccountsState &&
             const DeepCollectionEquality().equals(other._accounts, _accounts));
   }
 
@@ -252,21 +253,22 @@ class _NotSelected implements AccountsState {
 }
 
 /// @nodoc
-abstract mixin class _$NotSelectedCopyWith<$Res>
+abstract mixin class $NotSelectedAccountsStateCopyWith<$Res>
     implements $AccountsStateCopyWith<$Res> {
-  factory _$NotSelectedCopyWith(
-          _NotSelected value, $Res Function(_NotSelected) _then) =
-      __$NotSelectedCopyWithImpl;
+  factory $NotSelectedAccountsStateCopyWith(NotSelectedAccountsState value,
+          $Res Function(NotSelectedAccountsState) _then) =
+      _$NotSelectedAccountsStateCopyWithImpl;
   @useResult
   $Res call({List<Account> accounts});
 }
 
 /// @nodoc
-class __$NotSelectedCopyWithImpl<$Res> implements _$NotSelectedCopyWith<$Res> {
-  __$NotSelectedCopyWithImpl(this._self, this._then);
+class _$NotSelectedAccountsStateCopyWithImpl<$Res>
+    implements $NotSelectedAccountsStateCopyWith<$Res> {
+  _$NotSelectedAccountsStateCopyWithImpl(this._self, this._then);
 
-  final _NotSelected _self;
-  final $Res Function(_NotSelected) _then;
+  final NotSelectedAccountsState _self;
+  final $Res Function(NotSelectedAccountsState) _then;
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
@@ -274,7 +276,7 @@ class __$NotSelectedCopyWithImpl<$Res> implements _$NotSelectedCopyWith<$Res> {
   $Res call({
     Object? accounts = null,
   }) {
-    return _then(_NotSelected(
+    return _then(NotSelectedAccountsState(
       accounts: null == accounts
           ? _self._accounts
           : accounts // ignore: cast_nullable_to_non_nullable
@@ -285,8 +287,8 @@ class __$NotSelectedCopyWithImpl<$Res> implements _$NotSelectedCopyWith<$Res> {
 
 /// @nodoc
 
-class _Selected implements AccountsState {
-  const _Selected(
+class SelectedAccountsState implements AccountsState {
+  const SelectedAccountsState(
       {required this.selectedAccount, required final List<Account> accounts})
       : _accounts = accounts;
 
@@ -302,14 +304,15 @@ class _Selected implements AccountsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$SelectedCopyWith<_Selected> get copyWith =>
-      __$SelectedCopyWithImpl<_Selected>(this, _$identity);
+  $SelectedAccountsStateCopyWith<SelectedAccountsState> get copyWith =>
+      _$SelectedAccountsStateCopyWithImpl<SelectedAccountsState>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Selected &&
+            other is SelectedAccountsState &&
             (identical(other.selectedAccount, selectedAccount) ||
                 other.selectedAccount == selectedAccount) &&
             const DeepCollectionEquality().equals(other._accounts, _accounts));
@@ -326,10 +329,11 @@ class _Selected implements AccountsState {
 }
 
 /// @nodoc
-abstract mixin class _$SelectedCopyWith<$Res>
+abstract mixin class $SelectedAccountsStateCopyWith<$Res>
     implements $AccountsStateCopyWith<$Res> {
-  factory _$SelectedCopyWith(_Selected value, $Res Function(_Selected) _then) =
-      __$SelectedCopyWithImpl;
+  factory $SelectedAccountsStateCopyWith(SelectedAccountsState value,
+          $Res Function(SelectedAccountsState) _then) =
+      _$SelectedAccountsStateCopyWithImpl;
   @useResult
   $Res call({Account selectedAccount, List<Account> accounts});
 
@@ -337,11 +341,12 @@ abstract mixin class _$SelectedCopyWith<$Res>
 }
 
 /// @nodoc
-class __$SelectedCopyWithImpl<$Res> implements _$SelectedCopyWith<$Res> {
-  __$SelectedCopyWithImpl(this._self, this._then);
+class _$SelectedAccountsStateCopyWithImpl<$Res>
+    implements $SelectedAccountsStateCopyWith<$Res> {
+  _$SelectedAccountsStateCopyWithImpl(this._self, this._then);
 
-  final _Selected _self;
-  final $Res Function(_Selected) _then;
+  final SelectedAccountsState _self;
+  final $Res Function(SelectedAccountsState) _then;
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
@@ -350,7 +355,7 @@ class __$SelectedCopyWithImpl<$Res> implements _$SelectedCopyWith<$Res> {
     Object? selectedAccount = null,
     Object? accounts = null,
   }) {
-    return _then(_Selected(
+    return _then(SelectedAccountsState(
       selectedAccount: null == selectedAccount
           ? _self.selectedAccount
           : selectedAccount // ignore: cast_nullable_to_non_nullable
@@ -375,8 +380,8 @@ class __$SelectedCopyWithImpl<$Res> implements _$SelectedCopyWith<$Res> {
 
 /// @nodoc
 
-class _Error implements AccountsState {
-  const _Error({required this.errorMessage});
+class ErrorAccountsState implements AccountsState {
+  const ErrorAccountsState({required this.errorMessage});
 
   final String errorMessage;
 
@@ -384,14 +389,14 @@ class _Error implements AccountsState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ErrorCopyWith<_Error> get copyWith =>
-      __$ErrorCopyWithImpl<_Error>(this, _$identity);
+  $ErrorAccountsStateCopyWith<ErrorAccountsState> get copyWith =>
+      _$ErrorAccountsStateCopyWithImpl<ErrorAccountsState>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Error &&
+            other is ErrorAccountsState &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
@@ -406,20 +411,22 @@ class _Error implements AccountsState {
 }
 
 /// @nodoc
-abstract mixin class _$ErrorCopyWith<$Res>
+abstract mixin class $ErrorAccountsStateCopyWith<$Res>
     implements $AccountsStateCopyWith<$Res> {
-  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) =
-      __$ErrorCopyWithImpl;
+  factory $ErrorAccountsStateCopyWith(
+          ErrorAccountsState value, $Res Function(ErrorAccountsState) _then) =
+      _$ErrorAccountsStateCopyWithImpl;
   @useResult
   $Res call({String errorMessage});
 }
 
 /// @nodoc
-class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
-  __$ErrorCopyWithImpl(this._self, this._then);
+class _$ErrorAccountsStateCopyWithImpl<$Res>
+    implements $ErrorAccountsStateCopyWith<$Res> {
+  _$ErrorAccountsStateCopyWithImpl(this._self, this._then);
 
-  final _Error _self;
-  final $Res Function(_Error) _then;
+  final ErrorAccountsState _self;
+  final $Res Function(ErrorAccountsState) _then;
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
@@ -427,7 +434,7 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
   $Res call({
     Object? errorMessage = null,
   }) {
-    return _then(_Error(
+    return _then(ErrorAccountsState(
       errorMessage: null == errorMessage
           ? _self.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable

@@ -114,6 +114,47 @@ class FakeTransactionsRepository implements TransactionsRepository {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
+      TransactionResponse(
+        id: 2,
+        account: AccountState(
+          id: accountId,
+          name: 'Основной счёт',
+          balance: Decimal.parse('1000.00'),
+          currency: 'RUB',
+        ),
+        category: const Category(
+          id: 1,
+          name: 'Еда',
+          emoji: '🍔',
+          isIncome: false,
+        ),
+        amount: Decimal.parse('100.00'),
+        transactionDate: DateTime.now(),
+        comment: null,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
+      // some income
+      TransactionResponse(
+        id: 3,
+        account: AccountState(
+          id: accountId,
+          name: 'Основной счёт',
+          balance: Decimal.parse('1000.00'),
+          currency: 'RUB',
+        ),
+        category: const Category(
+          id: 2,
+          name: 'Зарплата',
+          emoji: '💰',
+          isIncome: true,
+        ),
+        amount: Decimal.parse('5000.00'),
+        transactionDate: DateTime.now(),
+        comment: 'Зарплата за месяц',
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
     ];
   }
 }

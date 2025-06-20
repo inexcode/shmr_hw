@@ -39,6 +39,8 @@ abstract class AccountRequest with _$AccountRequest {
     required final String currency,
   }) = _AccountRequest;
 
+  const AccountRequest._();
+
   AccountRequestDto toDto() => AccountRequestDto(
         name: name,
         balance: balance,

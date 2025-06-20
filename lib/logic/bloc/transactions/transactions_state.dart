@@ -18,6 +18,8 @@ abstract class TransactionsState with _$TransactionsState {
     final String? errorMessage,
   }) = _TransactionsState;
 
+  const TransactionsState._();
+
   factory TransactionsState.initial() {
     final now = DateTime.now();
     return TransactionsState(
@@ -29,4 +31,24 @@ abstract class TransactionsState with _$TransactionsState {
       transactionsToday: const [],
     );
   }
+
+  List<Transaction> get expensesToday => transactionsToday
+      .where((final transaction) => transaction.isIncome == false)
+      .toList();
+
+  Decimal get totalExpensesToday => expensesToday.fold(
+        Decimal.zero,
+        (final previousValue, final transaction) =>
+            previousValue + transaction.amount,
+      );
+
+  List<Transaction> get incomesToday => transactionsToday
+      .where((final transaction) => transaction.isIncome ?? false)
+      .toList();
+
+  Decimal get totalIncomesToday => incomesToday.fold(
+        Decimal.zero,
+        (final previousValue, final transaction) =>
+            previousValue + transaction.amount,
+      );
 }

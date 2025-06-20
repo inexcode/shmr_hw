@@ -20,7 +20,8 @@
   "account": {
     "title": "Счёт",
     "my_account": "Мой счёт",
-    "delete_account": "Удалить счёт"
+    "delete_account": "Удалить счёт",
+    "select_account": "Выберите счёт"
   },
   "categories": {
     "title": "Статьи",

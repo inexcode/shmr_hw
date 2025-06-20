@@ -9,18 +9,19 @@ part 'accounts_bloc.freezed.dart';
 
 class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
   AccountsBloc() : super(const AccountsState.initial()) {
-    on<_LoadAccounts>((final event, final emit) async {
+    on<LoadAccounts>((final event, final emit) async {
       emit(const AccountsState.loading());
       try {
-        final accounts = await Repositories.accountRepository.fetchAccounts();
+        final accounts =
+            await Repositories().accountsRepository.fetchAccounts();
         emit(AccountsState.notSelected(accounts: accounts));
       } catch (e) {
         emit(AccountsState.error(errorMessage: e.toString()));
       }
     });
-    on<_SelectAccount>((final event, final emit) async {
-      if (state is _NotSelected) {
-        final currentState = state as _NotSelected;
+    on<SelectAccount>((final event, final emit) {
+      if (state is NotSelectedAccountsState) {
+        final currentState = state as NotSelectedAccountsState;
         emit(
           AccountsState.selected(
             selectedAccount: event.account,
@@ -29,11 +30,13 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
         );
       }
     });
-    on<_DeselectAccount>((final event, final emit) async {
-      if (state is _Selected) {
-        final currentState = state as _Selected;
+    on<DeselectAccount>((final event, final emit) {
+      if (state is SelectedAccountsState) {
+        final currentState = state as SelectedAccountsState;
         emit(AccountsState.notSelected(accounts: currentState.accounts));
       }
     });
+
+    add(const LoadAccounts());
   }
 }

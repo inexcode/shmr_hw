@@ -9,15 +9,23 @@ part 'categories_bloc.freezed.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   CategoriesBloc() : super(const CategoriesState.initial()) {
-    on<_LoadCategories>((final event, final emit) async {
+    on<LoadCategories>((final event, final emit) async {
       emit(const CategoriesState.loading());
       try {
         final categories =
-            await Repositories.categoryRepository.fetchCategories();
-        emit(CategoriesState.loaded(categories: categories));
+            await Repositories().categoriesRepository.fetchCategories();
+        emit(
+          CategoriesState.loaded(
+            categories: {
+              for (final category in categories) category.id: category,
+            },
+          ),
+        );
       } catch (e) {
         emit(CategoriesState.error(errorMessage: e.toString()));
       }
     });
+
+    add(const LoadCategories());
   }
 }

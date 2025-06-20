@@ -10,7 +10,9 @@
     "end": "End",
     "currency": "Currency",
     "balance": "Balance",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Loading",
+    "error": "Error"
   },
   "currencies": {
     "russian_ruble": "Russian ruble ₽",
@@ -20,12 +22,14 @@
   "account": {
     "title": "Account",
     "my_account": "My account",
-    "delete_account": "Delete account"
+    "delete_account": "Delete account",
+    "select_account": "Select account"
   },
   "categories": {
     "title": "Categories",
     "my_categories": "My categories",
-    "find_category": "Find category"
+    "find_category": "Find category",
+    "unknown_category": "Unknown category"
   },
   "expenses": {
     "title": "Expenses",
@@ -39,7 +43,8 @@
   },
   "income": {
     "title": "Income",
-    "income_today": "Income today"
+    "income_today": "Income today",
+    "total": "Total"
   },
   "settings": {
     "title": "Settings",

@@ -2,5 +2,5 @@ part of 'categories_bloc.dart';
 
 @freezed
 class CategoriesEvent with _$CategoriesEvent {
-  const factory CategoriesEvent.loadCategories() = _LoadCategories;
+  const factory CategoriesEvent.loadCategories() = LoadCategories;
 }

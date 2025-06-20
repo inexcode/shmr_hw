@@ -43,38 +43,6 @@ class CategoriesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ExpensesPage]
-class ExpensesRoute extends PageRouteInfo<void> {
-  const ExpensesRoute({List<PageRouteInfo>? children})
-      : super(ExpensesRoute.name, initialChildren: children);
-
-  static const String name = 'ExpensesRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const ExpensesPage();
-    },
-  );
-}
-
-/// generated route for
-/// [IncomePage]
-class IncomeRoute extends PageRouteInfo<void> {
-  const IncomeRoute({List<PageRouteInfo>? children})
-      : super(IncomeRoute.name, initialChildren: children);
-
-  static const String name = 'IncomeRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const IncomePage();
-    },
-  );
-}
-
-/// generated route for
 /// [RootPage]
 class RootRoute extends PageRouteInfo<void> {
   const RootRoute({List<PageRouteInfo>? children})
@@ -104,4 +72,53 @@ class SettingsRoute extends PageRouteInfo<void> {
       return const SettingsPage();
     },
   );
+}
+
+/// generated route for
+/// [TransactionsPage]
+class TransactionsRoute extends PageRouteInfo<TransactionsRouteArgs> {
+  TransactionsRoute({
+    bool isIncome = false,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TransactionsRoute.name,
+          args: TransactionsRouteArgs(isIncome: isIncome, key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'TransactionsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TransactionsRouteArgs>(
+        orElse: () => const TransactionsRouteArgs(),
+      );
+      return TransactionsPage(isIncome: args.isIncome, key: args.key);
+    },
+  );
+}
+
+class TransactionsRouteArgs {
+  const TransactionsRouteArgs({this.isIncome = false, this.key});
+
+  final bool isIncome;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'TransactionsRouteArgs{isIncome: $isIncome, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TransactionsRouteArgs) return false;
+    return isIncome == other.isIncome && key == other.key;
+  }
+
+  @override
+  int get hashCode => isIncome.hashCode ^ key.hashCode;
 }
