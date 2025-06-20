@@ -28,8 +28,8 @@ class RestApiTransactionsRepository implements TransactionsRepository {
   }) async {
     final transactions = await _client.getTransactions(
       accountId: accountId,
-      startDate: startDate,
-      endDate: endDate,
+      startDate: startDate?.copyWith(hour: 0, minute: 0, second: 0),
+      endDate: endDate?.copyWith(hour: 23, minute: 59, second: 59),
     );
     return transactions.map(TransactionResponse.fromDto).toList();
   }
