@@ -51,5 +51,12 @@
     "synchronization": "Синхронизация",
     "language": "Язык",
     "about": "О программе"
+  },
+  "exceptions": {
+    "unauthorized": "Неавторизованный доступ. ${message}",
+    "bad_request": "Некорректные данные. ${message}",
+    "not_found": "Не найдено. ${message}",
+    "conflict": "Конфликт данных. ${message}",
+    "internal_server_error": "Внутренняя ошибка сервера. ${message}"
   }
 }
