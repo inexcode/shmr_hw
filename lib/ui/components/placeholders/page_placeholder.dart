@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 class PagePlaceholder extends StatelessWidget {
   const PagePlaceholder({
@@ -25,7 +24,7 @@ class PagePlaceholder extends StatelessWidget {
               size: 48,
               color: Theme.of(context).colorScheme.onSurface,
             ),
-            const Gap(16),
+            const SizedBox(height: 16),
             Text(
               title,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -33,7 +32,7 @@ class PagePlaceholder extends StatelessWidget {
                   ),
               textAlign: TextAlign.center,
             ),
-            if (description != null) const Gap(8),
+            if (description != null) const SizedBox(height: 8),
             if (description != null)
               Text(
                 description!,
