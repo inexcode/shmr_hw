@@ -335,8 +335,8 @@ class _$AccountRequestCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _Create implements AccountRequest {
-  const _Create(
+class _AccountRequest implements AccountRequest {
+  const _AccountRequest(
       {required this.name, required this.balance, required this.currency});
 
   @override
@@ -351,14 +351,14 @@ class _Create implements AccountRequest {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CreateCopyWith<_Create> get copyWith =>
-      __$CreateCopyWithImpl<_Create>(this, _$identity);
+  _$AccountRequestCopyWith<_AccountRequest> get copyWith =>
+      __$AccountRequestCopyWithImpl<_AccountRequest>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Create &&
+            other is _AccountRequest &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.currency, currency) ||
@@ -375,21 +375,23 @@ class _Create implements AccountRequest {
 }
 
 /// @nodoc
-abstract mixin class _$CreateCopyWith<$Res>
+abstract mixin class _$AccountRequestCopyWith<$Res>
     implements $AccountRequestCopyWith<$Res> {
-  factory _$CreateCopyWith(_Create value, $Res Function(_Create) _then) =
-      __$CreateCopyWithImpl;
+  factory _$AccountRequestCopyWith(
+          _AccountRequest value, $Res Function(_AccountRequest) _then) =
+      __$AccountRequestCopyWithImpl;
   @override
   @useResult
   $Res call({String name, Decimal balance, String currency});
 }
 
 /// @nodoc
-class __$CreateCopyWithImpl<$Res> implements _$CreateCopyWith<$Res> {
-  __$CreateCopyWithImpl(this._self, this._then);
+class __$AccountRequestCopyWithImpl<$Res>
+    implements _$AccountRequestCopyWith<$Res> {
+  __$AccountRequestCopyWithImpl(this._self, this._then);
 
-  final _Create _self;
-  final $Res Function(_Create) _then;
+  final _AccountRequest _self;
+  final $Res Function(_AccountRequest) _then;
 
   /// Create a copy of AccountRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -400,7 +402,7 @@ class __$CreateCopyWithImpl<$Res> implements _$CreateCopyWith<$Res> {
     Object? balance = null,
     Object? currency = null,
   }) {
-    return _then(_Create(
+    return _then(_AccountRequest(
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable

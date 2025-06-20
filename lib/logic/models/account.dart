@@ -37,7 +37,13 @@ abstract class AccountRequest with _$AccountRequest {
     required final String name,
     required final Decimal balance,
     required final String currency,
-  }) = _Create;
+  }) = _AccountRequest;
+
+  AccountRequestDto toDto() => AccountRequestDto(
+        name: name,
+        balance: balance,
+        currency: currency,
+      );
 }
 
 @freezed

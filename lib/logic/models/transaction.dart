@@ -61,6 +61,14 @@ abstract class TransactionRequest with _$TransactionRequest {
         transactionDate: transaction.transactionDate,
         comment: transaction.comment,
       );
+
+  TransactionRequestDto toDto() => TransactionRequestDto(
+        accountId: accountId,
+        categoryId: categoryId,
+        amount: amount,
+        transactionDate: transactionDate,
+        comment: comment,
+      );
 }
 
 @freezed
