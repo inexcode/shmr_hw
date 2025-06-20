@@ -23,6 +23,7 @@ mixin _$Transaction {
   String? get comment;
   DateTime get createdAt;
   DateTime get updatedAt;
+  bool? get isIncome;
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -48,16 +49,18 @@ mixin _$Transaction {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.isIncome, isIncome) ||
+                other.isIncome == isIncome));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, id, accountId, categoryId,
-      amount, transactionDate, comment, createdAt, updatedAt);
+      amount, transactionDate, comment, createdAt, updatedAt, isIncome);
 
   @override
   String toString() {
-    return 'Transaction(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Transaction(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt, isIncome: $isIncome)';
   }
 }
 
@@ -75,7 +78,8 @@ abstract mixin class $TransactionCopyWith<$Res> {
       DateTime transactionDate,
       String? comment,
       DateTime createdAt,
-      DateTime updatedAt});
+      DateTime updatedAt,
+      bool? isIncome});
 }
 
 /// @nodoc
@@ -98,6 +102,7 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
     Object? comment = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? isIncome = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -132,6 +137,10 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
           ? _self.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isIncome: freezed == isIncome
+          ? _self.isIncome
+          : isIncome // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -147,7 +156,8 @@ class _Transaction implements Transaction {
       required this.transactionDate,
       required this.comment,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt,
+      this.isIncome});
 
   @override
   final int id;
@@ -165,6 +175,8 @@ class _Transaction implements Transaction {
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
+  @override
+  final bool? isIncome;
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -191,16 +203,18 @@ class _Transaction implements Transaction {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.isIncome, isIncome) ||
+                other.isIncome == isIncome));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, id, accountId, categoryId,
-      amount, transactionDate, comment, createdAt, updatedAt);
+      amount, transactionDate, comment, createdAt, updatedAt, isIncome);
 
   @override
   String toString() {
-    return 'Transaction(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Transaction(id: $id, accountId: $accountId, categoryId: $categoryId, amount: $amount, transactionDate: $transactionDate, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt, isIncome: $isIncome)';
   }
 }
 
@@ -220,7 +234,8 @@ abstract mixin class _$TransactionCopyWith<$Res>
       DateTime transactionDate,
       String? comment,
       DateTime createdAt,
-      DateTime updatedAt});
+      DateTime updatedAt,
+      bool? isIncome});
 }
 
 /// @nodoc
@@ -243,6 +258,7 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
     Object? comment = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? isIncome = freezed,
   }) {
     return _then(_Transaction(
       id: null == id
@@ -277,6 +293,10 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
           ? _self.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isIncome: freezed == isIncome
+          ? _self.isIncome
+          : isIncome // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -382,13 +402,14 @@ class _$TransactionRequestCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _TransactionRequest implements TransactionRequest {
+class _TransactionRequest extends TransactionRequest {
   const _TransactionRequest(
       {required this.accountId,
       required this.categoryId,
       required this.amount,
       required this.transactionDate,
-      required this.comment});
+      required this.comment})
+      : super._();
 
   @override
   final int accountId;

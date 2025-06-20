@@ -2,16 +2,32 @@ part of 'accounts_bloc.dart';
 
 @freezed
 abstract class AccountsState with _$AccountsState {
-  const factory AccountsState.initial() = _Initial;
-  const factory AccountsState.loading() = _Loading;
+  const factory AccountsState.initial() = InitialAccountsState;
+  const factory AccountsState.loading() = LoadingAccountsState;
   const factory AccountsState.notSelected({
     required final List<Account> accounts,
-  }) = _NotSelected;
+  }) = NotSelectedAccountsState;
   const factory AccountsState.selected({
     required final Account selectedAccount,
     required final List<Account> accounts,
-  }) = _Selected;
+  }) = SelectedAccountsState;
   const factory AccountsState.error({
     required final String errorMessage,
-  }) = _Error;
+  }) = ErrorAccountsState;
+}
+
+// extension on SelectedAccountsState to have a currency symbol getter
+extension SelectedAccountsStateExtension on SelectedAccountsState {
+  String get currencySymbol {
+    switch (selectedAccount.currency) {
+      case 'USD':
+        return r'$';
+      case 'RUB':
+        return '₽';
+      case 'EUR':
+        return '€';
+      default:
+        return selectedAccount.currency;
+    }
+  }
 }

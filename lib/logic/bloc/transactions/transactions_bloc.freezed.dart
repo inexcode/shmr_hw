@@ -38,13 +38,13 @@ class $TransactionsEventCopyWith<$Res> {
 
 /// @nodoc
 
-class _LoadTransactions implements TransactionsEvent {
-  const _LoadTransactions();
+class LoadTransactions implements TransactionsEvent {
+  const LoadTransactions();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _LoadTransactions);
+        (other.runtimeType == runtimeType && other is LoadTransactions);
   }
 
   @override
@@ -58,8 +58,8 @@ class _LoadTransactions implements TransactionsEvent {
 
 /// @nodoc
 
-class _SetStartEndDate implements TransactionsEvent {
-  const _SetStartEndDate({required this.startDate, required this.endDate});
+class SetStartEndDate implements TransactionsEvent {
+  const SetStartEndDate({required this.startDate, required this.endDate});
 
   final DateTime startDate;
   final DateTime endDate;
@@ -68,14 +68,14 @@ class _SetStartEndDate implements TransactionsEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$SetStartEndDateCopyWith<_SetStartEndDate> get copyWith =>
-      __$SetStartEndDateCopyWithImpl<_SetStartEndDate>(this, _$identity);
+  $SetStartEndDateCopyWith<SetStartEndDate> get copyWith =>
+      _$SetStartEndDateCopyWithImpl<SetStartEndDate>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _SetStartEndDate &&
+            other is SetStartEndDate &&
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate));
@@ -91,22 +91,22 @@ class _SetStartEndDate implements TransactionsEvent {
 }
 
 /// @nodoc
-abstract mixin class _$SetStartEndDateCopyWith<$Res>
+abstract mixin class $SetStartEndDateCopyWith<$Res>
     implements $TransactionsEventCopyWith<$Res> {
-  factory _$SetStartEndDateCopyWith(
-          _SetStartEndDate value, $Res Function(_SetStartEndDate) _then) =
-      __$SetStartEndDateCopyWithImpl;
+  factory $SetStartEndDateCopyWith(
+          SetStartEndDate value, $Res Function(SetStartEndDate) _then) =
+      _$SetStartEndDateCopyWithImpl;
   @useResult
   $Res call({DateTime startDate, DateTime endDate});
 }
 
 /// @nodoc
-class __$SetStartEndDateCopyWithImpl<$Res>
-    implements _$SetStartEndDateCopyWith<$Res> {
-  __$SetStartEndDateCopyWithImpl(this._self, this._then);
+class _$SetStartEndDateCopyWithImpl<$Res>
+    implements $SetStartEndDateCopyWith<$Res> {
+  _$SetStartEndDateCopyWithImpl(this._self, this._then);
 
-  final _SetStartEndDate _self;
-  final $Res Function(_SetStartEndDate) _then;
+  final SetStartEndDate _self;
+  final $Res Function(SetStartEndDate) _then;
 
   /// Create a copy of TransactionsEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -115,7 +115,7 @@ class __$SetStartEndDateCopyWithImpl<$Res>
     Object? startDate = null,
     Object? endDate = null,
   }) {
-    return _then(_SetStartEndDate(
+    return _then(SetStartEndDate(
       startDate: null == startDate
           ? _self.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -244,7 +244,7 @@ class _$TransactionsStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _TransactionsState implements TransactionsState {
+class _TransactionsState extends TransactionsState {
   const _TransactionsState(
       {required this.status,
       required final List<Transaction> transactions,
@@ -253,7 +253,8 @@ class _TransactionsState implements TransactionsState {
       required this.endDate,
       this.errorMessage})
       : _transactions = transactions,
-        _transactionsToday = transactionsToday;
+        _transactionsToday = transactionsToday,
+        super._();
 
   @override
   final TransactionsStatus status;

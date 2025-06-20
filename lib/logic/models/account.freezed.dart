@@ -335,9 +335,10 @@ class _$AccountRequestCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _AccountRequest implements AccountRequest {
+class _AccountRequest extends AccountRequest {
   const _AccountRequest(
-      {required this.name, required this.balance, required this.currency});
+      {required this.name, required this.balance, required this.currency})
+      : super._();
 
   @override
   final String name;

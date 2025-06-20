@@ -15,28 +15,28 @@ class RouteDestination {
   final String label;
 }
 
-const List<RouteDestination> rootDestinations = [
+final List<RouteDestination> rootDestinations = [
   RouteDestination(
-    route: ExpensesRoute(),
+    route: TransactionsRoute(isIncome: false),
     icon: CustomIcons.expenses,
     label: 'expenses.title',
   ),
   RouteDestination(
-    route: IncomeRoute(),
+    route: TransactionsRoute(isIncome: true),
     icon: CustomIcons.income,
     label: 'income.title',
   ),
-  RouteDestination(
+  const RouteDestination(
     route: AccountRoute(),
     icon: CustomIcons.account,
     label: 'account.title',
   ),
-  RouteDestination(
+  const RouteDestination(
     route: CategoriesRoute(),
     icon: CustomIcons.categories,
     label: 'categories.title',
   ),
-  RouteDestination(
+  const RouteDestination(
     route: SettingsRoute(),
     icon: CustomIcons.settings,
     label: 'settings.title',

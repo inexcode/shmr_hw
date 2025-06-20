@@ -17,6 +17,7 @@ abstract class Transaction with _$Transaction {
     required final String? comment,
     required final DateTime createdAt,
     required final DateTime updatedAt,
+    final bool? isIncome,
   }) = _Transaction;
 
   factory Transaction.fromDto(final TransactionDto dto) => Transaction(
@@ -40,6 +41,7 @@ abstract class Transaction with _$Transaction {
         comment: response.comment,
         createdAt: response.createdAt,
         updatedAt: response.updatedAt,
+        isIncome: response.category.isIncome,
       );
 }
 
@@ -52,6 +54,8 @@ abstract class TransactionRequest with _$TransactionRequest {
     required final DateTime transactionDate,
     required final String? comment,
   }) = _TransactionRequest;
+
+  const TransactionRequest._();
 
   factory TransactionRequest.fromTransaction(final Transaction transaction) =>
       TransactionRequest(
