@@ -76,6 +76,13 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
         );
       }
     });
+    on<SetSortOrder>((final event, final emit) {
+      emit(
+        state.copyWith(
+          sortOrder: event.sortOrder,
+        ),
+      );
+    });
 
     add(const LoadTransactions());
   }

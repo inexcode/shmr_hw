@@ -128,7 +128,7 @@ class FakeTransactionsRepository implements TransactionsRepository {
           emoji: '🍔',
           isIncome: false,
         ),
-        amount: Decimal.parse('100.00'),
+        amount: Decimal.parse('150.00'),
         transactionDate: DateTime.now(),
         comment: null,
         createdAt: DateTime.now(),

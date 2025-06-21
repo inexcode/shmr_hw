@@ -31,6 +31,13 @@
     "find_category": "Find category",
     "unknown_category": "Unknown category"
   },
+  "sorting": {
+    "sort_by": "Sort by",
+    "date_asc": "Date ascending",
+    "date_desc": "Date descending",
+    "amount_asc": "Amount ascending",
+    "amount_desc": "Amount descending"
+  },
   "expenses": {
     "title": "Expenses",
     "total": "Total",
@@ -39,7 +46,8 @@
     "delete_expense": "Delete expense",
     "analysis": "Expense analysis",
     "period_start": "Period: start",
-    "period_end": "Period: end"
+    "period_end": "Period: end",
+    "my_history": "My history"
   },
   "income": {
     "title": "Income",

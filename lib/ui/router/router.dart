@@ -5,6 +5,8 @@ import 'package:shmr_hw/ui/pages/account/account.dart';
 import 'package:shmr_hw/ui/pages/categories/categories.dart';
 import 'package:shmr_hw/ui/pages/settings/settings.dart';
 import 'package:shmr_hw/ui/pages/transactions/transactions.dart';
+import 'package:shmr_hw/ui/pages/transactions/transactions_history.dart';
+import 'package:shmr_hw/ui/pages/transactions/transactions_today.dart';
 
 part 'router.gr.dart';
 
@@ -24,6 +26,14 @@ class RootRouter extends RootStackRouter {
           page: TransactionsRoute.page,
           path: 'transactions',
           initial: true,
+          children: [
+            AutoRoute(
+              page: TransactionsTodayRoute.page,
+              path: 'today',
+              initial: true,
+            ),
+            AutoRoute(page: TransactionsHistoryRoute.page, path: 'history'),
+          ],
         ),
         AutoRoute(page: AccountRoute.page, path: 'account'),
         AutoRoute(page: CategoriesRoute.page, path: 'categories'),

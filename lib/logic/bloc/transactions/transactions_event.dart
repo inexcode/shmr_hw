@@ -7,4 +7,7 @@ class TransactionsEvent with _$TransactionsEvent {
     required final DateTime startDate,
     required final DateTime endDate,
   }) = SetStartEndDate;
+  const factory TransactionsEvent.setSortOrder({
+    required final SortOrder sortOrder,
+  }) = SetSortOrder;
 }
