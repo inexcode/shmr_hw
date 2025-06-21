@@ -10,7 +10,9 @@
     "end": "Конец",
     "currency": "Валюта",
     "balance": "Баланс",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "loading": "Загрузка",
+    "error": "Ошибка"
   },
   "currencies": {
     "russian_ruble": "Российский рубль ₽",
@@ -26,7 +28,15 @@
   "categories": {
     "title": "Статьи",
     "my_categories": "Мои статьи",
-    "find_category": "Найти статью"
+    "find_category": "Найти статью",
+    "unknown_category": "Неизвестная статья"
+  },
+  "sorting": {
+    "sort_by": "Сортировать по",
+    "date_asc": "Дата по возрастанию",
+    "date_desc": "Дата по убыванию",
+    "amount_asc": "Сумма по возрастанию",
+    "amount_desc": "Сумма по убыванию"
   },
   "expenses": {
     "title": "Расходы",
@@ -36,11 +46,13 @@
     "delete_expense": "Удалить расход",
     "analysis": "Анализ расходов",
     "period_start": "Период: начало",
-    "period_end": "Период: конец"
+    "period_end": "Период: конец",
+    "my_history": "Моя история"
   },
   "income": {
     "title": "Доходы",
-    "income_today": "Доходы сегодня"
+    "income_today": "Доходы сегодня",
+    "total": "Всего"
   },
   "settings": {
     "title": "Настройки",

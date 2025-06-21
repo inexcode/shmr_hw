@@ -7,6 +7,26 @@ enum TransactionsStatus {
   error,
 }
 
+enum SortOrder {
+  dateAscending,
+  dateDescending,
+  amountAscending,
+  amountDescending;
+
+  String get name {
+    switch (this) {
+      case SortOrder.dateAscending:
+        return 'sorting.date_asc';
+      case SortOrder.dateDescending:
+        return 'sorting.date_desc';
+      case SortOrder.amountAscending:
+        return 'sorting.amount_asc';
+      case SortOrder.amountDescending:
+        return 'sorting.amount_desc';
+    }
+  }
+}
+
 @freezed
 abstract class TransactionsState with _$TransactionsState {
   const factory TransactionsState({
@@ -15,6 +35,7 @@ abstract class TransactionsState with _$TransactionsState {
     required final List<Transaction> transactionsToday,
     required final DateTime startDate,
     required final DateTime endDate,
+    required final SortOrder sortOrder,
     final String? errorMessage,
   }) = _TransactionsState;
 
@@ -27,14 +48,61 @@ abstract class TransactionsState with _$TransactionsState {
           .subtract(const Duration(days: 30)),
       endDate: DateTime(now.year, now.month, now.day, 23, 59, 59),
       status: TransactionsStatus.initial,
+      sortOrder: SortOrder.dateDescending,
       transactions: const [],
       transactionsToday: const [],
     );
   }
 
-  List<Transaction> get expensesToday => transactionsToday
-      .where((final transaction) => transaction.isIncome == false)
-      .toList();
+  // Helper to sort transactions according to sortOrder
+  List<Transaction> _sortTransactions(final List<Transaction> list) {
+    final sorted = List<Transaction>.from(list);
+    switch (sortOrder) {
+      case SortOrder.dateAscending:
+        sorted.sort(
+          (final a, final b) => a.transactionDate.compareTo(b.transactionDate),
+        );
+      case SortOrder.dateDescending:
+        sorted.sort(
+          (final a, final b) => b.transactionDate.compareTo(a.transactionDate),
+        );
+      case SortOrder.amountAscending:
+        sorted.sort((final a, final b) => a.amount.compareTo(b.amount));
+      case SortOrder.amountDescending:
+        sorted.sort((final a, final b) => b.amount.compareTo(a.amount));
+    }
+    return sorted;
+  }
+
+  List<Transaction> get expenses => _sortTransactions(
+        transactions
+            .where((final transaction) => transaction.isIncome == false)
+            .toList(),
+      );
+
+  Decimal get totalExpenses => expenses.fold(
+        Decimal.zero,
+        (final previousValue, final transaction) =>
+            previousValue + transaction.amount,
+      );
+
+  List<Transaction> get incomes => _sortTransactions(
+        transactions
+            .where((final transaction) => transaction.isIncome ?? false)
+            .toList(),
+      );
+
+  Decimal get totalIncomes => incomes.fold(
+        Decimal.zero,
+        (final previousValue, final transaction) =>
+            previousValue + transaction.amount,
+      );
+
+  List<Transaction> get expensesToday => _sortTransactions(
+        transactionsToday
+            .where((final transaction) => transaction.isIncome == false)
+            .toList(),
+      );
 
   Decimal get totalExpensesToday => expensesToday.fold(
         Decimal.zero,
@@ -42,9 +110,11 @@ abstract class TransactionsState with _$TransactionsState {
             previousValue + transaction.amount,
       );
 
-  List<Transaction> get incomesToday => transactionsToday
-      .where((final transaction) => transaction.isIncome ?? false)
-      .toList();
+  List<Transaction> get incomesToday => _sortTransactions(
+        transactionsToday
+            .where((final transaction) => transaction.isIncome ?? false)
+            .toList(),
+      );
 
   Decimal get totalIncomesToday => incomesToday.fold(
         Decimal.zero,

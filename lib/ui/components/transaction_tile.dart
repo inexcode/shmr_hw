@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
@@ -8,10 +9,12 @@ import 'package:shmr_hw/ui/components/category_name.dart';
 class TransactionTile extends StatelessWidget {
   const TransactionTile({
     required this.transaction,
+    this.showDate = false,
     super.key,
   });
 
   final Transaction transaction;
+  final bool showDate;
 
   @override
   Widget build(final BuildContext context) {
@@ -34,9 +37,21 @@ class TransactionTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            '${transaction.amount} ${accountsState.currencySymbol}',
-            style: Theme.of(context).textTheme.bodyLarge,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${transaction.amount} ${accountsState.currencySymbol}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              if (showDate)
+                Text(
+                  DateFormat('yyyy-MM-dd hh:mm')
+                      .format(transaction.transactionDate),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+            ],
           ),
           const SizedBox(width: 8),
           Icon(

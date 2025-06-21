@@ -129,12 +129,77 @@ class _$SetStartEndDateCopyWithImpl<$Res>
 }
 
 /// @nodoc
+
+class SetSortOrder implements TransactionsEvent {
+  const SetSortOrder({required this.sortOrder});
+
+  final SortOrder sortOrder;
+
+  /// Create a copy of TransactionsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $SetSortOrderCopyWith<SetSortOrder> get copyWith =>
+      _$SetSortOrderCopyWithImpl<SetSortOrder>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is SetSortOrder &&
+            (identical(other.sortOrder, sortOrder) ||
+                other.sortOrder == sortOrder));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, sortOrder);
+
+  @override
+  String toString() {
+    return 'TransactionsEvent.setSortOrder(sortOrder: $sortOrder)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $SetSortOrderCopyWith<$Res>
+    implements $TransactionsEventCopyWith<$Res> {
+  factory $SetSortOrderCopyWith(
+          SetSortOrder value, $Res Function(SetSortOrder) _then) =
+      _$SetSortOrderCopyWithImpl;
+  @useResult
+  $Res call({SortOrder sortOrder});
+}
+
+/// @nodoc
+class _$SetSortOrderCopyWithImpl<$Res> implements $SetSortOrderCopyWith<$Res> {
+  _$SetSortOrderCopyWithImpl(this._self, this._then);
+
+  final SetSortOrder _self;
+  final $Res Function(SetSortOrder) _then;
+
+  /// Create a copy of TransactionsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? sortOrder = null,
+  }) {
+    return _then(SetSortOrder(
+      sortOrder: null == sortOrder
+          ? _self.sortOrder
+          : sortOrder // ignore: cast_nullable_to_non_nullable
+              as SortOrder,
+    ));
+  }
+}
+
+/// @nodoc
 mixin _$TransactionsState {
   TransactionsStatus get status;
   List<Transaction> get transactions;
   List<Transaction> get transactionsToday;
   DateTime get startDate;
   DateTime get endDate;
+  SortOrder get sortOrder;
   String? get errorMessage;
 
   /// Create a copy of TransactionsState
@@ -158,6 +223,8 @@ mixin _$TransactionsState {
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
+            (identical(other.sortOrder, sortOrder) ||
+                other.sortOrder == sortOrder) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
@@ -170,11 +237,12 @@ mixin _$TransactionsState {
       const DeepCollectionEquality().hash(transactionsToday),
       startDate,
       endDate,
+      sortOrder,
       errorMessage);
 
   @override
   String toString() {
-    return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, startDate: $startDate, endDate: $endDate, errorMessage: $errorMessage)';
+    return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, startDate: $startDate, endDate: $endDate, sortOrder: $sortOrder, errorMessage: $errorMessage)';
   }
 }
 
@@ -190,6 +258,7 @@ abstract mixin class $TransactionsStateCopyWith<$Res> {
       List<Transaction> transactionsToday,
       DateTime startDate,
       DateTime endDate,
+      SortOrder sortOrder,
       String? errorMessage});
 }
 
@@ -211,6 +280,7 @@ class _$TransactionsStateCopyWithImpl<$Res>
     Object? transactionsToday = null,
     Object? startDate = null,
     Object? endDate = null,
+    Object? sortOrder = null,
     Object? errorMessage = freezed,
   }) {
     return _then(_self.copyWith(
@@ -234,6 +304,10 @@ class _$TransactionsStateCopyWithImpl<$Res>
           ? _self.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      sortOrder: null == sortOrder
+          ? _self.sortOrder
+          : sortOrder // ignore: cast_nullable_to_non_nullable
+              as SortOrder,
       errorMessage: freezed == errorMessage
           ? _self.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -251,6 +325,7 @@ class _TransactionsState extends TransactionsState {
       required final List<Transaction> transactionsToday,
       required this.startDate,
       required this.endDate,
+      required this.sortOrder,
       this.errorMessage})
       : _transactions = transactions,
         _transactionsToday = transactionsToday,
@@ -280,6 +355,8 @@ class _TransactionsState extends TransactionsState {
   @override
   final DateTime endDate;
   @override
+  final SortOrder sortOrder;
+  @override
   final String? errorMessage;
 
   /// Create a copy of TransactionsState
@@ -303,6 +380,8 @@ class _TransactionsState extends TransactionsState {
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
+            (identical(other.sortOrder, sortOrder) ||
+                other.sortOrder == sortOrder) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
@@ -315,11 +394,12 @@ class _TransactionsState extends TransactionsState {
       const DeepCollectionEquality().hash(_transactionsToday),
       startDate,
       endDate,
+      sortOrder,
       errorMessage);
 
   @override
   String toString() {
-    return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, startDate: $startDate, endDate: $endDate, errorMessage: $errorMessage)';
+    return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, startDate: $startDate, endDate: $endDate, sortOrder: $sortOrder, errorMessage: $errorMessage)';
   }
 }
 
@@ -337,6 +417,7 @@ abstract mixin class _$TransactionsStateCopyWith<$Res>
       List<Transaction> transactionsToday,
       DateTime startDate,
       DateTime endDate,
+      SortOrder sortOrder,
       String? errorMessage});
 }
 
@@ -358,6 +439,7 @@ class __$TransactionsStateCopyWithImpl<$Res>
     Object? transactionsToday = null,
     Object? startDate = null,
     Object? endDate = null,
+    Object? sortOrder = null,
     Object? errorMessage = freezed,
   }) {
     return _then(_TransactionsState(
@@ -381,6 +463,10 @@ class __$TransactionsStateCopyWithImpl<$Res>
           ? _self.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      sortOrder: null == sortOrder
+          ? _self.sortOrder
+          : sortOrder // ignore: cast_nullable_to_non_nullable
+              as SortOrder,
       errorMessage: freezed == errorMessage
           ? _self.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable

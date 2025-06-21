@@ -17,12 +17,12 @@ class RouteDestination {
 
 final List<RouteDestination> rootDestinations = [
   RouteDestination(
-    route: TransactionsRoute(isIncome: false),
+    route: TransactionsTodayRoute(isIncome: false),
     icon: CustomIcons.expenses,
     label: 'expenses.title',
   ),
   RouteDestination(
-    route: TransactionsRoute(isIncome: true),
+    route: TransactionsTodayRoute(isIncome: true),
     icon: CustomIcons.income,
     label: 'income.title',
   ),
