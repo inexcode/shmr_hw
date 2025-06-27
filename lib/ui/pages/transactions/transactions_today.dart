@@ -100,16 +100,18 @@ class _TransactionsTodayContent extends StatelessWidget {
           trailing: '$total ${accountsState.currencySymbol}',
         ),
         const Divider(height: 0),
-        ListView.separated(
-          shrinkWrap: true,
-          itemCount: transactions.length,
-          itemBuilder: (final context, final index) {
-            final transaction = transactions[index];
-            return TransactionTile(transaction: transaction);
-          },
-          separatorBuilder: (final BuildContext context, final int index) =>
-              const Divider(
-            height: 0,
+        Expanded(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: transactions.length,
+            itemBuilder: (final context, final index) {
+              final transaction = transactions[index];
+              return TransactionTile(transaction: transaction);
+            },
+            separatorBuilder: (final BuildContext context, final int index) =>
+                const Divider(
+              height: 0,
+            ),
           ),
         ),
         const Divider(height: 0),
