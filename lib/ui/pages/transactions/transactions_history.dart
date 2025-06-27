@@ -80,6 +80,7 @@ class _TransactionsHistoryContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         TotalsTile(
           title: 'expenses.period_start'.tr(),
@@ -167,19 +168,20 @@ class _TransactionsHistoryContent extends StatelessWidget {
           title: '${isIncome ? 'income' : 'expenses'}.total'.tr(),
           trailing: '$total ${accountsState.currencySymbol}',
         ),
-        ListView.separated(
-          shrinkWrap: true,
-          itemCount: transactions.length,
-          itemBuilder: (final context, final index) {
-            final transaction = transactions[index];
-            return TransactionTile(
-              transaction: transaction,
-              showDate: true,
-            );
-          },
-          separatorBuilder: (final BuildContext context, final int index) =>
-              const Divider(
-            height: 0,
+        Expanded(
+          child: ListView.separated(
+            itemCount: transactions.length,
+            itemBuilder: (final context, final index) {
+              final transaction = transactions[index];
+              return TransactionTile(
+                transaction: transaction,
+                showDate: true,
+              );
+            },
+            separatorBuilder: (final BuildContext context, final int index) =>
+                const Divider(
+              height: 0,
+            ),
           ),
         ),
         const Divider(height: 0),
