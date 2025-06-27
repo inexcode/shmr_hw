@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shmr_hw/logic/models/drift/database.dart';
 import 'package:shmr_hw/logic/models/enums.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/account.dart';
 import 'package:shmr_hw/logic/models/stat_item.dart';
@@ -26,6 +27,16 @@ abstract class Account with _$Account {
         currency: dto.currency,
         createdAt: dto.createdAt,
         updatedAt: dto.updatedAt,
+      );
+
+  factory Account.fromDatabase(final DatabaseAccount dbAccount) => Account(
+        id: dbAccount.id,
+        userId: dbAccount.userId,
+        name: dbAccount.name,
+        balance: dbAccount.balance,
+        currency: dbAccount.currency,
+        createdAt: dbAccount.createdAt,
+        updatedAt: dbAccount.updatedAt,
       );
 }
 
@@ -72,6 +83,19 @@ abstract class AccountDetails with _$AccountDetails {
         createdAt: dto.createdAt,
         updatedAt: dto.updatedAt,
       );
+
+  factory AccountDetails.fromDatabase(final DatabaseAccount dbAccount) =>
+      AccountDetails(
+        id: dbAccount.id,
+        name: dbAccount.name,
+        balance: dbAccount.balance,
+        currency: dbAccount.currency,
+        createdAt: dbAccount.createdAt,
+        updatedAt: dbAccount.updatedAt,
+        // TODO(inex): Not clear what exactly should be here.
+        incomeStats: const [],
+        expenseStats: const [],
+      );
 }
 
 @freezed
@@ -88,6 +112,21 @@ abstract class AccountState with _$AccountState {
         name: dto.name,
         balance: dto.balance,
         currency: dto.currency,
+      );
+
+  factory AccountState.fromDatabase(final DatabaseAccountState dbState) =>
+      AccountState(
+        id: dbState.id,
+        name: dbState.name,
+        balance: dbState.balance,
+        currency: dbState.currency,
+      );
+
+  factory AccountState.empty() => AccountState(
+        id: 0,
+        name: '',
+        balance: Decimal.zero,
+        currency: '',
       );
 }
 
@@ -116,6 +155,22 @@ abstract class AccountHistoryElement with _$AccountHistoryElement {
         newState: AccountState.fromDto(dto.newState),
         changeTimestamp: dto.changeTimestamp,
         createdAt: dto.createdAt,
+      );
+
+  factory AccountHistoryElement.fromDatabase(
+    final DatabaseHistoryElementWithStates dbElement,
+  ) =>
+      AccountHistoryElement(
+        id: dbElement.element.id,
+        accountId: dbElement.element.accountId,
+        name: dbElement.element.name,
+        changeType: dbElement.element.changeType,
+        previousState: dbElement.previousState != null
+            ? AccountState.fromDatabase(dbElement.previousState!)
+            : null,
+        newState: AccountState.fromDatabase(dbElement.newState),
+        changeTimestamp: dbElement.element.updatedAt,
+        createdAt: dbElement.element.createdAt,
       );
 }
 

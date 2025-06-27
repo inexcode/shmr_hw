@@ -1,0 +1,28 @@
+import 'package:shmr_hw/logic/models/category.dart';
+
+const fakeCategories = [
+  Category(id: 1, name: 'Зарплата', emoji: '💰', isIncome: true),
+  Category(id: 2, name: 'Фриланс', emoji: '💻', isIncome: true),
+  Category(id: 3, name: 'Подарки', emoji: '🎁', isIncome: true),
+  Category(id: 4, name: 'Проценты по вкладам', emoji: '🏦', isIncome: true),
+  Category(id: 5, name: 'Возврат долга', emoji: '🔄', isIncome: true),
+  Category(id: 6, name: 'Продажа имущества', emoji: '🏠', isIncome: true),
+  Category(id: 7, name: 'Жильё', emoji: '🏠', isIncome: false),
+  Category(id: 8, name: 'Продукты', emoji: '🍎', isIncome: false),
+  Category(id: 9, name: 'Транспорт', emoji: '🚗', isIncome: false),
+  Category(id: 10, name: 'Развлечения', emoji: '🎭', isIncome: false),
+  Category(id: 11, name: 'Рестораны', emoji: '🍽️', isIncome: false),
+  Category(id: 12, name: 'Одежда', emoji: '👕', isIncome: false),
+  Category(id: 13, name: 'Здоровье', emoji: '🏥', isIncome: false),
+  Category(id: 14, name: 'Коммунальные услуги', emoji: '💡', isIncome: false),
+  Category(id: 15, name: 'Техника', emoji: '📱', isIncome: false),
+  Category(id: 16, name: 'Образование', emoji: '📚', isIncome: false),
+  Category(id: 17, name: 'Путешествия', emoji: '✈️', isIncome: false),
+  Category(id: 18, name: 'Подписки', emoji: '📺', isIncome: false),
+  Category(id: 19, name: 'Подарки', emoji: '🎀', isIncome: false),
+  Category(id: 20, name: 'Красота', emoji: '💄', isIncome: false),
+  Category(id: 21, name: 'Спорт', emoji: '🏋️', isIncome: false),
+  Category(id: 22, name: 'Домашние животные', emoji: '🐾', isIncome: false),
+  Category(id: 23, name: 'Хобби', emoji: '🎨', isIncome: false),
+  Category(id: 24, name: 'Кредиты', emoji: '💳', isIncome: false),
+];
