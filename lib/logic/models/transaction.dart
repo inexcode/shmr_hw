@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr_hw/logic/models/account.dart';
 import 'package:shmr_hw/logic/models/category.dart';
+import 'package:shmr_hw/logic/models/drift/database.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/transaction.dart';
 
 part 'transaction.freezed.dart';
@@ -42,6 +43,21 @@ abstract class Transaction with _$Transaction {
         createdAt: response.createdAt,
         updatedAt: response.updatedAt,
         isIncome: response.category.isIncome,
+      );
+
+  factory Transaction.fromDatabase(
+    final DatabaseTransactionWithCategory dbTransaction,
+  ) =>
+      Transaction(
+        id: dbTransaction.transaction.id,
+        accountId: dbTransaction.transaction.accountId,
+        categoryId: dbTransaction.transaction.categoryId,
+        amount: dbTransaction.transaction.amount,
+        transactionDate: dbTransaction.transaction.transactionDate,
+        comment: dbTransaction.transaction.comment,
+        createdAt: dbTransaction.transaction.createdAt,
+        updatedAt: dbTransaction.transaction.updatedAt,
+        isIncome: dbTransaction.category.isIncome,
       );
 }
 
@@ -98,5 +114,20 @@ abstract class TransactionResponse with _$TransactionResponse {
         comment: dto.comment,
         createdAt: dto.createdAt,
         updatedAt: dto.updatedAt,
+      );
+
+  factory TransactionResponse.fromDatabase(
+    final DatabaseTransactionWithCategory dbTransaction,
+    final AccountState accountState,
+  ) =>
+      TransactionResponse(
+        id: dbTransaction.transaction.id,
+        account: accountState,
+        category: Category.fromDatabase(dbTransaction.category),
+        amount: dbTransaction.transaction.amount,
+        transactionDate: dbTransaction.transaction.transactionDate,
+        comment: dbTransaction.transaction.comment,
+        createdAt: dbTransaction.transaction.createdAt,
+        updatedAt: dbTransaction.transaction.updatedAt,
       );
 }

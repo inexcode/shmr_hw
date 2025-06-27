@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shmr_hw/logic/models/drift/database.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/category.dart';
 
 part 'category.freezed.dart';
@@ -17,5 +18,12 @@ abstract class Category with _$Category {
         name: dto.name,
         emoji: dto.emoji,
         isIncome: dto.isIncome,
+      );
+
+  factory Category.fromDatabase(final DatabaseCategory dbCategory) => Category(
+        id: dbCategory.id,
+        name: dbCategory.name,
+        emoji: dbCategory.emoji,
+        isIncome: dbCategory.isIncome,
       );
 }

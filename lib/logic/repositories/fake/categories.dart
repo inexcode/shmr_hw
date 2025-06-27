@@ -1,24 +1,12 @@
 import 'package:shmr_hw/logic/models/category.dart';
+import 'package:shmr_hw/logic/models/fake_data/fake_categories.dart';
 import 'package:shmr_hw/logic/repositories/abstract/categories.dart';
 
 class FakeCategoriesRepository implements CategoriesRepository {
   @override
   Future<List<Category>> fetchCategories() async {
     await Future.delayed(const Duration(seconds: 1));
-    return [
-      const Category(
-        id: 1,
-        name: 'Еда',
-        emoji: '🍔',
-        isIncome: false,
-      ),
-      const Category(
-        id: 2,
-        name: 'Зарплата',
-        emoji: '💰',
-        isIncome: true,
-      ),
-    ];
+    return fakeCategories;
   }
 
   @override
