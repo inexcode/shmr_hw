@@ -72,6 +72,8 @@ class _CategoriesContentState extends State<_CategoriesContent> {
   List<MapEntry<int, Category>> _filterCategories(
     final Map<int, Category> categories,
   ) {
+    const categoryFilterCutoff = 60;
+
     final categoriesList = categories.entries.toList();
 
     if (_searchQuery.isEmpty) {
@@ -84,7 +86,7 @@ class _CategoriesContentState extends State<_CategoriesContent> {
     final results = extractAllSorted(
       query: _searchQuery,
       choices: categoryNames,
-      cutoff: 60,
+      cutoff: categoryFilterCutoff,
     );
 
     return results.map((final result) {
