@@ -241,11 +241,6 @@ class Database extends _$Database {
         .getSingleOrNull();
 
     final previousStateId = previousHistoryElement?.newStateId;
-    final previousState = previousStateId != null
-        ? await (select(accountStates)
-              ..where((final tbl) => tbl.id.equals(previousStateId)))
-            .getSingle()
-        : null;
     final previousBalance = account.balance;
 
     final newBalance = category.isIncome
@@ -343,12 +338,7 @@ class Database extends _$Database {
           ..limit(1))
         .getSingleOrNull();
     final previousStateId = previousHistoryElement?.newStateId;
-    final previousState = previousStateId != null
-        ? await (select(accountStates)
-              ..where((final tbl) => tbl.id.equals(previousStateId)))
-            .getSingle()
-        : null;
-    final previousBalance = account.balance ?? Decimal.zero;
+    final previousBalance = account.balance;
     final newBalance = previousTransaction.category.isIncome
         ? previousBalance + amountDelta
         : previousBalance - amountDelta;
@@ -417,12 +407,7 @@ class Database extends _$Database {
           ..limit(1))
         .getSingleOrNull();
     final previousStateId = previousHistoryElement?.newStateId;
-    final previousState = previousStateId != null
-        ? await (select(accountStates)
-              ..where((final tbl) => tbl.id.equals(previousStateId)))
-            .getSingle()
-        : null;
-    final previousBalance = account.balance ?? Decimal.zero;
+    final previousBalance = account.balance;
     final amount = databaseTransaction.amount;
     final newBalance =
         category.isIncome ? previousBalance - amount : previousBalance + amount;
