@@ -55,9 +55,12 @@ abstract class TransactionsState with _$TransactionsState {
   }
 
   // Helper to sort transactions according to sortOrder
-  List<Transaction> _sortTransactions(final List<Transaction> list) {
+  List<Transaction> _sortTransactions(
+    final List<Transaction> list, {
+    final SortOrder? overwriteSortOrder,
+  }) {
     final sorted = List<Transaction>.from(list);
-    switch (sortOrder) {
+    switch (overwriteSortOrder ?? sortOrder) {
       case SortOrder.dateAscending:
         sorted.sort(
           (final a, final b) => a.transactionDate.compareTo(b.transactionDate),
@@ -120,5 +123,60 @@ abstract class TransactionsState with _$TransactionsState {
         Decimal.zero,
         (final previousValue, final transaction) =>
             previousValue + transaction.amount,
+      );
+
+  List<Transaction> get groupedExpenses {
+    final sortedExpenses = _sortTransactions(
+      expenses,
+      overwriteSortOrder: SortOrder.dateAscending,
+    );
+    final Map<int, Transaction> grouped = {};
+    for (final transaction in sortedExpenses) {
+      if (grouped.containsKey(transaction.categoryId)) {
+        final existing = grouped[transaction.categoryId]!;
+        grouped[transaction.categoryId] = existing.copyWith(
+          amount: existing.amount + transaction.amount,
+          comment: transaction.comment ?? existing.comment,
+        );
+      } else {
+        grouped[transaction.categoryId] = transaction;
+      }
+    }
+    return grouped.values.toList()
+      ..sort(
+        (final a, final b) => b.amount.compareTo(a.amount),
+      );
+  }
+
+  List<Transaction> get groupedIncomes {
+    final sortedIncomes = _sortTransactions(
+      incomes,
+      overwriteSortOrder: SortOrder.dateAscending,
+    );
+    final Map<int, Transaction> grouped = {};
+    for (final transaction in sortedIncomes) {
+      if (grouped.containsKey(transaction.categoryId)) {
+        final existing = grouped[transaction.categoryId]!;
+        grouped[transaction.categoryId] = existing.copyWith(
+          amount: existing.amount + transaction.amount,
+          comment: transaction.comment ?? existing.comment,
+        );
+      } else {
+        grouped[transaction.categoryId] = transaction;
+      }
+    }
+    return grouped.values.toList()
+      ..sort(
+        (final a, final b) => b.amount.compareTo(a.amount),
+      );
+  }
+
+  List<Transaction> transactionsInCategory(
+    final int categoryId,
+  ) =>
+      _sortTransactions(
+        transactions
+            .where((final transaction) => transaction.categoryId == categoryId)
+            .toList(),
       );
 }

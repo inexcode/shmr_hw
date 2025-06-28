@@ -21,10 +21,9 @@ abstract class AccountsState with _$AccountsState {
 extension SelectedAccountsStateExtension on SelectedAccountsState {
   String get currencySymbol {
     try {
-      Currency.fromString(selectedAccount.currency).symbol;
+      return Currency.fromString(selectedAccount.currency).symbol;
     } on UnknownCurrencyException {
       return selectedAccount.currency;
     }
-    return selectedAccount.currency;
   }
 }

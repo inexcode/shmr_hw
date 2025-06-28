@@ -13,7 +13,8 @@
     "cancel": "Отмена",
     "loading": "Загрузка",
     "error": "Ошибка",
-    "save": "Сохранить"
+    "save": "Сохранить",
+    "analysis": "Анализ"
   },
   "currencies": {
     "russian_ruble": "Российский рубль ₽",
