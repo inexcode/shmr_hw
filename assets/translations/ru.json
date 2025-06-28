@@ -12,7 +12,8 @@
     "balance": "Баланс",
     "cancel": "Отмена",
     "loading": "Загрузка",
-    "error": "Ошибка"
+    "error": "Ошибка",
+    "save": "Сохранить"
   },
   "currencies": {
     "russian_ruble": "Российский рубль ₽",
@@ -23,13 +24,17 @@
     "title": "Счёт",
     "my_account": "Мой счёт",
     "delete_account": "Удалить счёт",
-    "select_account": "Выберите счёт"
+    "select_account": "Выберите счёт",
+    "edit_account_name": "Изменить название счёта",
+    "account_name": "Название счёта"
   },
   "categories": {
     "title": "Статьи",
     "my_categories": "Мои статьи",
     "find_category": "Найти статью",
-    "unknown_category": "Неизвестная статья"
+    "unknown_category": "Неизвестная статья",
+    "no_results": "Статьи не найдены",
+    "search_hint": "Найти статью"
   },
   "sorting": {
     "sort_by": "Сортировать по",
