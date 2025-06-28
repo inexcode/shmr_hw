@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shmr_hw/ui/components/spoiler_balance.dart';
 import 'package:shmr_hw/ui/theme.dart';
 
 class TotalsTile extends StatelessWidget {
@@ -7,6 +8,7 @@ class TotalsTile extends StatelessWidget {
     required this.trailing,
     this.onTap,
     this.showTrailingArrow = false,
+    this.shouldApplySpoiler = false,
     super.key,
   });
 
@@ -14,6 +16,7 @@ class TotalsTile extends StatelessWidget {
   final String trailing;
   final GestureTapCallback? onTap;
   final bool showTrailingArrow;
+  final bool shouldApplySpoiler;
 
   @override
   Widget build(final BuildContext context) => ListTile(
@@ -22,10 +25,18 @@ class TotalsTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              trailing,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            if (shouldApplySpoiler)
+              SpoilerBalance(
+                child: Text(
+                  trailing,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              )
+            else
+              Text(
+                trailing,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
             if (showTrailingArrow) ...[
               const SizedBox(width: 8),
               Icon(

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shmr_hw/config/localization.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
+import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/router/router.dart';
@@ -103,6 +104,9 @@ class _MyAppState extends State<MyApp> {
                   ),
                   BlocProvider<CategoriesBloc>(
                     create: (final context) => CategoriesBloc(),
+                  ),
+                  BlocProvider<BalanceSpoilerBloc>(
+                    create: (final context) => BalanceSpoilerBloc(),
                   ),
                 ],
                 child: MaterialApp.router(

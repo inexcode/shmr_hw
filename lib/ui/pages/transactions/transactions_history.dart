@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
+import 'package:shmr_hw/ui/router/router.dart';
 
 @RoutePage()
 class TransactionsHistoryPage extends StatelessWidget {
@@ -49,7 +52,12 @@ class TransactionsHistoryPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.content_paste_search_outlined),
-            onPressed: () {},
+            onPressed: () {
+              unawaited(
+                context
+                    .pushRoute(TransactionsAnalysisRoute(isIncome: isIncome)),
+              );
+            },
           ),
         ],
       ),
@@ -166,6 +174,7 @@ class _TransactionsHistoryContent extends StatelessWidget {
         TotalsTile(
           title: '${isIncome ? 'income' : 'expenses'}.total'.tr(),
           trailing: '$total ${accountsState.currencySymbol}',
+          shouldApplySpoiler: true,
         ),
         Expanded(
           child: ListView.separated(
@@ -175,6 +184,7 @@ class _TransactionsHistoryContent extends StatelessWidget {
               return TransactionTile(
                 transaction: transaction,
                 showDate: true,
+                key: ValueKey('history-transaction-${transaction.id}'),
               );
             },
             separatorBuilder: (final BuildContext context, final int index) =>

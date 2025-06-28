@@ -75,6 +75,54 @@ class SettingsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TransactionsAnalysisPage]
+class TransactionsAnalysisRoute
+    extends PageRouteInfo<TransactionsAnalysisRouteArgs> {
+  TransactionsAnalysisRoute({
+    required bool isIncome,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TransactionsAnalysisRoute.name,
+          args: TransactionsAnalysisRouteArgs(isIncome: isIncome, key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'TransactionsAnalysisRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TransactionsAnalysisRouteArgs>();
+      return TransactionsAnalysisPage(isIncome: args.isIncome, key: args.key);
+    },
+  );
+}
+
+class TransactionsAnalysisRouteArgs {
+  const TransactionsAnalysisRouteArgs({required this.isIncome, this.key});
+
+  final bool isIncome;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'TransactionsAnalysisRouteArgs{isIncome: $isIncome, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TransactionsAnalysisRouteArgs) return false;
+    return isIncome == other.isIncome && key == other.key;
+  }
+
+  @override
+  int get hashCode => isIncome.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [TransactionsHistoryPage]
 class TransactionsHistoryRoute
     extends PageRouteInfo<TransactionsHistoryRouteArgs> {

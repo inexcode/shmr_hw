@@ -92,6 +92,7 @@ class _AccountContent extends StatelessWidget {
           trailing:
               '${accountsState.selectedAccount.balance.toStringAsFixed(2)} ${accountsState.currencySymbol}',
           showTrailingArrow: true,
+          shouldApplySpoiler: true,
         ),
         const Divider(height: 0),
         TotalsTile(
