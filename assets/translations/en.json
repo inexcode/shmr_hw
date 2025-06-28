@@ -12,7 +12,8 @@
     "balance": "Balance",
     "cancel": "Cancel",
     "loading": "Loading",
-    "error": "Error"
+    "error": "Error",
+    "save": "Save"
   },
   "currencies": {
     "russian_ruble": "Russian ruble ₽",
@@ -23,7 +24,9 @@
     "title": "Account",
     "my_account": "My account",
     "delete_account": "Delete account",
-    "select_account": "Select account"
+    "select_account": "Select account",
+    "edit_account_name": "Edit account name",
+    "account_name": "Account name"
   },
   "categories": {
     "title": "Categories",

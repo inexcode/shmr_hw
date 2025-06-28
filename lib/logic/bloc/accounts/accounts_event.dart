@@ -7,4 +7,10 @@ class AccountsEvent with _$AccountsEvent {
     required final Account account,
   }) = SelectAccount;
   const factory AccountsEvent.deselectAccount() = DeselectAccount;
+  const factory AccountsEvent.renameAccount({
+    required final String newName,
+  }) = RenameAccount;
+  const factory AccountsEvent.changeCurrency({
+    required final String newCurrency,
+  }) = ChangeCurrency;
 }
