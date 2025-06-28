@@ -117,14 +117,16 @@ class Database extends _$Database {
       ),
     );
     // Create the initial history element for the new account
-    HistoryElementsCompanion.insert(
-      accountId: id,
-      name: account.name.value,
-      changeType: AccountHistoryChangeType.creation,
-      previousStateId: const Value(null), // No previous state for creation
-      newStateId: stateId,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+    await into(historyElements).insert(
+      HistoryElementsCompanion.insert(
+        accountId: id,
+        name: account.name.value,
+        changeType: AccountHistoryChangeType.creation,
+        previousStateId: const Value(null), // No previous state for creation
+        newStateId: stateId,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
     );
 
     return (select(accounts)..where((final tbl) => tbl.id.equals(id)))
@@ -154,15 +156,17 @@ class Database extends _$Database {
           ..limit(1))
         .getSingleOrNull();
 
-    HistoryElementsCompanion.insert(
-      accountId: id,
-      name: account.name.value,
-      changeType: AccountHistoryChangeType.modification,
-      previousStateId:
-          Value(previousState?.previousStateId), // No previous state for update
-      newStateId: newStateId,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+    await into(historyElements).insert(
+      HistoryElementsCompanion.insert(
+        accountId: id,
+        name: account.name.value,
+        changeType: AccountHistoryChangeType.modification,
+        previousStateId: Value(
+            previousState?.previousStateId), // No previous state for update
+        newStateId: newStateId,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
     );
 
     await (update(accounts)..where((final tbl) => tbl.id.equals(id)))
