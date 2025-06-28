@@ -149,6 +149,7 @@ class _CategoriesContentState extends State<_CategoriesContent> {
                         child: CategoryEmoji(categoryId: category.id),
                       ),
                       title: Text(category.name),
+                      key: ValueKey('category-${category.id}'),
                     );
                   },
                 ),

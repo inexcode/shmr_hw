@@ -98,6 +98,7 @@ class _TransactionsTodayContent extends StatelessWidget {
         TotalsTile(
           title: '${isIncome ? 'income' : 'expenses'}.total'.tr(),
           trailing: '$total ${accountsState.currencySymbol}',
+          shouldApplySpoiler: true,
         ),
         const Divider(height: 0),
         Expanded(
@@ -106,7 +107,10 @@ class _TransactionsTodayContent extends StatelessWidget {
             itemCount: transactions.length,
             itemBuilder: (final context, final index) {
               final transaction = transactions[index];
-              return TransactionTile(transaction: transaction);
+              return TransactionTile(
+                transaction: transaction,
+                key: ValueKey('daily-${transaction.id}'),
+              );
             },
             separatorBuilder: (final BuildContext context, final int index) =>
                 const Divider(

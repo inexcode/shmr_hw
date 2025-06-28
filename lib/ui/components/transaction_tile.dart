@@ -5,6 +5,7 @@ import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/models/transaction.dart';
 import 'package:shmr_hw/ui/components/category_emoji.dart';
 import 'package:shmr_hw/ui/components/category_name.dart';
+import 'package:shmr_hw/ui/components/spoiler_balance.dart';
 
 class TransactionTile extends StatelessWidget {
   const TransactionTile({
@@ -41,9 +42,11 @@ class TransactionTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                '${transaction.amount} ${accountsState.currencySymbol}',
-                style: Theme.of(context).textTheme.bodyLarge,
+              SpoilerBalance(
+                child: Text(
+                  '${transaction.amount} ${accountsState.currencySymbol}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
               if (showDate)
                 Text(
