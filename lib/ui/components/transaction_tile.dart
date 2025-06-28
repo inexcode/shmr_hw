@@ -11,11 +11,13 @@ class TransactionTile extends StatelessWidget {
   const TransactionTile({
     required this.transaction,
     this.showDate = false,
+    this.percent,
     super.key,
   });
 
   final Transaction transaction;
   final bool showDate;
+  final int? percent;
 
   @override
   Widget build(final BuildContext context) {
@@ -42,6 +44,11 @@ class TransactionTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (percent != null)
+                Text(
+                  '$percent%',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               SpoilerBalance(
                 child: Text(
                   '${transaction.amount} ${accountsState.currencySymbol}',

@@ -9,6 +9,7 @@ class TotalsTile extends StatelessWidget {
     this.onTap,
     this.showTrailingArrow = false,
     this.shouldApplySpoiler = false,
+    this.greenBackground = true,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class TotalsTile extends StatelessWidget {
   final GestureTapCallback? onTap;
   final bool showTrailingArrow;
   final bool shouldApplySpoiler;
+  final bool greenBackground;
 
   @override
   Widget build(final BuildContext context) => ListTile(
@@ -49,7 +51,7 @@ class TotalsTile extends StatelessWidget {
             ],
           ],
         ),
-        tileColor: ThemeColors.lightGreen,
+        tileColor: greenBackground ? ThemeColors.lightGreen : null,
         onTap: onTap,
       );
 }
