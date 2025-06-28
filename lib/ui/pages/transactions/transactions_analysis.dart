@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
+import 'package:shmr_hw/ui/router/router.dart';
 
 @RoutePage()
 class TransactionsAnalysisPage extends StatelessWidget {
@@ -152,6 +155,16 @@ class _TransactionsAnalysisContent extends StatelessWidget {
                 key: ValueKey('history-transaction-${transaction.id}'),
                 percent:
                     ((transaction.amount / total).toDouble() * 100).round(),
+                onTap: () {
+                  unawaited(
+                    context.pushRoute(
+                      TransactionsHistoryRoute(
+                        isIncome: isIncome,
+                        categoryId: transaction.categoryId,
+                      ),
+                    ),
+                  );
+                },
               );
             },
             separatorBuilder: (final BuildContext context, final int index) =>

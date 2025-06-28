@@ -12,12 +12,14 @@ class TransactionTile extends StatelessWidget {
     required this.transaction,
     this.showDate = false,
     this.percent,
+    this.onTap,
     super.key,
   });
 
   final Transaction transaction;
   final bool showDate;
   final int? percent;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(final BuildContext context) {
@@ -36,6 +38,7 @@ class TransactionTile extends StatelessWidget {
       title: CategoryName(categoryId: transaction.categoryId),
       subtitle: transaction.comment != null ? Text(transaction.comment!) : null,
       minTileHeight: 70,
+      onTap: onTap,
       trailing: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,

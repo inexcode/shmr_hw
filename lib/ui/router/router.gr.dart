@@ -128,11 +128,16 @@ class TransactionsHistoryRoute
     extends PageRouteInfo<TransactionsHistoryRouteArgs> {
   TransactionsHistoryRoute({
     required bool isIncome,
+    int? categoryId,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           TransactionsHistoryRoute.name,
-          args: TransactionsHistoryRouteArgs(isIncome: isIncome, key: key),
+          args: TransactionsHistoryRouteArgs(
+            isIncome: isIncome,
+            categoryId: categoryId,
+            key: key,
+          ),
           initialChildren: children,
         );
 
@@ -142,32 +147,44 @@ class TransactionsHistoryRoute
     name,
     builder: (data) {
       final args = data.argsAs<TransactionsHistoryRouteArgs>();
-      return TransactionsHistoryPage(isIncome: args.isIncome, key: args.key);
+      return TransactionsHistoryPage(
+        isIncome: args.isIncome,
+        categoryId: args.categoryId,
+        key: args.key,
+      );
     },
   );
 }
 
 class TransactionsHistoryRouteArgs {
-  const TransactionsHistoryRouteArgs({required this.isIncome, this.key});
+  const TransactionsHistoryRouteArgs({
+    required this.isIncome,
+    this.categoryId,
+    this.key,
+  });
 
   final bool isIncome;
+
+  final int? categoryId;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'TransactionsHistoryRouteArgs{isIncome: $isIncome, key: $key}';
+    return 'TransactionsHistoryRouteArgs{isIncome: $isIncome, categoryId: $categoryId, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! TransactionsHistoryRouteArgs) return false;
-    return isIncome == other.isIncome && key == other.key;
+    return isIncome == other.isIncome &&
+        categoryId == other.categoryId &&
+        key == other.key;
   }
 
   @override
-  int get hashCode => isIncome.hashCode ^ key.hashCode;
+  int get hashCode => isIncome.hashCode ^ categoryId.hashCode ^ key.hashCode;
 }
 
 /// generated route for

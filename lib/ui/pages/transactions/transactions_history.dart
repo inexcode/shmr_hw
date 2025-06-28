@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
+import 'package:shmr_hw/ui/components/category_name.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
@@ -15,10 +16,12 @@ import 'package:shmr_hw/ui/router/router.dart';
 class TransactionsHistoryPage extends StatelessWidget {
   const TransactionsHistoryPage({
     required this.isIncome,
+    this.categoryId,
     super.key,
   });
 
   final bool isIncome;
+  final int? categoryId;
 
   @override
   Widget build(final BuildContext context) {
@@ -32,7 +35,10 @@ class TransactionsHistoryPage extends StatelessWidget {
         childWidget = const Center(child: CircularProgressIndicator());
       case TransactionsStatus.loaded:
         childWidget = Center(
-          child: _TransactionsHistoryContent(isIncome: isIncome),
+          child: _TransactionsHistoryContent(
+            isIncome: isIncome,
+            categoryId: categoryId,
+          ),
         );
       case TransactionsStatus.error:
         childWidget = Center(
@@ -46,19 +52,22 @@ class TransactionsHistoryPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'expenses.my_history'.tr(),
-        ).tr(),
+        title: categoryId != null
+            ? CategoryName(categoryId: categoryId!)
+            : Text(
+                'expenses.my_history'.tr(),
+              ).tr(),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.content_paste_search_outlined),
-            onPressed: () {
-              unawaited(
-                context
-                    .pushRoute(TransactionsAnalysisRoute(isIncome: isIncome)),
-              );
-            },
-          ),
+          if (categoryId == null)
+            IconButton(
+              icon: const Icon(Icons.content_paste_search_outlined),
+              onPressed: () {
+                unawaited(
+                  context
+                      .pushRoute(TransactionsAnalysisRoute(isIncome: isIncome)),
+                );
+              },
+            ),
         ],
       ),
       body: childWidget,
@@ -69,21 +78,29 @@ class TransactionsHistoryPage extends StatelessWidget {
 class _TransactionsHistoryContent extends StatelessWidget {
   const _TransactionsHistoryContent({
     required this.isIncome,
+    this.categoryId,
   });
 
   final bool isIncome;
+  final int? categoryId;
+
   @override
   Widget build(final BuildContext context) {
     final transactionsState = context.watch<TransactionsBloc>().state;
     final accountsState =
         context.watch<AccountsBloc>().state as SelectedAccountsState;
 
-    final transactions =
-        isIncome ? transactionsState.incomes : transactionsState.expenses;
+    final transactions = categoryId != null
+        ? transactionsState.transactionsInCategory(categoryId!)
+        : isIncome
+            ? transactionsState.incomes
+            : transactionsState.expenses;
 
-    final total = isIncome
-        ? transactionsState.totalIncomes
-        : transactionsState.totalExpenses;
+    final total = categoryId != null
+        ? transactionsState.totalInCategory(categoryId!)
+        : isIncome
+            ? transactionsState.totalIncomes
+            : transactionsState.totalExpenses;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
