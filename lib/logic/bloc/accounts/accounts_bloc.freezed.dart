@@ -152,6 +152,135 @@ class DeselectAccount implements AccountsEvent {
 }
 
 /// @nodoc
+
+class RenameAccount implements AccountsEvent {
+  const RenameAccount({required this.newName});
+
+  final String newName;
+
+  /// Create a copy of AccountsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $RenameAccountCopyWith<RenameAccount> get copyWith =>
+      _$RenameAccountCopyWithImpl<RenameAccount>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is RenameAccount &&
+            (identical(other.newName, newName) || other.newName == newName));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, newName);
+
+  @override
+  String toString() {
+    return 'AccountsEvent.renameAccount(newName: $newName)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $RenameAccountCopyWith<$Res>
+    implements $AccountsEventCopyWith<$Res> {
+  factory $RenameAccountCopyWith(
+          RenameAccount value, $Res Function(RenameAccount) _then) =
+      _$RenameAccountCopyWithImpl;
+  @useResult
+  $Res call({String newName});
+}
+
+/// @nodoc
+class _$RenameAccountCopyWithImpl<$Res>
+    implements $RenameAccountCopyWith<$Res> {
+  _$RenameAccountCopyWithImpl(this._self, this._then);
+
+  final RenameAccount _self;
+  final $Res Function(RenameAccount) _then;
+
+  /// Create a copy of AccountsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? newName = null,
+  }) {
+    return _then(RenameAccount(
+      newName: null == newName
+          ? _self.newName
+          : newName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class ChangeCurrency implements AccountsEvent {
+  const ChangeCurrency({required this.newCurrency});
+
+  final String newCurrency;
+
+  /// Create a copy of AccountsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $ChangeCurrencyCopyWith<ChangeCurrency> get copyWith =>
+      _$ChangeCurrencyCopyWithImpl<ChangeCurrency>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ChangeCurrency &&
+            (identical(other.newCurrency, newCurrency) ||
+                other.newCurrency == newCurrency));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, newCurrency);
+
+  @override
+  String toString() {
+    return 'AccountsEvent.changeCurrency(newCurrency: $newCurrency)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $ChangeCurrencyCopyWith<$Res>
+    implements $AccountsEventCopyWith<$Res> {
+  factory $ChangeCurrencyCopyWith(
+          ChangeCurrency value, $Res Function(ChangeCurrency) _then) =
+      _$ChangeCurrencyCopyWithImpl;
+  @useResult
+  $Res call({String newCurrency});
+}
+
+/// @nodoc
+class _$ChangeCurrencyCopyWithImpl<$Res>
+    implements $ChangeCurrencyCopyWith<$Res> {
+  _$ChangeCurrencyCopyWithImpl(this._self, this._then);
+
+  final ChangeCurrency _self;
+  final $Res Function(ChangeCurrency) _then;
+
+  /// Create a copy of AccountsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? newCurrency = null,
+  }) {
+    return _then(ChangeCurrency(
+      newCurrency: null == newCurrency
+          ? _self.newCurrency
+          : newCurrency // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
 mixin _$AccountsState {
   @override
   bool operator ==(Object other) {
@@ -289,7 +418,9 @@ class _$NotSelectedAccountsStateCopyWithImpl<$Res>
 
 class SelectedAccountsState implements AccountsState {
   const SelectedAccountsState(
-      {required this.selectedAccount, required final List<Account> accounts})
+      {required this.selectedAccount,
+      required final List<Account> accounts,
+      required this.isUpdating})
       : _accounts = accounts;
 
   final Account selectedAccount;
@@ -299,6 +430,8 @@ class SelectedAccountsState implements AccountsState {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_accounts);
   }
+
+  final bool isUpdating;
 
   /// Create a copy of AccountsState
   /// with the given fields replaced by the non-null parameter values.
@@ -315,16 +448,18 @@ class SelectedAccountsState implements AccountsState {
             other is SelectedAccountsState &&
             (identical(other.selectedAccount, selectedAccount) ||
                 other.selectedAccount == selectedAccount) &&
-            const DeepCollectionEquality().equals(other._accounts, _accounts));
+            const DeepCollectionEquality().equals(other._accounts, _accounts) &&
+            (identical(other.isUpdating, isUpdating) ||
+                other.isUpdating == isUpdating));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, selectedAccount,
-      const DeepCollectionEquality().hash(_accounts));
+      const DeepCollectionEquality().hash(_accounts), isUpdating);
 
   @override
   String toString() {
-    return 'AccountsState.selected(selectedAccount: $selectedAccount, accounts: $accounts)';
+    return 'AccountsState.selected(selectedAccount: $selectedAccount, accounts: $accounts, isUpdating: $isUpdating)';
   }
 }
 
@@ -335,7 +470,7 @@ abstract mixin class $SelectedAccountsStateCopyWith<$Res>
           $Res Function(SelectedAccountsState) _then) =
       _$SelectedAccountsStateCopyWithImpl;
   @useResult
-  $Res call({Account selectedAccount, List<Account> accounts});
+  $Res call({Account selectedAccount, List<Account> accounts, bool isUpdating});
 
   $AccountCopyWith<$Res> get selectedAccount;
 }
@@ -354,6 +489,7 @@ class _$SelectedAccountsStateCopyWithImpl<$Res>
   $Res call({
     Object? selectedAccount = null,
     Object? accounts = null,
+    Object? isUpdating = null,
   }) {
     return _then(SelectedAccountsState(
       selectedAccount: null == selectedAccount
@@ -364,6 +500,10 @@ class _$SelectedAccountsStateCopyWithImpl<$Res>
           ? _self._accounts
           : accounts // ignore: cast_nullable_to_non_nullable
               as List<Account>,
+      isUpdating: null == isUpdating
+          ? _self.isUpdating
+          : isUpdating // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 

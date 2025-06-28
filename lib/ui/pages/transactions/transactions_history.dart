@@ -80,7 +80,6 @@ class _TransactionsHistoryContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
       children: [
         TotalsTile(
           title: 'expenses.period_start'.tr(),
