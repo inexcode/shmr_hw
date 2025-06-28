@@ -30,10 +30,12 @@ class TotalsTile extends StatelessWidget {
               const SizedBox(width: 8),
               Icon(
                 Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant.withAlpha(76),
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurfaceVariant
+                    .withAlpha(76),
               ),
-            ]
-
+            ],
           ],
         ),
         tileColor: ThemeColors.lightGreen,

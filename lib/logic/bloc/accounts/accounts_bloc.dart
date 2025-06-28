@@ -68,14 +68,17 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     add(const LoadAccounts());
   }
 
-  Future<void> _updateAccount(final AccountRequest request, final Emitter<AccountsState> emit) async {
+  Future<void> _updateAccount(
+    final AccountRequest request,
+    final Emitter<AccountsState> emit,
+  ) async {
     final currentState = state as SelectedAccountsState;
     emit(currentState.copyWith(isUpdating: true));
 
     final account = await Repositories().accountsRepository.updateAccount(
-      id: currentState.selectedAccount.id,
-      request: request,
-    );
+          id: currentState.selectedAccount.id,
+          request: request,
+        );
 
     final updatedAccounts = currentState.accounts
         .map((final acc) => acc.id == account.id ? account : acc)
