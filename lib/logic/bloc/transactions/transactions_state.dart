@@ -179,4 +179,13 @@ abstract class TransactionsState with _$TransactionsState {
             .where((final transaction) => transaction.categoryId == categoryId)
             .toList(),
       );
+
+  Decimal totalInCategory(
+    final int categoryId,
+  ) =>
+      transactionsInCategory(categoryId).fold(
+        Decimal.zero,
+        (final previousValue, final transaction) =>
+            previousValue + transaction.amount,
+      );
 }

@@ -35,9 +35,24 @@ class TotalsTile extends StatelessWidget {
                 ),
               )
             else
-              Text(
-                trailing,
-                style: Theme.of(context).textTheme.bodyLarge,
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: !greenBackground ? ThemeColors.toxicGreen : null,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: !greenBackground
+                      ? const EdgeInsets.symmetric(horizontal: 16, vertical: 4)
+                      : EdgeInsets.zero,
+                  child: Text(
+                    trailing,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: !greenBackground
+                              ? FontWeight.w600
+                              : FontWeight.normal,
+                        ),
+                  ),
+                ),
               ),
             if (showTrailingArrow) ...[
               const SizedBox(width: 8),
