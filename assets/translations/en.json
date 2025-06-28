@@ -32,7 +32,9 @@
     "title": "Categories",
     "my_categories": "My categories",
     "find_category": "Find category",
-    "unknown_category": "Unknown category"
+    "unknown_category": "Unknown category",
+    "no_results": "No categories found",
+    "search_hint": "Find a category"
   },
   "sorting": {
     "sort_by": "Sort by",
