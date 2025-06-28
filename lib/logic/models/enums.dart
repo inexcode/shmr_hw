@@ -10,7 +10,6 @@ enum AccountHistoryChangeType {
 }
 
 class UnknownCurrencyException implements Exception {
-
   UnknownCurrencyException(this.message);
   final String message;
 
@@ -79,5 +78,4 @@ enum Currency {
         return CustomIcons.euroSign;
     }
   }
-
 }

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/models/enums.dart';
-import 'package:shmr_hw/ui/components/custom_icons.dart';
-import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
 
 @RoutePage()
@@ -78,7 +76,7 @@ class AccountPage extends StatelessWidget {
 }
 
 class _AccountContent extends StatelessWidget {
-  const _AccountContent({super.key});
+  const _AccountContent();
 
   @override
   Widget build(final BuildContext context) {
