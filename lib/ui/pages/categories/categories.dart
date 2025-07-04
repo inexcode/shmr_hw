@@ -23,7 +23,7 @@ class CategoriesPage extends StatelessWidget {
       case LoadingCategoriesState():
         childWidget = const Center(child: CircularProgressIndicator());
       case LoadedCategoriesState():
-        childWidget = const _CategoriesContent();
+        childWidget = const CategoriesContent();
       case ErrorCategoriesState():
         childWidget = Center(
           child: PagePlaceholder(
@@ -34,22 +34,29 @@ class CategoriesPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('categories.my_categories'.tr()).tr(),
-      ),
+      appBar: AppBar(title: Text('categories.my_categories'.tr()).tr()),
       body: childWidget,
     );
   }
 }
 
-class _CategoriesContent extends StatefulWidget {
-  const _CategoriesContent();
+enum CategoriesPageType { all, income, expenses }
+
+class CategoriesContent extends StatefulWidget {
+  const CategoriesContent({
+    super.key,
+    this.onTapCallback,
+    this.pageType = CategoriesPageType.all,
+  });
+
+  final Function(Category)? onTapCallback;
+  final CategoriesPageType pageType;
 
   @override
-  State<_CategoriesContent> createState() => _CategoriesContentState();
+  State<CategoriesContent> createState() => _CategoriesContentState();
 }
 
-class _CategoriesContentState extends State<_CategoriesContent> {
+class _CategoriesContentState extends State<CategoriesContent> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -76,12 +83,22 @@ class _CategoriesContentState extends State<_CategoriesContent> {
 
     final categoriesList = categories.entries.toList();
 
+    switch (widget.pageType) {
+      case CategoriesPageType.all:
+        break;
+      case CategoriesPageType.income:
+        categoriesList.retainWhere((final entry) => entry.value.isIncome);
+      case CategoriesPageType.expenses:
+        categoriesList.retainWhere((final entry) => !entry.value.isIncome);
+    }
+
     if (_searchQuery.isEmpty) {
       return categoriesList;
     }
 
-    final categoryNames =
-        categoriesList.map((final entry) => entry.value.name).toList();
+    final categoryNames = categoriesList
+        .map((final entry) => entry.value.name)
+        .toList();
 
     final results = extractAllSorted(
       query: _searchQuery,
@@ -119,9 +136,7 @@ class _CategoriesContentState extends State<_CategoriesContent> {
                         onPressed: _searchController.clear,
                       )
                     : const Icon(Icons.search),
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                ),
+                border: const OutlineInputBorder(borderSide: BorderSide.none),
                 filled: false,
               ),
             ),
@@ -136,14 +151,9 @@ class _CategoriesContentState extends State<_CategoriesContent> {
               : ListView.separated(
                   separatorBuilder:
                       (final BuildContext context, final int index) =>
-                          const Divider(
-                    height: 0,
-                  ),
+                          const Divider(height: 0),
                   itemCount: filteredCategories.length,
-                  itemBuilder: (
-                    final BuildContext context,
-                    final int index,
-                  ) {
+                  itemBuilder: (final BuildContext context, final int index) {
                     final categoryEntry = filteredCategories[index];
                     final category = categoryEntry.value;
                     return ListTile(
@@ -152,6 +162,10 @@ class _CategoriesContentState extends State<_CategoriesContent> {
                       ),
                       title: Text(category.name),
                       key: ValueKey('category-${category.id}'),
+                      onTap: () {
+                        widget.onTapCallback?.call(category);
+                        context.pop<Category>(category);
+                      },
                     );
                   },
                 ),

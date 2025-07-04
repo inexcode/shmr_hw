@@ -5,6 +5,7 @@ import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/models/transaction.dart';
 import 'package:shmr_hw/ui/components/category_emoji.dart';
 import 'package:shmr_hw/ui/components/category_name.dart';
+import 'package:shmr_hw/ui/components/generic_tile.dart';
 import 'package:shmr_hw/ui/components/spoiler_balance.dart';
 
 class TransactionTile extends StatelessWidget {
@@ -29,7 +30,7 @@ class TransactionTile extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return ListTile(
+    return GenericTile(
       leading: (transaction.isIncome ?? false)
           ? null
           : CircleAvatar(
@@ -37,40 +38,26 @@ class TransactionTile extends StatelessWidget {
             ),
       title: CategoryName(categoryId: transaction.categoryId),
       subtitle: transaction.comment != null ? Text(transaction.comment!) : null,
-      minTileHeight: 70,
       onTap: onTap,
-      trailing: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+      trailing: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (percent != null)
-                Text(
-                  '$percent%',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              SpoilerBalance(
-                child: Text(
-                  '${transaction.amount} ${accountsState.currencySymbol}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-              if (showDate)
-                Text(
-                  DateFormat('yyyy-MM-dd hh:mm')
-                      .format(transaction.transactionDate),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-            ],
+          if (percent != null)
+            Text('$percent%', style: Theme.of(context).textTheme.bodyLarge),
+          SpoilerBalance(
+            child: Text(
+              '${transaction.amount} ${accountsState.currencySymbol}',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ),
-          const SizedBox(width: 8),
-          Icon(
-            Icons.chevron_right,
-            color: Theme.of(context).colorScheme.onSurfaceVariant.withAlpha(76),
-          ),
+          if (showDate)
+            Text(
+              DateFormat(
+                'yyyy-MM-dd hh:mm',
+              ).format(transaction.transactionDate),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
         ],
       ),
     );

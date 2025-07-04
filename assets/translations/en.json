@@ -14,7 +14,13 @@
     "loading": "Loading",
     "error": "Error",
     "save": "Save",
-    "analysis": "Analysis"
+    "analysis": "Analysis",
+    "not_set": "Not set",
+    "set": "Set",
+    "add_comment_hint": "Add a comment…",
+    "cant_save": "Can't save",
+    "fill_all_fields": "Please fill in all fields",
+    "delete": "Delete"
   },
   "currencies": {
     "russian_ruble": "Russian ruble ₽",
@@ -53,12 +59,17 @@
     "analysis": "Expense analysis",
     "period_start": "Period: start",
     "period_end": "Period: end",
-    "my_history": "My history"
+    "my_history": "My history",
+    "delete": "Delete expense",
+    "delete_confirmation": "Are you sure you want to delete this expense?"
   },
   "income": {
     "title": "Income",
     "income_today": "Income today",
-    "total": "Total"
+    "total": "Total",
+    "my_income": "My income",
+    "delete": "Delete income",
+    "delete_confirmation": "Are you sure you want to delete this income?"
   },
   "settings": {
     "title": "Settings",

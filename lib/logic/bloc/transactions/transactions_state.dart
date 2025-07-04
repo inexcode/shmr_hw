@@ -1,11 +1,6 @@
 part of 'transactions_bloc.dart';
 
-enum TransactionsStatus {
-  initial,
-  loading,
-  loaded,
-  error,
-}
+enum TransactionsStatus { initial, loading, loaded, error }
 
 enum SortOrder {
   dateAscending,
@@ -44,8 +39,11 @@ abstract class TransactionsState with _$TransactionsState {
   factory TransactionsState.initial() {
     final now = DateTime.now();
     return TransactionsState(
-      startDate: DateTime(now.year, now.month, now.day)
-          .subtract(const Duration(days: 30)),
+      startDate: DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).subtract(const Duration(days: 30)),
       endDate: DateTime(now.year, now.month, now.day, 23, 59, 59),
       status: TransactionsStatus.initial,
       sortOrder: SortOrder.dateDescending,
@@ -78,52 +76,52 @@ abstract class TransactionsState with _$TransactionsState {
   }
 
   List<Transaction> get expenses => _sortTransactions(
-        transactions
-            .where((final transaction) => transaction.isIncome == false)
-            .toList(),
-      );
+    transactions
+        .where((final transaction) => transaction.isIncome == false)
+        .toList(),
+  );
 
   Decimal get totalExpenses => expenses.fold(
-        Decimal.zero,
-        (final previousValue, final transaction) =>
-            previousValue + transaction.amount,
-      );
+    Decimal.zero,
+    (final previousValue, final transaction) =>
+        previousValue + transaction.amount,
+  );
 
   List<Transaction> get incomes => _sortTransactions(
-        transactions
-            .where((final transaction) => transaction.isIncome ?? false)
-            .toList(),
-      );
+    transactions
+        .where((final transaction) => transaction.isIncome ?? false)
+        .toList(),
+  );
 
   Decimal get totalIncomes => incomes.fold(
-        Decimal.zero,
-        (final previousValue, final transaction) =>
-            previousValue + transaction.amount,
-      );
+    Decimal.zero,
+    (final previousValue, final transaction) =>
+        previousValue + transaction.amount,
+  );
 
   List<Transaction> get expensesToday => _sortTransactions(
-        transactionsToday
-            .where((final transaction) => transaction.isIncome == false)
-            .toList(),
-      );
+    transactionsToday
+        .where((final transaction) => transaction.isIncome == false)
+        .toList(),
+  );
 
   Decimal get totalExpensesToday => expensesToday.fold(
-        Decimal.zero,
-        (final previousValue, final transaction) =>
-            previousValue + transaction.amount,
-      );
+    Decimal.zero,
+    (final previousValue, final transaction) =>
+        previousValue + transaction.amount,
+  );
 
   List<Transaction> get incomesToday => _sortTransactions(
-        transactionsToday
-            .where((final transaction) => transaction.isIncome ?? false)
-            .toList(),
-      );
+    transactionsToday
+        .where((final transaction) => transaction.isIncome ?? false)
+        .toList(),
+  );
 
   Decimal get totalIncomesToday => incomesToday.fold(
-        Decimal.zero,
-        (final previousValue, final transaction) =>
-            previousValue + transaction.amount,
-      );
+    Decimal.zero,
+    (final previousValue, final transaction) =>
+        previousValue + transaction.amount,
+  );
 
   List<Transaction> get groupedExpenses {
     final sortedExpenses = _sortTransactions(
@@ -143,9 +141,7 @@ abstract class TransactionsState with _$TransactionsState {
       }
     }
     return grouped.values.toList()
-      ..sort(
-        (final a, final b) => b.amount.compareTo(a.amount),
-      );
+      ..sort((final a, final b) => b.amount.compareTo(a.amount));
   }
 
   List<Transaction> get groupedIncomes {
@@ -166,23 +162,17 @@ abstract class TransactionsState with _$TransactionsState {
       }
     }
     return grouped.values.toList()
-      ..sort(
-        (final a, final b) => b.amount.compareTo(a.amount),
-      );
+      ..sort((final a, final b) => b.amount.compareTo(a.amount));
   }
 
-  List<Transaction> transactionsInCategory(
-    final int categoryId,
-  ) =>
+  List<Transaction> transactionsInCategory(final int categoryId) =>
       _sortTransactions(
         transactions
             .where((final transaction) => transaction.categoryId == categoryId)
             .toList(),
       );
 
-  Decimal totalInCategory(
-    final int categoryId,
-  ) =>
+  Decimal totalInCategory(final int categoryId) =>
       transactionsInCategory(categoryId).fold(
         Decimal.zero,
         (final previousValue, final transaction) =>

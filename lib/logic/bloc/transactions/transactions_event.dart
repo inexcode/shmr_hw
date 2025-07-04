@@ -10,4 +10,13 @@ class TransactionsEvent with _$TransactionsEvent {
   const factory TransactionsEvent.setSortOrder({
     required final SortOrder sortOrder,
   }) = SetSortOrder;
+  const factory TransactionsEvent.createTransaction({
+    required final TransactionRequest transaction,
+  }) = CreateTransaction;
+  const factory TransactionsEvent.editTransaction({
+    required final int id,
+    required final TransactionRequest transaction,
+  }) = EditTransaction;
+  const factory TransactionsEvent.deleteTransaction({required final int id}) =
+      DeleteTransaction;
 }

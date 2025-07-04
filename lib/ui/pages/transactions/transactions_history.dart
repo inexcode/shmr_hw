@@ -9,6 +9,7 @@ import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/components/category_name.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
+import 'package:shmr_hw/ui/components/transaction_dialog.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
 import 'package:shmr_hw/ui/router/router.dart';
 
@@ -43,7 +44,8 @@ class TransactionsHistoryPage extends StatelessWidget {
       case TransactionsStatus.error:
         childWidget = Center(
           child: PagePlaceholder(
-            title: transactionsState.errorMessage?.tr() ??
+            title:
+                transactionsState.errorMessage?.tr() ??
                 'expenses.error_message'.tr(),
             iconData: Icons.error_outline,
           ),
@@ -54,17 +56,16 @@ class TransactionsHistoryPage extends StatelessWidget {
       appBar: AppBar(
         title: categoryId != null
             ? CategoryName(categoryId: categoryId!)
-            : Text(
-                'expenses.my_history'.tr(),
-              ).tr(),
+            : Text('expenses.my_history'.tr()).tr(),
         actions: [
           if (categoryId == null)
             IconButton(
               icon: const Icon(Icons.content_paste_search_outlined),
               onPressed: () {
                 unawaited(
-                  context
-                      .pushRoute(TransactionsAnalysisRoute(isIncome: isIncome)),
+                  context.pushRoute(
+                    TransactionsAnalysisRoute(isIncome: isIncome),
+                  ),
                 );
               },
             ),
@@ -76,10 +77,7 @@ class TransactionsHistoryPage extends StatelessWidget {
 }
 
 class _TransactionsHistoryContent extends StatelessWidget {
-  const _TransactionsHistoryContent({
-    required this.isIncome,
-    this.categoryId,
-  });
+  const _TransactionsHistoryContent({required this.isIncome, this.categoryId});
 
   final bool isIncome;
   final int? categoryId;
@@ -93,14 +91,14 @@ class _TransactionsHistoryContent extends StatelessWidget {
     final transactions = categoryId != null
         ? transactionsState.transactionsInCategory(categoryId!)
         : isIncome
-            ? transactionsState.incomes
-            : transactionsState.expenses;
+        ? transactionsState.incomes
+        : transactionsState.expenses;
 
     final total = categoryId != null
         ? transactionsState.totalInCategory(categoryId!)
         : isIncome
-            ? transactionsState.totalIncomes
-            : transactionsState.totalExpenses;
+        ? transactionsState.totalIncomes
+        : transactionsState.totalExpenses;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -108,27 +106,28 @@ class _TransactionsHistoryContent extends StatelessWidget {
       children: [
         TotalsTile(
           title: 'expenses.period_start'.tr(),
-          trailing:
-              DateFormat('yyyy-MM-dd').format(transactionsState.startDate),
+          trailing: DateFormat(
+            'yyyy-MM-dd',
+          ).format(transactionsState.startDate),
           onTap: () async {
             final DateTimeRange<DateTime>? dateRange =
                 await showDateRangePicker(
-              context: context,
-              firstDate: DateTime(2000),
-              lastDate: DateTime.now(),
-              initialDateRange: DateTimeRange(
-                start: transactionsState.startDate,
-                end: transactionsState.endDate,
-              ),
-            );
+                  context: context,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime.now(),
+                  initialDateRange: DateTimeRange(
+                    start: transactionsState.startDate,
+                    end: transactionsState.endDate,
+                  ),
+                );
             if (dateRange != null) {
               if (context.mounted) {
                 context.read<TransactionsBloc>().add(
-                      SetStartEndDate(
-                        startDate: dateRange.start,
-                        endDate: dateRange.end,
-                      ),
-                    );
+                  SetStartEndDate(
+                    startDate: dateRange.start,
+                    endDate: dateRange.end,
+                  ),
+                );
               }
             }
           },
@@ -140,22 +139,22 @@ class _TransactionsHistoryContent extends StatelessWidget {
           onTap: () async {
             final DateTimeRange<DateTime>? dateRange =
                 await showDateRangePicker(
-              context: context,
-              firstDate: DateTime(2000),
-              lastDate: DateTime.now(),
-              initialDateRange: DateTimeRange(
-                start: transactionsState.startDate,
-                end: transactionsState.endDate,
-              ),
-            );
+                  context: context,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime.now(),
+                  initialDateRange: DateTimeRange(
+                    start: transactionsState.startDate,
+                    end: transactionsState.endDate,
+                  ),
+                );
             if (dateRange != null) {
               if (context.mounted) {
                 context.read<TransactionsBloc>().add(
-                      SetStartEndDate(
-                        startDate: dateRange.start,
-                        endDate: dateRange.end,
-                      ),
-                    );
+                  SetStartEndDate(
+                    startDate: dateRange.start,
+                    endDate: dateRange.end,
+                  ),
+                );
               }
             }
           },
@@ -181,9 +180,9 @@ class _TransactionsHistoryContent extends StatelessWidget {
               ),
             );
             if (sortOrder != null && context.mounted) {
-              context
-                  .read<TransactionsBloc>()
-                  .add(SetSortOrder(sortOrder: sortOrder));
+              context.read<TransactionsBloc>().add(
+                SetSortOrder(sortOrder: sortOrder),
+              );
             }
           },
         ),
@@ -202,12 +201,15 @@ class _TransactionsHistoryContent extends StatelessWidget {
                 transaction: transaction,
                 showDate: true,
                 key: ValueKey('history-transaction-${transaction.id}'),
+                onTap: () => transactionDialogBuilder(
+                  context: context,
+                  isIncome: isIncome,
+                  transaction: transaction,
+                ),
               );
             },
             separatorBuilder: (final BuildContext context, final int index) =>
-                const Divider(
-              height: 0,
-            ),
+                const Divider(height: 0),
           ),
         ),
         const Divider(height: 0),
