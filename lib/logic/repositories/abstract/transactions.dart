@@ -5,18 +5,14 @@ abstract interface class TransactionsRepository {
     required final TransactionRequest request,
   });
 
-  Future<TransactionResponse> getTransaction({
-    required final int id,
-  });
+  Future<TransactionResponse> getTransaction({required final int id});
 
   Future<TransactionResponse> updateTransaction({
     required final int id,
     required final TransactionRequest request,
   });
 
-  Future<void> deleteTransaction({
-    required final int id,
-  });
+  Future<void> deleteTransaction({required final int id});
 
   Future<List<TransactionResponse>> fetchTransactions({
     required final int accountId,

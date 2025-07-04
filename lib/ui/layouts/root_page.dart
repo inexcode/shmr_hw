@@ -10,9 +10,7 @@ import 'package:shmr_hw/ui/router/destinations.dart';
 
 @RoutePage()
 class RootPage extends StatefulWidget {
-  const RootPage({
-    super.key,
-  });
+  const RootPage({super.key});
 
   @override
   State<RootPage> createState() => _RootPageState();
@@ -30,9 +28,11 @@ class _RootPageState extends State<RootPage> {
         // Shake detection
         if (context.mounted) {
           if (event.x.abs() > 12 || event.y.abs() > 12 || event.z.abs() > 12) {
-            context.read<BalanceSpoilerBloc>().add(
-                  const ToggleBalanceSpoilerEvent(),
-                );
+            if (context.mounted) {
+              context.read<BalanceSpoilerBloc>().add(
+                const ToggleBalanceSpoilerEvent(),
+              );
+            }
           }
         }
       });
@@ -47,26 +47,26 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(final BuildContext context) => AutoTabsRouter(
-        routes: rootDestinations
-            .map((final destination) => destination.route)
-            .toList(),
-        builder: (final context, final child) {
-          final tabsRouter = AutoTabsRouter.of(context);
-          return Scaffold(
-            body: child,
-            bottomNavigationBar: NavigationBar(
-              selectedIndex: tabsRouter.activeIndex,
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-              onDestinationSelected: tabsRouter.setActiveIndex,
-              destinations: [
-                for (final destination in rootDestinations)
-                  NavigationDestination(
-                    icon: Icon(destination.icon),
-                    label: destination.label.tr(),
-                  ),
-              ].toList(),
-            ),
-          );
-        },
+    routes: rootDestinations
+        .map((final destination) => destination.route)
+        .toList(),
+    builder: (final context, final child) {
+      final tabsRouter = AutoTabsRouter.of(context);
+      return Scaffold(
+        body: child,
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: tabsRouter.activeIndex,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          onDestinationSelected: tabsRouter.setActiveIndex,
+          destinations: [
+            for (final destination in rootDestinations)
+              NavigationDestination(
+                icon: Icon(destination.icon),
+                label: destination.label.tr(),
+              ),
+          ].toList(),
+        ),
       );
+    },
+  );
 }

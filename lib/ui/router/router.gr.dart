@@ -14,7 +14,7 @@ part of 'router.dart';
 /// [AccountPage]
 class AccountRoute extends PageRouteInfo<void> {
   const AccountRoute({List<PageRouteInfo>? children})
-      : super(AccountRoute.name, initialChildren: children);
+    : super(AccountRoute.name, initialChildren: children);
 
   static const String name = 'AccountRoute';
 
@@ -30,7 +30,7 @@ class AccountRoute extends PageRouteInfo<void> {
 /// [CategoriesPage]
 class CategoriesRoute extends PageRouteInfo<void> {
   const CategoriesRoute({List<PageRouteInfo>? children})
-      : super(CategoriesRoute.name, initialChildren: children);
+    : super(CategoriesRoute.name, initialChildren: children);
 
   static const String name = 'CategoriesRoute';
 
@@ -46,7 +46,7 @@ class CategoriesRoute extends PageRouteInfo<void> {
 /// [RootPage]
 class RootRoute extends PageRouteInfo<void> {
   const RootRoute({List<PageRouteInfo>? children})
-      : super(RootRoute.name, initialChildren: children);
+    : super(RootRoute.name, initialChildren: children);
 
   static const String name = 'RootRoute';
 
@@ -62,7 +62,7 @@ class RootRoute extends PageRouteInfo<void> {
 /// [SettingsPage]
 class SettingsRoute extends PageRouteInfo<void> {
   const SettingsRoute({List<PageRouteInfo>? children})
-      : super(SettingsRoute.name, initialChildren: children);
+    : super(SettingsRoute.name, initialChildren: children);
 
   static const String name = 'SettingsRoute';
 
@@ -83,10 +83,10 @@ class TransactionsAnalysisRoute
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          TransactionsAnalysisRoute.name,
-          args: TransactionsAnalysisRouteArgs(isIncome: isIncome, key: key),
-          initialChildren: children,
-        );
+         TransactionsAnalysisRoute.name,
+         args: TransactionsAnalysisRouteArgs(isIncome: isIncome, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'TransactionsAnalysisRoute';
 
@@ -132,14 +132,14 @@ class TransactionsHistoryRoute
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          TransactionsHistoryRoute.name,
-          args: TransactionsHistoryRouteArgs(
-            isIncome: isIncome,
-            categoryId: categoryId,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         TransactionsHistoryRoute.name,
+         args: TransactionsHistoryRouteArgs(
+           isIncome: isIncome,
+           categoryId: categoryId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'TransactionsHistoryRoute';
 
@@ -191,7 +191,7 @@ class TransactionsHistoryRouteArgs {
 /// [TransactionsPage]
 class TransactionsRoute extends PageRouteInfo<void> {
   const TransactionsRoute({List<PageRouteInfo>? children})
-      : super(TransactionsRoute.name, initialChildren: children);
+    : super(TransactionsRoute.name, initialChildren: children);
 
   static const String name = 'TransactionsRoute';
 
@@ -211,10 +211,10 @@ class TransactionsTodayRoute extends PageRouteInfo<TransactionsTodayRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          TransactionsTodayRoute.name,
-          args: TransactionsTodayRouteArgs(isIncome: isIncome, key: key),
-          initialChildren: children,
-        );
+         TransactionsTodayRoute.name,
+         args: TransactionsTodayRouteArgs(isIncome: isIncome, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'TransactionsTodayRoute';
 

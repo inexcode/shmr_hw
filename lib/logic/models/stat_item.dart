@@ -14,9 +14,9 @@ abstract class StatItem with _$StatItem {
   }) = _StatItem;
 
   factory StatItem.fromDto(final StatItemDto dto) => StatItem(
-        categoryId: dto.categoryId,
-        categoryName: dto.categoryName,
-        emoji: dto.emoji,
-        amount: dto.amount,
-      );
+    categoryId: dto.categoryId,
+    categoryName: dto.categoryName,
+    emoji: dto.emoji,
+    amount: dto.amount,
+  );
 }

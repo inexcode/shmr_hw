@@ -7,7 +7,6 @@ class CategoriesState with _$CategoriesState {
   const factory CategoriesState.loaded({
     required final Map<int, Category> categories,
   }) = LoadedCategoriesState;
-  const factory CategoriesState.error({
-    required final String errorMessage,
-  }) = ErrorCategoriesState;
+  const factory CategoriesState.error({required final String errorMessage}) =
+      ErrorCategoriesState;
 }

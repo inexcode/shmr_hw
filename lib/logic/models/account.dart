@@ -20,24 +20,24 @@ abstract class Account with _$Account {
   }) = _Account;
 
   factory Account.fromDto(final AccountDto dto) => Account(
-        id: dto.id,
-        userId: dto.userId,
-        name: dto.name,
-        balance: dto.balance,
-        currency: dto.currency,
-        createdAt: dto.createdAt,
-        updatedAt: dto.updatedAt,
-      );
+    id: dto.id,
+    userId: dto.userId,
+    name: dto.name,
+    balance: dto.balance,
+    currency: dto.currency,
+    createdAt: dto.createdAt,
+    updatedAt: dto.updatedAt,
+  );
 
   factory Account.fromDatabase(final DatabaseAccount dbAccount) => Account(
-        id: dbAccount.id,
-        userId: dbAccount.userId,
-        name: dbAccount.name,
-        balance: dbAccount.balance,
-        currency: dbAccount.currency,
-        createdAt: dbAccount.createdAt,
-        updatedAt: dbAccount.updatedAt,
-      );
+    id: dbAccount.id,
+    userId: dbAccount.userId,
+    name: dbAccount.name,
+    balance: dbAccount.balance,
+    currency: dbAccount.currency,
+    createdAt: dbAccount.createdAt,
+    updatedAt: dbAccount.updatedAt,
+  );
 }
 
 // API defines AccountCreateRequest and AccountUpdateRequest that are
@@ -52,11 +52,8 @@ abstract class AccountRequest with _$AccountRequest {
 
   const AccountRequest._();
 
-  AccountRequestDto toDto() => AccountRequestDto(
-        name: name,
-        balance: balance,
-        currency: currency,
-      );
+  AccountRequestDto toDto() =>
+      AccountRequestDto(name: name, balance: balance, currency: currency);
 }
 
 @freezed
@@ -108,11 +105,11 @@ abstract class AccountState with _$AccountState {
   }) = _AccountState;
 
   factory AccountState.fromDto(final AccountStateDto dto) => AccountState(
-        id: dto.id,
-        name: dto.name,
-        balance: dto.balance,
-        currency: dto.currency,
-      );
+    id: dto.id,
+    name: dto.name,
+    balance: dto.balance,
+    currency: dto.currency,
+  );
 
   factory AccountState.fromDatabase(final DatabaseAccountState dbState) =>
       AccountState(
@@ -122,12 +119,8 @@ abstract class AccountState with _$AccountState {
         currency: dbState.currency,
       );
 
-  factory AccountState.empty() => AccountState(
-        id: 0,
-        name: '',
-        balance: Decimal.zero,
-        currency: '',
-      );
+  factory AccountState.empty() =>
+      AccountState(id: 0, name: '', balance: Decimal.zero, currency: '');
 }
 
 @freezed
@@ -159,19 +152,18 @@ abstract class AccountHistoryElement with _$AccountHistoryElement {
 
   factory AccountHistoryElement.fromDatabase(
     final DatabaseHistoryElementWithStates dbElement,
-  ) =>
-      AccountHistoryElement(
-        id: dbElement.element.id,
-        accountId: dbElement.element.accountId,
-        name: dbElement.element.name,
-        changeType: dbElement.element.changeType,
-        previousState: dbElement.previousState != null
-            ? AccountState.fromDatabase(dbElement.previousState!)
-            : null,
-        newState: AccountState.fromDatabase(dbElement.newState),
-        changeTimestamp: dbElement.element.updatedAt,
-        createdAt: dbElement.element.createdAt,
-      );
+  ) => AccountHistoryElement(
+    id: dbElement.element.id,
+    accountId: dbElement.element.accountId,
+    name: dbElement.element.name,
+    changeType: dbElement.element.changeType,
+    previousState: dbElement.previousState != null
+        ? AccountState.fromDatabase(dbElement.previousState!)
+        : null,
+    newState: AccountState.fromDatabase(dbElement.newState),
+    changeTimestamp: dbElement.element.updatedAt,
+    createdAt: dbElement.element.createdAt,
+  );
 }
 
 @freezed

@@ -23,9 +23,7 @@ class FakeTransactionsRepository implements TransactionsRepository {
   }
 
   @override
-  Future<TransactionResponse> getTransaction({
-    required final int id,
-  }) async {
+  Future<TransactionResponse> getTransaction({required final int id}) async {
     await Future.delayed(const Duration(seconds: 1));
     return TransactionResponse(
       id: id,
@@ -78,9 +76,7 @@ class FakeTransactionsRepository implements TransactionsRepository {
   }
 
   @override
-  Future<void> deleteTransaction({
-    required final int id,
-  }) async {
+  Future<void> deleteTransaction({required final int id}) async {
     await Future.delayed(const Duration(seconds: 1));
     // duh.
     return;

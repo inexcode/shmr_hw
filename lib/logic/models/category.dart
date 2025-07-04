@@ -14,16 +14,16 @@ abstract class Category with _$Category {
   }) = _Category;
 
   factory Category.fromDto(final CategoryDto dto) => Category(
-        id: dto.id,
-        name: dto.name,
-        emoji: dto.emoji,
-        isIncome: dto.isIncome,
-      );
+    id: dto.id,
+    name: dto.name,
+    emoji: dto.emoji,
+    isIncome: dto.isIncome,
+  );
 
   factory Category.fromDatabase(final DatabaseCategory dbCategory) => Category(
-        id: dbCategory.id,
-        name: dbCategory.name,
-        emoji: dbCategory.emoji,
-        isIncome: dbCategory.isIncome,
-      );
+    id: dbCategory.id,
+    name: dbCategory.name,
+    emoji: dbCategory.emoji,
+    isIncome: dbCategory.isIncome,
+  );
 }

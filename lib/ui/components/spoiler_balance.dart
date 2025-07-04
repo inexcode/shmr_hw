@@ -4,10 +4,7 @@ import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SpoilerBalance extends StatelessWidget {
-  const SpoilerBalance({
-    required this.child,
-    super.key,
-  });
+  const SpoilerBalance({required this.child, super.key});
 
   final Widget child;
 

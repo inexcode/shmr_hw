@@ -14,9 +14,7 @@ class RestApiTransactionsRepository implements TransactionsRepository {
   }
 
   @override
-  Future<void> deleteTransaction({
-    required final int id,
-  }) async {
+  Future<void> deleteTransaction({required final int id}) async {
     await _client.deleteTransaction(id);
   }
 
@@ -35,9 +33,7 @@ class RestApiTransactionsRepository implements TransactionsRepository {
   }
 
   @override
-  Future<TransactionResponse> getTransaction({
-    required final int id,
-  }) async {
+  Future<TransactionResponse> getTransaction({required final int id}) async {
     final transaction = await _client.getTransactionDetails(id);
     return TransactionResponse.fromDto(transaction);
   }

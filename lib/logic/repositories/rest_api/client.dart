@@ -11,7 +11,7 @@ import 'package:shmr_hw/logic/repositories/rest_api/exceptions.dart';
 
 class RestApiClient {
   RestApiClient({this.baseUrl = 'https://shmr-finance.ru/api/v1'})
-      : _bearerToken = dotenv.env['REST_API_TOKEN'] ?? '';
+    : _bearerToken = dotenv.env['REST_API_TOKEN'] ?? '';
 
   final String baseUrl;
   final String _bearerToken;
@@ -20,12 +20,10 @@ class RestApiClient {
     final String endpoint, {
     final Map<String, String>? queryParameters,
   }) {
-    final uri = Uri.parse('$baseUrl$endpoint')
-        .replace(queryParameters: queryParameters);
-    return http.get(
-      uri,
-      headers: _headers(),
-    );
+    final uri = Uri.parse(
+      '$baseUrl$endpoint',
+    ).replace(queryParameters: queryParameters);
+    return http.get(uri, headers: _headers());
   }
 
   Future<http.Response> post(
@@ -33,11 +31,7 @@ class RestApiClient {
     final Map<String, dynamic>? body,
   }) {
     final uri = Uri.parse('$baseUrl$endpoint');
-    return http.post(
-      uri,
-      headers: _headers(),
-      body: jsonEncode(body),
-    );
+    return http.post(uri, headers: _headers(), body: jsonEncode(body));
   }
 
   Future<http.Response> put(
@@ -45,19 +39,12 @@ class RestApiClient {
     final Map<String, dynamic>? body,
   }) {
     final uri = Uri.parse('$baseUrl$endpoint');
-    return http.put(
-      uri,
-      headers: _headers(),
-      body: jsonEncode(body),
-    );
+    return http.put(uri, headers: _headers(), body: jsonEncode(body));
   }
 
   Future<http.Response> delete(final String endpoint) {
     final uri = Uri.parse('$baseUrl$endpoint');
-    return http.delete(
-      uri,
-      headers: _headers(),
-    );
+    return http.delete(uri, headers: _headers());
   }
 
   Future<List<AccountDto>> getAccounts() async {
@@ -128,9 +115,7 @@ class RestApiClient {
   }) async {
     final response = await get(
       '/categories',
-      queryParameters: {
-        'is_income': isIncome.toString(),
-      },
+      queryParameters: {'is_income': isIncome.toString()},
     );
 
     _checkCommonErrors(response);
@@ -204,9 +189,9 @@ class RestApiClient {
   }
 
   Map<String, String> _headers() => {
-        'Content-Type': 'application/json',
-        if (_bearerToken.isNotEmpty) 'Authorization': 'Bearer $_bearerToken',
-      };
+    'Content-Type': 'application/json',
+    if (_bearerToken.isNotEmpty) 'Authorization': 'Bearer $_bearerToken',
+  };
 
   void _checkCommonErrors(final http.Response response) {
     if (response.statusCode == HttpStatus.unauthorized) {

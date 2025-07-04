@@ -57,9 +57,9 @@ class AccountPage extends StatelessWidget {
               );
               if (context.mounted) {
                 if (newName != null && newName != accountName) {
-                  context
-                      .read<AccountsBloc>()
-                      .add(RenameAccount(newName: newName));
+                  context.read<AccountsBloc>().add(
+                    RenameAccount(newName: newName),
+                  );
                 }
               }
             },
@@ -100,7 +100,8 @@ class _AccountContent extends StatelessWidget {
           trailing: accountsState.currencySymbol,
           showTrailingArrow: true,
           onTap: () async {
-            final String newCurrency = await showModalBottomSheet<String>(
+            final String newCurrency =
+                await showModalBottomSheet<String>(
                   showDragHandle: true,
                   context: context,
                   builder: (final context) => ListView.builder(
@@ -111,14 +112,17 @@ class _AccountContent extends StatelessWidget {
                           title: Text('common.cancel'.tr()),
                           leading: Icon(
                             Icons.cancel_outlined,
-                            color:
-                                Theme.of(context).colorScheme.onErrorContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onErrorContainer,
                           ),
                           onTap: () => Navigator.of(context).pop(''),
-                          tileColor:
-                              Theme.of(context).colorScheme.errorContainer,
-                          textColor:
-                              Theme.of(context).colorScheme.onErrorContainer,
+                          tileColor: Theme.of(
+                            context,
+                          ).colorScheme.errorContainer,
+                          textColor: Theme.of(
+                            context,
+                          ).colorScheme.onErrorContainer,
                         );
                       }
 
@@ -133,9 +137,9 @@ class _AccountContent extends StatelessWidget {
                 ) ??
                 '';
             if (context.mounted && newCurrency.isNotEmpty) {
-              context
-                  .read<AccountsBloc>()
-                  .add(ChangeCurrency(newCurrency: newCurrency));
+              context.read<AccountsBloc>().add(
+                ChangeCurrency(newCurrency: newCurrency),
+              );
             }
           },
         ),

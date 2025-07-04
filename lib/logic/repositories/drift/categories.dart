@@ -17,8 +17,9 @@ class DriftCategoriesRepository implements CategoriesRepository {
   Future<List<Category>> fetchCategoriesByType({
     required final bool isIncome,
   }) async {
-    final categories =
-        await _databaseSingleton.database.categoriesByType(isIncome: isIncome);
+    final categories = await _databaseSingleton.database.categoriesByType(
+      isIncome: isIncome,
+    );
     return categories.map(Category.fromDatabase).toList();
   }
 }

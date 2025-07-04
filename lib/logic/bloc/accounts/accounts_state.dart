@@ -12,9 +12,8 @@ abstract class AccountsState with _$AccountsState {
     required final List<Account> accounts,
     required final bool isUpdating,
   }) = SelectedAccountsState;
-  const factory AccountsState.error({
-    required final String errorMessage,
-  }) = ErrorAccountsState;
+  const factory AccountsState.error({required final String errorMessage}) =
+      ErrorAccountsState;
 }
 
 // extension on SelectedAccountsState to have a currency symbol getter

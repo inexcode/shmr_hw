@@ -31,48 +31,47 @@ Map<String, dynamic> _$TransactionDtoToJson(_TransactionDto instance) =>
     };
 
 _TransactionRequestDto _$TransactionRequestDtoFromJson(
-        Map<String, dynamic> json) =>
-    _TransactionRequestDto(
-      accountId: (json['accountId'] as num).toInt(),
-      categoryId: (json['categoryId'] as num).toInt(),
-      amount: Decimal.fromJson(json['amount'] as String),
-      transactionDate: DateTime.parse(json['transactionDate'] as String),
-      comment: json['comment'] as String?,
-    );
+  Map<String, dynamic> json,
+) => _TransactionRequestDto(
+  accountId: (json['accountId'] as num).toInt(),
+  categoryId: (json['categoryId'] as num).toInt(),
+  amount: Decimal.fromJson(json['amount'] as String),
+  transactionDate: DateTime.parse(json['transactionDate'] as String),
+  comment: json['comment'] as String?,
+);
 
 Map<String, dynamic> _$TransactionRequestDtoToJson(
-        _TransactionRequestDto instance) =>
-    <String, dynamic>{
-      'accountId': instance.accountId,
-      'categoryId': instance.categoryId,
-      'amount': instance.amount,
-      'transactionDate': instance.transactionDate.toIso8601String(),
-      'comment': instance.comment,
-    };
+  _TransactionRequestDto instance,
+) => <String, dynamic>{
+  'accountId': instance.accountId,
+  'categoryId': instance.categoryId,
+  'amount': instance.amount,
+  'transactionDate': instance.transactionDate.toIso8601String(),
+  'comment': instance.comment,
+};
 
 _TransactionResponseDto _$TransactionResponseDtoFromJson(
-        Map<String, dynamic> json) =>
-    _TransactionResponseDto(
-      id: (json['id'] as num).toInt(),
-      account:
-          AccountStateDto.fromJson(json['account'] as Map<String, dynamic>),
-      category: CategoryDto.fromJson(json['category'] as Map<String, dynamic>),
-      amount: Decimal.fromJson(json['amount'] as String),
-      transactionDate: DateTime.parse(json['transactionDate'] as String),
-      comment: json['comment'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-    );
+  Map<String, dynamic> json,
+) => _TransactionResponseDto(
+  id: (json['id'] as num).toInt(),
+  account: AccountStateDto.fromJson(json['account'] as Map<String, dynamic>),
+  category: CategoryDto.fromJson(json['category'] as Map<String, dynamic>),
+  amount: Decimal.fromJson(json['amount'] as String),
+  transactionDate: DateTime.parse(json['transactionDate'] as String),
+  comment: json['comment'] as String?,
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
+);
 
 Map<String, dynamic> _$TransactionResponseDtoToJson(
-        _TransactionResponseDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'account': instance.account,
-      'category': instance.category,
-      'amount': instance.amount,
-      'transactionDate': instance.transactionDate.toIso8601String(),
-      'comment': instance.comment,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
-    };
+  _TransactionResponseDto instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'account': instance.account,
+  'category': instance.category,
+  'amount': instance.amount,
+  'transactionDate': instance.transactionDate.toIso8601String(),
+  'comment': instance.comment,
+  'createdAt': instance.createdAt.toIso8601String(),
+  'updatedAt': instance.updatedAt.toIso8601String(),
+};

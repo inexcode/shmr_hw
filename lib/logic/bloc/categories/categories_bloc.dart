@@ -12,8 +12,8 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     on<LoadCategories>((final event, final emit) async {
       emit(const CategoriesState.loading());
       try {
-        final categories =
-            await Repositories().categoriesRepository.fetchCategories();
+        final categories = await Repositories().categoriesRepository
+            .fetchCategories();
         emit(
           CategoriesState.loaded(
             categories: {

@@ -3,10 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 
 class CategoryEmoji extends StatelessWidget {
-  const CategoryEmoji({
-    required this.categoryId,
-    super.key,
-  });
+  const CategoryEmoji({required this.categoryId, super.key});
 
   final int categoryId;
 

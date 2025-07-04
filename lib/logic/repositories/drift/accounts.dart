@@ -16,9 +16,7 @@ class DriftAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<Account> createAccount({
-    required final AccountRequest request,
-  }) async {
+  Future<Account> createAccount({required final AccountRequest request}) async {
     final account = await _databaseSingleton.database.createAccount(
       AccountsCompanion.insert(
         userId: 1,
@@ -33,9 +31,7 @@ class DriftAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<AccountDetails> getAccount({
-    required final int id,
-  }) async {
+  Future<AccountDetails> getAccount({required final int id}) async {
     final account = await _databaseSingleton.database.getAccount(id);
     return AccountDetails.fromDatabase(account);
   }
@@ -58,13 +54,12 @@ class DriftAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<AccountHistory> getAccountHistory({
-    required final int id,
-  }) async {
+  Future<AccountHistory> getAccountHistory({required final int id}) async {
     final history = await _databaseSingleton.database.getAccountHistory(id);
     final items = history.map(AccountHistoryElement.fromDatabase).toList();
-    final lastAccountState =
-        items.isNotEmpty ? items.last.newState : AccountState.empty();
+    final lastAccountState = items.isNotEmpty
+        ? items.last.newState
+        : AccountState.empty();
 
     return AccountHistory(
       history: items,

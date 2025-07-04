@@ -22,9 +22,7 @@ class FakeAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<Account> createAccount({
-    required final AccountRequest request,
-  }) async {
+  Future<Account> createAccount({required final AccountRequest request}) async {
     await Future.delayed(const Duration(seconds: 1));
     return Account(
       id: 2,
@@ -38,9 +36,7 @@ class FakeAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<AccountDetails> getAccount({
-    required final int id,
-  }) async {
+  Future<AccountDetails> getAccount({required final int id}) async {
     await Future.delayed(const Duration(seconds: 1));
     return AccountDetails(
       id: id,
@@ -86,9 +82,7 @@ class FakeAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<AccountHistory> getAccountHistory({
-    required final int id,
-  }) async {
+  Future<AccountHistory> getAccountHistory({required final int id}) async {
     await Future.delayed(const Duration(seconds: 1));
     return AccountHistory(
       accountId: 1,

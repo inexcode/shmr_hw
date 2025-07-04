@@ -86,26 +86,18 @@ class DatabaseTransactionWithCategory {
 }
 
 @DriftDatabase(
-  tables: [
-    Categories,
-    Accounts,
-    Transactions,
-    AccountStates,
-    HistoryElements,
-  ],
+  tables: [Categories, Accounts, Transactions, AccountStates, HistoryElements],
 )
 class Database extends _$Database {
   Database([final QueryExecutor? executor])
-      : super(executor ?? _openConnection());
+    : super(executor ?? _openConnection());
 
   @override
   int get schemaVersion => 1;
 
   Future<List<DatabaseAccount>> allAccounts() => select(accounts).get();
 
-  Future<DatabaseAccount> createAccount(
-    final AccountsCompanion account,
-  ) async {
+  Future<DatabaseAccount> createAccount(final AccountsCompanion account) async {
     final id = await into(accounts).insert(account);
     // Create the initial state for the new account
     final stateId = await into(accountStates).insert(
@@ -129,8 +121,9 @@ class Database extends _$Database {
       ),
     );
 
-    return (select(accounts)..where((final tbl) => tbl.id.equals(id)))
-        .getSingle();
+    return (select(
+      accounts,
+    )..where((final tbl) => tbl.id.equals(id))).getSingle();
   }
 
   Future<DatabaseAccount> getAccount(final int id) =>
@@ -150,11 +143,12 @@ class Database extends _$Database {
       ),
     );
     // We need to get the previous state ID for the history element.
-    final previousState = await (select(historyElements)
-          ..where((final tbl) => tbl.accountId.equals(id))
-          ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
-          ..limit(1))
-        .getSingleOrNull();
+    final previousState =
+        await (select(historyElements)
+              ..where((final tbl) => tbl.accountId.equals(id))
+              ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
+              ..limit(1))
+            .getSingleOrNull();
 
     await into(historyElements).insert(
       HistoryElementsCompanion.insert(
@@ -170,8 +164,9 @@ class Database extends _$Database {
       ),
     );
 
-    await (update(accounts)..where((final tbl) => tbl.id.equals(id)))
-        .write(account);
+    await (update(
+      accounts,
+    )..where((final tbl) => tbl.id.equals(id))).write(account);
     return getAccount(id);
   }
 
@@ -191,10 +186,7 @@ class Database extends _$Database {
         previousStates,
         previousStates.id.equalsExp(historyElements.previousStateId),
       ),
-      innerJoin(
-        newStates,
-        newStates.id.equalsExp(historyElements.newStateId),
-      ),
+      innerJoin(newStates, newStates.id.equalsExp(historyElements.newStateId)),
     ]).get();
 
     return elements
@@ -212,38 +204,37 @@ class Database extends _$Database {
 
   Future<List<DatabaseCategory>> categoriesByType({
     required final bool isIncome,
-  }) =>
-      (select(categories)..where((final tbl) => tbl.isIncome.equals(isIncome)))
-          .get();
+  }) => (select(
+    categories,
+  )..where((final tbl) => tbl.isIncome.equals(isIncome))).get();
 
   Future<DatabaseTransactionWithCategory> createTransaction(
     final TransactionsCompanion transaction,
   ) async {
     final id = await into(transactions).insert(transaction);
 
-    final dbTransaction = await (select(transactions)
-          ..where((final tbl) => tbl.id.equals(id)))
-        .join([
-      innerJoin(
-        categories,
-        categories.id.equalsExp(transactions.categoryId),
-      ),
-      // join the account
-      innerJoin(
-        accounts,
-        accounts.id.equalsExp(transactions.accountId),
-      ),
-    ]).getSingle();
+    final dbTransaction =
+        await (select(
+          transactions,
+        )..where((final tbl) => tbl.id.equals(id))).join([
+          innerJoin(
+            categories,
+            categories.id.equalsExp(transactions.categoryId),
+          ),
+          // join the account
+          innerJoin(accounts, accounts.id.equalsExp(transactions.accountId)),
+        ]).getSingle();
 
     final databaseTransaction = dbTransaction.readTable(transactions);
     final category = dbTransaction.readTable(categories);
     final account = dbTransaction.readTable(accounts);
 
-    final previousHistoryElement = await (select(historyElements)
-          ..where((final tbl) => tbl.accountId.equals(id))
-          ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
-          ..limit(1))
-        .getSingleOrNull();
+    final previousHistoryElement =
+        await (select(historyElements)
+              ..where((final tbl) => tbl.accountId.equals(id))
+              ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
+              ..limit(1))
+            .getSingleOrNull();
 
     final previousStateId = previousHistoryElement?.newStateId;
     final previousBalance = account.balance;
@@ -277,11 +268,11 @@ class Database extends _$Database {
     await (update(accounts)
           ..where((final tbl) => tbl.id.equals(databaseTransaction.accountId)))
         .write(
-      AccountsCompanion(
-        balance: Value(newBalance),
-        updatedAt: Value(DateTime.now()),
-      ),
-    );
+          AccountsCompanion(
+            balance: Value(newBalance),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
 
     return DatabaseTransactionWithCategory(
       transaction: databaseTransaction,
@@ -290,14 +281,15 @@ class Database extends _$Database {
   }
 
   Future<DatabaseTransactionWithCategory> getTransaction(final int id) async {
-    final dbTransaction = await (select(transactions)
-          ..where((final tbl) => tbl.id.equals(id)))
-        .join([
-      innerJoin(
-        categories,
-        categories.id.equalsExp(transactions.categoryId),
-      ),
-    ]).getSingle();
+    final dbTransaction =
+        await (select(
+          transactions,
+        )..where((final tbl) => tbl.id.equals(id))).join([
+          innerJoin(
+            categories,
+            categories.id.equalsExp(transactions.categoryId),
+          ),
+        ]).getSingle();
     return DatabaseTransactionWithCategory(
       transaction: dbTransaction.readTable(transactions),
       category: dbTransaction.readTable(categories),
@@ -309,39 +301,40 @@ class Database extends _$Database {
     final TransactionsCompanion transaction,
   ) async {
     final previousTransaction = await getTransaction(id);
-    await (update(transactions)..where((final tbl) => tbl.id.equals(id)))
-        .write(transaction);
+    await (update(
+      transactions,
+    )..where((final tbl) => tbl.id.equals(id))).write(transaction);
 
-    final dbTransaction = await (select(transactions)
-          ..where((final tbl) => tbl.id.equals(id)))
-        .join([
-      innerJoin(
-        categories,
-        categories.id.equalsExp(transactions.categoryId),
-      ),
-      // join the account
-      innerJoin(
-        accounts,
-        accounts.id.equalsExp(transactions.accountId),
-      ),
-    ]).getSingle();
+    final dbTransaction =
+        await (select(
+          transactions,
+        )..where((final tbl) => tbl.id.equals(id))).join([
+          innerJoin(
+            categories,
+            categories.id.equalsExp(transactions.categoryId),
+          ),
+          // join the account
+          innerJoin(accounts, accounts.id.equalsExp(transactions.accountId)),
+        ]).getSingle();
 
     final databaseTransaction = dbTransaction.readTable(transactions);
     final category = dbTransaction.readTable(categories);
     final account = dbTransaction.readTable(accounts);
 
-    final amountDelta = previousTransaction.category.isIncome ==
-            category.isIncome
+    final amountDelta =
+        previousTransaction.category.isIncome == category.isIncome
         ? databaseTransaction.amount - previousTransaction.transaction.amount
         : previousTransaction.transaction.amount + databaseTransaction.amount;
 
-    final previousHistoryElement = await (select(historyElements)
-          ..where(
-            (final tbl) => tbl.accountId.equals(databaseTransaction.accountId),
-          )
-          ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
-          ..limit(1))
-        .getSingleOrNull();
+    final previousHistoryElement =
+        await (select(historyElements)
+              ..where(
+                (final tbl) =>
+                    tbl.accountId.equals(databaseTransaction.accountId),
+              )
+              ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
+              ..limit(1))
+            .getSingleOrNull();
     final previousStateId = previousHistoryElement?.newStateId;
     final previousBalance = account.balance;
     final newBalance = previousTransaction.category.isIncome
@@ -371,11 +364,11 @@ class Database extends _$Database {
     await (update(accounts)
           ..where((final tbl) => tbl.id.equals(databaseTransaction.accountId)))
         .write(
-      AccountsCompanion(
-        balance: Value(newBalance),
-        updatedAt: Value(DateTime.now()),
-      ),
-    );
+          AccountsCompanion(
+            balance: Value(newBalance),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
 
     return DatabaseTransactionWithCategory(
       transaction: databaseTransaction,
@@ -384,19 +377,17 @@ class Database extends _$Database {
   }
 
   Future<void> deleteTransaction(final int id) async {
-    final dbTransaction = await (select(transactions)
-          ..where((final tbl) => tbl.id.equals(id)))
-        .join([
-      innerJoin(
-        categories,
-        categories.id.equalsExp(transactions.categoryId),
-      ),
-      // join the account
-      innerJoin(
-        accounts,
-        accounts.id.equalsExp(transactions.accountId),
-      ),
-    ]).getSingle();
+    final dbTransaction =
+        await (select(
+          transactions,
+        )..where((final tbl) => tbl.id.equals(id))).join([
+          innerJoin(
+            categories,
+            categories.id.equalsExp(transactions.categoryId),
+          ),
+          // join the account
+          innerJoin(accounts, accounts.id.equalsExp(transactions.accountId)),
+        ]).getSingle();
 
     final databaseTransaction = dbTransaction.readTable(transactions);
     final category = dbTransaction.readTable(categories);
@@ -404,18 +395,21 @@ class Database extends _$Database {
 
     await (delete(transactions)..where((final tbl) => tbl.id.equals(id))).go();
 
-    final previousHistoryElement = await (select(historyElements)
-          ..where(
-            (final tbl) => tbl.accountId.equals(databaseTransaction.accountId),
-          )
-          ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
-          ..limit(1))
-        .getSingleOrNull();
+    final previousHistoryElement =
+        await (select(historyElements)
+              ..where(
+                (final tbl) =>
+                    tbl.accountId.equals(databaseTransaction.accountId),
+              )
+              ..orderBy([(final tbl) => OrderingTerm.desc(tbl.createdAt)])
+              ..limit(1))
+            .getSingleOrNull();
     final previousStateId = previousHistoryElement?.newStateId;
     final previousBalance = account.balance;
     final amount = databaseTransaction.amount;
-    final newBalance =
-        category.isIncome ? previousBalance - amount : previousBalance + amount;
+    final newBalance = category.isIncome
+        ? previousBalance - amount
+        : previousBalance + amount;
     final newStateId = await into(accountStates).insert(
       AccountStatesCompanion.insert(
         accountId: databaseTransaction.accountId,
@@ -439,11 +433,11 @@ class Database extends _$Database {
     await (update(accounts)
           ..where((final tbl) => tbl.id.equals(databaseTransaction.accountId)))
         .write(
-      AccountsCompanion(
-        balance: Value(newBalance),
-        updatedAt: Value(DateTime.now()),
-      ),
-    );
+          AccountsCompanion(
+            balance: Value(newBalance),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
   }
 
   Future<List<DatabaseTransactionWithCategory>> getTransactionsByDates({
@@ -459,10 +453,7 @@ class Database extends _$Database {
       )
       ..orderBy([(final tbl) => OrderingTerm.desc(tbl.transactionDate)]);
     final results = await query.join([
-      innerJoin(
-        categories,
-        categories.id.equalsExp(transactions.categoryId),
-      ),
+      innerJoin(categories, categories.id.equalsExp(transactions.categoryId)),
     ]).get();
     return results
         .map(
@@ -476,55 +467,55 @@ class Database extends _$Database {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (final Migrator m) async {
-          await m.createAll();
-          await batch((final batch) {
-            batch.insertAll(
-              categories,
-              fakeCategories.map(
-                (final category) => CategoriesCompanion.insert(
-                  name: category.name,
-                  emoji: category.emoji,
-                  isIncome: category.isIncome,
-                ),
-              ),
-            );
-          });
-          await into(accounts).insert(
-            AccountsCompanion.insert(
-              userId: 1,
-              name: 'Main Account',
-              balance: Decimal.zero,
-              currency: 'RUB',
-              createdAt: DateTime.now(),
-              updatedAt: DateTime.now(),
+    onCreate: (final Migrator m) async {
+      await m.createAll();
+      await batch((final batch) {
+        batch.insertAll(
+          categories,
+          fakeCategories.map(
+            (final category) => CategoriesCompanion.insert(
+              name: category.name,
+              emoji: category.emoji,
+              isIncome: category.isIncome,
             ),
-          );
-          for (final transaction in fakeTransactions) {
-            await createTransaction(
-              TransactionsCompanion.insert(
-                accountId: transaction.accountId,
-                categoryId: transaction.categoryId,
-                amount: transaction.amount,
-                transactionDate: transaction.transactionDate,
-                createdAt: transaction.createdAt,
-                updatedAt: transaction.updatedAt,
-                comment: Value(transaction.comment),
-              ),
-            );
-          }
-        },
-        beforeOpen: (final details) async {
-          await customStatement('PRAGMA foreign_keys = ON');
-        },
-      );
-
-  static QueryExecutor _openConnection() => driftDatabase(
-        name: 'database',
-        native: const DriftNativeOptions(
-          databaseDirectory: getApplicationSupportDirectory,
+          ),
+        );
+      });
+      await into(accounts).insert(
+        AccountsCompanion.insert(
+          userId: 1,
+          name: 'Main Account',
+          balance: Decimal.zero,
+          currency: 'RUB',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
         ),
       );
+      for (final transaction in fakeTransactions) {
+        await createTransaction(
+          TransactionsCompanion.insert(
+            accountId: transaction.accountId,
+            categoryId: transaction.categoryId,
+            amount: transaction.amount,
+            transactionDate: transaction.transactionDate,
+            createdAt: transaction.createdAt,
+            updatedAt: transaction.updatedAt,
+            comment: Value(transaction.comment),
+          ),
+        );
+      }
+    },
+    beforeOpen: (final details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
+  );
+
+  static QueryExecutor _openConnection() => driftDatabase(
+    name: 'database',
+    native: const DriftNativeOptions(
+      databaseDirectory: getApplicationSupportDirectory,
+    ),
+  );
 }
 
 class DecimalConverter extends TypeConverter<Decimal, String> {

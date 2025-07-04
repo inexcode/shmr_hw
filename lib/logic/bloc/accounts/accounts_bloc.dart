@@ -13,8 +13,8 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     on<LoadAccounts>((final event, final emit) async {
       emit(const AccountsState.loading());
       try {
-        final accounts =
-            await Repositories().accountsRepository.fetchAccounts();
+        final accounts = await Repositories().accountsRepository
+            .fetchAccounts();
         emit(AccountsState.notSelected(accounts: accounts));
       } catch (e) {
         emit(AccountsState.error(errorMessage: e.toString()));
@@ -76,9 +76,9 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     emit(currentState.copyWith(isUpdating: true));
 
     final account = await Repositories().accountsRepository.updateAccount(
-          id: currentState.selectedAccount.id,
-          request: request,
-        );
+      id: currentState.selectedAccount.id,
+      request: request,
+    );
 
     final updatedAccounts = currentState.accounts
         .map((final acc) => acc.id == account.id ? account : acc)

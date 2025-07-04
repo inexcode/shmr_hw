@@ -22,15 +22,15 @@ abstract class Transaction with _$Transaction {
   }) = _Transaction;
 
   factory Transaction.fromDto(final TransactionDto dto) => Transaction(
-        id: dto.id,
-        accountId: dto.accountId,
-        categoryId: dto.categoryId,
-        amount: dto.amount,
-        transactionDate: dto.transactionDate,
-        comment: dto.comment,
-        createdAt: dto.createdAt,
-        updatedAt: dto.updatedAt,
-      );
+    id: dto.id,
+    accountId: dto.accountId,
+    categoryId: dto.categoryId,
+    amount: dto.amount,
+    transactionDate: dto.transactionDate,
+    comment: dto.comment,
+    createdAt: dto.createdAt,
+    updatedAt: dto.updatedAt,
+  );
 
   factory Transaction.fromResponse(final TransactionResponse response) =>
       Transaction(
@@ -47,18 +47,17 @@ abstract class Transaction with _$Transaction {
 
   factory Transaction.fromDatabase(
     final DatabaseTransactionWithCategory dbTransaction,
-  ) =>
-      Transaction(
-        id: dbTransaction.transaction.id,
-        accountId: dbTransaction.transaction.accountId,
-        categoryId: dbTransaction.transaction.categoryId,
-        amount: dbTransaction.transaction.amount,
-        transactionDate: dbTransaction.transaction.transactionDate,
-        comment: dbTransaction.transaction.comment,
-        createdAt: dbTransaction.transaction.createdAt,
-        updatedAt: dbTransaction.transaction.updatedAt,
-        isIncome: dbTransaction.category.isIncome,
-      );
+  ) => Transaction(
+    id: dbTransaction.transaction.id,
+    accountId: dbTransaction.transaction.accountId,
+    categoryId: dbTransaction.transaction.categoryId,
+    amount: dbTransaction.transaction.amount,
+    transactionDate: dbTransaction.transaction.transactionDate,
+    comment: dbTransaction.transaction.comment,
+    createdAt: dbTransaction.transaction.createdAt,
+    updatedAt: dbTransaction.transaction.updatedAt,
+    isIncome: dbTransaction.category.isIncome,
+  );
 }
 
 @freezed
@@ -83,12 +82,12 @@ abstract class TransactionRequest with _$TransactionRequest {
       );
 
   TransactionRequestDto toDto() => TransactionRequestDto(
-        accountId: accountId,
-        categoryId: categoryId,
-        amount: amount,
-        transactionDate: transactionDate,
-        comment: comment,
-      );
+    accountId: accountId,
+    categoryId: categoryId,
+    amount: amount,
+    transactionDate: transactionDate,
+    comment: comment,
+  );
 }
 
 @freezed
@@ -119,15 +118,14 @@ abstract class TransactionResponse with _$TransactionResponse {
   factory TransactionResponse.fromDatabase(
     final DatabaseTransactionWithCategory dbTransaction,
     final AccountState accountState,
-  ) =>
-      TransactionResponse(
-        id: dbTransaction.transaction.id,
-        account: accountState,
-        category: Category.fromDatabase(dbTransaction.category),
-        amount: dbTransaction.transaction.amount,
-        transactionDate: dbTransaction.transaction.transactionDate,
-        comment: dbTransaction.transaction.comment,
-        createdAt: dbTransaction.transaction.createdAt,
-        updatedAt: dbTransaction.transaction.updatedAt,
-      );
+  ) => TransactionResponse(
+    id: dbTransaction.transaction.id,
+    account: accountState,
+    category: Category.fromDatabase(dbTransaction.category),
+    amount: dbTransaction.transaction.amount,
+    transactionDate: dbTransaction.transaction.transactionDate,
+    comment: dbTransaction.transaction.comment,
+    createdAt: dbTransaction.transaction.createdAt,
+    updatedAt: dbTransaction.transaction.updatedAt,
+  );
 }
