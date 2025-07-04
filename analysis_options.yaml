@@ -7,6 +7,15 @@ analyzer:
     - lib/generated_plugin_registrant.dart
     - lib/**.g.dart
     - lib/**.freezed.dart
+  plugins:
+    - custom_lint
+
+#custom_lint:
+#  debug: true
+#  verbose: true
+#  rules:
+#    - route_page_class_name:
+#      suffix: 'Page'
 
 linter:
   rules:

@@ -162,7 +162,8 @@ class Database extends _$Database {
         name: account.name.value,
         changeType: AccountHistoryChangeType.modification,
         previousStateId: Value(
-            previousState?.previousStateId), // No previous state for update
+          previousState?.previousStateId,
+        ), // No previous state for update
         newStateId: newStateId,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),

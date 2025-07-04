@@ -31,12 +31,15 @@ dev_dependencies:
   auto_route_generator: ^10.2.3
   bloc_lint: ^0.2.0-dev.6
   build_runner: ^2.5.4
+  custom_lint: ^0.7.5
   drift_dev: ^2.27.0
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
   freezed: ^3.0.6
   json_serializable: ^6.9.0
+  sp_lints:
+    git: https://git.selfprivacy.org/SelfPrivacy/sp-lints.git
 
 flutter:
   uses-material-design: true
