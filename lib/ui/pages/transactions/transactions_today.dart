@@ -8,15 +8,13 @@ import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
+import 'package:shmr_hw/ui/components/transaction_dialog.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
 import 'package:shmr_hw/ui/router/router.dart';
 
 @RoutePage()
 class TransactionsTodayPage extends StatelessWidget {
-  const TransactionsTodayPage({
-    this.isIncome = false,
-    super.key,
-  });
+  const TransactionsTodayPage({this.isIncome = false, super.key});
 
   final bool isIncome;
 
@@ -37,7 +35,8 @@ class TransactionsTodayPage extends StatelessWidget {
       case TransactionsStatus.error:
         childWidget = Center(
           child: PagePlaceholder(
-            title: transactionsState.errorMessage?.tr() ??
+            title:
+                transactionsState.errorMessage?.tr() ??
                 'expenses.error_message'.tr(),
             iconData: Icons.error_outline,
           ),
@@ -64,7 +63,11 @@ class TransactionsTodayPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          unawaited(
+            transactionDialogBuilder(context: context, isIncome: isIncome),
+          );
+        },
       ),
       body: childWidget,
     );
@@ -72,9 +75,7 @@ class TransactionsTodayPage extends StatelessWidget {
 }
 
 class _TransactionsTodayContent extends StatelessWidget {
-  const _TransactionsTodayContent({
-    required this.isIncome,
-  });
+  const _TransactionsTodayContent({required this.isIncome});
 
   final bool isIncome;
   @override
@@ -110,12 +111,19 @@ class _TransactionsTodayContent extends StatelessWidget {
               return TransactionTile(
                 transaction: transaction,
                 key: ValueKey('daily-${transaction.id}'),
+                onTap: () {
+                  unawaited(
+                    transactionDialogBuilder(
+                      context: context,
+                      isIncome: isIncome,
+                      transaction: transaction,
+                    ),
+                  );
+                },
               );
             },
             separatorBuilder: (final BuildContext context, final int index) =>
-                const Divider(
-              height: 0,
-            ),
+                const Divider(height: 0),
           ),
         ),
         const Divider(height: 0),

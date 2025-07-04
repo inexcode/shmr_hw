@@ -10,13 +10,9 @@ part 'transactions_bloc.freezed.dart';
 
 class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   TransactionsBloc({required this.accountId})
-      : super(
-          TransactionsState.initial(),
-        ) {
+    : super(TransactionsState.initial()) {
     on<LoadTransactions>((final event, final emit) async {
-      emit(
-        state.copyWith(status: TransactionsStatus.loading),
-      );
+      emit(state.copyWith(status: TransactionsStatus.loading));
       try {
         final todayTransactions = await _getTodayTransactions();
         final transactions = await _getTransactionsForDateRange(
@@ -77,11 +73,26 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       }
     });
     on<SetSortOrder>((final event, final emit) {
-      emit(
-        state.copyWith(
-          sortOrder: event.sortOrder,
-        ),
+      emit(state.copyWith(sortOrder: event.sortOrder));
+    });
+    on<CreateTransaction>((final event, final emit) async {
+      await Repositories().transactionsRepository.createTransaction(
+        request: event.transaction,
       );
+      add(const LoadTransactions());
+    });
+    on<EditTransaction>((final event, final emit) async {
+      await Repositories().transactionsRepository.updateTransaction(
+        id: event.id,
+        request: event.transaction,
+      );
+      add(const LoadTransactions());
+    });
+    on<DeleteTransaction>((final event, final emit) async {
+      await Repositories().transactionsRepository.deleteTransaction(
+        id: event.id,
+      );
+      add(const LoadTransactions());
     });
 
     add(const LoadTransactions());
@@ -92,18 +103,12 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   Future<List<Transaction>> _getTransactionsForDateRange(
     final DateTime startDate,
     final DateTime endDate,
-  ) async =>
-      (await Repositories().transactionsRepository.fetchTransactions(
-                accountId: accountId,
-                startDate: startDate,
-                endDate: endDate,
-              ))
-          .map(Transaction.fromResponse)
-          .toList();
+  ) async => (await Repositories().transactionsRepository.fetchTransactions(
+    accountId: accountId,
+    startDate: startDate,
+    endDate: endDate,
+  )).map(Transaction.fromResponse).toList();
 
   Future<List<Transaction>> _getTodayTransactions() =>
-      _getTransactionsForDateRange(
-        DateTime.now(),
-        DateTime.now(),
-      );
+      _getTransactionsForDateRange(DateTime.now(), DateTime.now());
 }

@@ -13,10 +13,7 @@ import 'package:shmr_hw/ui/router/router.dart';
 
 @RoutePage()
 class TransactionsAnalysisPage extends StatelessWidget {
-  const TransactionsAnalysisPage({
-    required this.isIncome,
-    super.key,
-  });
+  const TransactionsAnalysisPage({required this.isIncome, super.key});
 
   final bool isIncome;
 
@@ -37,7 +34,8 @@ class TransactionsAnalysisPage extends StatelessWidget {
       case TransactionsStatus.error:
         childWidget = Center(
           child: PagePlaceholder(
-            title: transactionsState.errorMessage?.tr() ??
+            title:
+                transactionsState.errorMessage?.tr() ??
                 'expenses.error_message'.tr(),
             iconData: Icons.error_outline,
           ),
@@ -46,9 +44,7 @@ class TransactionsAnalysisPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'common.analysis'.tr(),
-        ).tr(),
+        title: Text('common.analysis'.tr()).tr(),
         backgroundColor: Theme.of(context).colorScheme.surface,
       ),
       body: childWidget,
@@ -57,9 +53,7 @@ class TransactionsAnalysisPage extends StatelessWidget {
 }
 
 class _TransactionsAnalysisContent extends StatelessWidget {
-  const _TransactionsAnalysisContent({
-    required this.isIncome,
-  });
+  const _TransactionsAnalysisContent({required this.isIncome});
 
   final bool isIncome;
 
@@ -83,28 +77,29 @@ class _TransactionsAnalysisContent extends StatelessWidget {
       children: [
         TotalsTile(
           title: 'expenses.period_start'.tr(),
-          trailing:
-              DateFormat('yyyy-MM-dd').format(transactionsState.startDate),
+          trailing: DateFormat(
+            'yyyy-MM-dd',
+          ).format(transactionsState.startDate),
           greenBackground: false,
           onTap: () async {
             final DateTimeRange<DateTime>? dateRange =
                 await showDateRangePicker(
-              context: context,
-              firstDate: DateTime(2000),
-              lastDate: DateTime.now(),
-              initialDateRange: DateTimeRange(
-                start: transactionsState.startDate,
-                end: transactionsState.endDate,
-              ),
-            );
+                  context: context,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime.now(),
+                  initialDateRange: DateTimeRange(
+                    start: transactionsState.startDate,
+                    end: transactionsState.endDate,
+                  ),
+                );
             if (dateRange != null) {
               if (context.mounted) {
                 context.read<TransactionsBloc>().add(
-                      SetStartEndDate(
-                        startDate: dateRange.start,
-                        endDate: dateRange.end,
-                      ),
-                    );
+                  SetStartEndDate(
+                    startDate: dateRange.start,
+                    endDate: dateRange.end,
+                  ),
+                );
               }
             }
           },
@@ -117,22 +112,22 @@ class _TransactionsAnalysisContent extends StatelessWidget {
           onTap: () async {
             final DateTimeRange<DateTime>? dateRange =
                 await showDateRangePicker(
-              context: context,
-              firstDate: DateTime(2000),
-              lastDate: DateTime.now(),
-              initialDateRange: DateTimeRange(
-                start: transactionsState.startDate,
-                end: transactionsState.endDate,
-              ),
-            );
+                  context: context,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime.now(),
+                  initialDateRange: DateTimeRange(
+                    start: transactionsState.startDate,
+                    end: transactionsState.endDate,
+                  ),
+                );
             if (dateRange != null) {
               if (context.mounted) {
                 context.read<TransactionsBloc>().add(
-                      SetStartEndDate(
-                        startDate: dateRange.start,
-                        endDate: dateRange.end,
-                      ),
-                    );
+                  SetStartEndDate(
+                    startDate: dateRange.start,
+                    endDate: dateRange.end,
+                  ),
+                );
               }
             }
           },
@@ -153,8 +148,8 @@ class _TransactionsAnalysisContent extends StatelessWidget {
               return TransactionTile(
                 transaction: transaction,
                 key: ValueKey('history-transaction-${transaction.id}'),
-                percent:
-                    ((transaction.amount / total).toDouble() * 100).round(),
+                percent: ((transaction.amount / total).toDouble() * 100)
+                    .round(),
                 onTap: () {
                   unawaited(
                     context.pushRoute(
@@ -168,9 +163,7 @@ class _TransactionsAnalysisContent extends StatelessWidget {
               );
             },
             separatorBuilder: (final BuildContext context, final int index) =>
-                const Divider(
-              height: 0,
-            ),
+                const Divider(height: 0),
           ),
         ),
         const Divider(height: 0),

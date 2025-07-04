@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr_hw/config/repositories.dart';
 import 'package:shmr_hw/logic/models/account.dart';

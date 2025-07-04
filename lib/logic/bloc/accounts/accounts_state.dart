@@ -25,4 +25,7 @@ extension SelectedAccountsStateExtension on SelectedAccountsState {
       return selectedAccount.currency;
     }
   }
+
+  Account? accountById(final int id) =>
+      accounts.firstWhereOrNull((final account) => account.id == id);
 }

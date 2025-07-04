@@ -14,7 +14,13 @@
     "loading": "Загрузка",
     "error": "Ошибка",
     "save": "Сохранить",
-    "analysis": "Анализ"
+    "analysis": "Анализ",
+    "not_set": "Не установлено",
+    "set": "Задать",
+    "add_comment_hint": "Добавить комментарий...",
+    "cant_save": "Нельзя сохранить",
+    "fill_all_fields": "Пожалуйста, заполните все поля",
+    "delete": "Удалить"
   },
   "currencies": {
     "russian_ruble": "Российский рубль ₽",
@@ -53,12 +59,17 @@
     "analysis": "Анализ расходов",
     "period_start": "Период: начало",
     "period_end": "Период: конец",
-    "my_history": "Моя история"
+    "my_history": "Моя история",
+    "delete": "Удалить расход",
+    "delete_confirmation": "Вы уверены, что хотите удалить этот расход?"
   },
   "income": {
     "title": "Доходы",
     "income_today": "Доходы сегодня",
-    "total": "Всего"
+    "total": "Всего",
+    "my_income": "Мои доходы",
+    "delete": "Удалить доход",
+    "delete_confirmation": "Вы уверены, что хотите удалить этот доход?"
   },
   "settings": {
     "title": "Настройки",
