@@ -5,11 +5,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
+import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
 import 'package:shmr_hw/ui/router/router.dart';
+import 'package:shmr_hw_pie_chart/shmr_hw_pie_chart.dart';
 
 @RoutePage()
 class TransactionsAnalysisPage extends StatelessWidget {
@@ -21,39 +23,46 @@ class TransactionsAnalysisPage extends StatelessWidget {
   Widget build(final BuildContext context) {
     final transactionsState = context.watch<TransactionsBloc>().state;
 
-    late final Widget childWidget;
-
-    switch (transactionsState.status) {
-      case TransactionsStatus.initial:
-      case TransactionsStatus.loading:
-        childWidget = const Center(child: CircularProgressIndicator());
-      case TransactionsStatus.loaded:
-        childWidget = Center(
-          child: _TransactionsAnalysisContent(isIncome: isIncome),
-        );
-      case TransactionsStatus.error:
-        childWidget = Center(
-          child: PagePlaceholder(
-            title:
-                transactionsState.errorMessage?.tr() ??
-                'expenses.error_message'.tr(),
-            iconData: Icons.error_outline,
-          ),
-        );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('common.analysis'.tr()).tr(),
         backgroundColor: Theme.of(context).colorScheme.surface,
       ),
-      body: childWidget,
+      body: Builder(
+        builder: (final context) {
+          switch (transactionsState.status) {
+            case TransactionsStatus.initial:
+              return const Center(child: CircularProgressIndicator());
+            case TransactionsStatus.loading:
+            case TransactionsStatus.loaded:
+              return Stack(
+                children: [
+                  _TransactionsAnalysisContent(
+                    key: ValueKey('analysis_content_$isIncome'),
+                    isIncome: isIncome,
+                  ),
+                  if (transactionsState.status == TransactionsStatus.loading)
+                    const Center(child: CircularProgressIndicator()),
+                ],
+              );
+            case TransactionsStatus.error:
+              return Center(
+                child: PagePlaceholder(
+                  title:
+                      transactionsState.errorMessage?.tr() ??
+                      'expenses.error_message'.tr(),
+                  iconData: Icons.error_outline,
+                ),
+              );
+          }
+        },
+      ),
     );
   }
 }
 
 class _TransactionsAnalysisContent extends StatelessWidget {
-  const _TransactionsAnalysisContent({required this.isIncome});
+  const _TransactionsAnalysisContent({required this.isIncome, super.key});
 
   final bool isIncome;
 
@@ -70,6 +79,16 @@ class _TransactionsAnalysisContent extends StatelessWidget {
     final total = isIncome
         ? transactionsState.totalIncomes
         : transactionsState.totalExpenses;
+
+    final categoriesState = context.watch<CategoriesBloc>().state;
+
+    String getCategoryName(final int categoryId) {
+      if (categoriesState is! LoadedCategoriesState) {
+        return 'common.unknown'.tr();
+      }
+      final category = categoriesState.categories[categoryId];
+      return category?.name ?? 'common.unknown'.tr();
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -138,6 +157,19 @@ class _TransactionsAnalysisContent extends StatelessWidget {
           trailing: '$total ${accountsState.currencySymbol}',
           shouldApplySpoiler: true,
           greenBackground: false,
+        ),
+        const Divider(height: 0),
+        AnimatedPieChart(
+          key: const ValueKey('transactions_pie_chart'),
+          data: transactions
+              .map(
+                (final transaction) => PieChartInputData(
+                  value: transaction.amount.toDouble(),
+                  label: getCategoryName(transaction.categoryId),
+                ),
+              )
+              .toList(),
+          valueSuffix: accountsState.currencySymbol,
         ),
         const Divider(height: 0),
         Expanded(
