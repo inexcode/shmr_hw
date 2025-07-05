@@ -16,6 +16,7 @@ dependencies:
   drift: ^2.27.0
   drift_flutter: ^0.2.4
   easy_localization: ^3.0.7+1
+  fl_chart: ^1.0.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -26,6 +27,8 @@ dependencies:
   json_annotation: ^4.9.0
   path_provider: ^2.1.5
   sensors_plus: ^6.1.1
+  shmr_hw_pie_chart:
+    path: ./shmr_hw_pie_chart
   skeletonizer: ^2.0.1
 
 dev_dependencies:
@@ -51,4 +54,3 @@ flutter:
     - family: CustomIcons
       fonts:
         - asset: assets/fonts/CustomIcons.ttf
-
