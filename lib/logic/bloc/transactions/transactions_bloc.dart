@@ -19,11 +19,13 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
           state.startDate,
           state.endDate,
         );
+        final transactionsDelta = await _getTransactionsDeltaForLastMonth();
         emit(
           state.copyWith(
             status: TransactionsStatus.loaded,
             transactions: transactions,
             transactionsToday: todayTransactions,
+            transactionsDelta: transactionsDelta,
           ),
         );
       } catch (e) {
@@ -111,4 +113,50 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
 
   Future<List<Transaction>> _getTodayTransactions() =>
       _getTransactionsForDateRange(DateTime.now(), DateTime.now());
+
+  Future<List<DayTransactionsDelta>> _getTransactionsDeltaForLastMonth() {
+    final today = DateTime.now();
+    return _getTransactionsDelta(
+      DateTime(today.year, today.month, today.day - 30),
+      DateTime(today.year, today.month, today.day, 23, 59, 59),
+    );
+  }
+
+  Future<List<DayTransactionsDelta>> _getTransactionsDelta(
+    final DateTime startDate,
+    final DateTime endDate,
+  ) async {
+    final transactions = await _getTransactionsForDateRange(startDate, endDate);
+
+    final dailyDeltas = <DateTime, Decimal>{};
+    var currentDate = DateTime(startDate.year, startDate.month, startDate.day);
+    while (currentDate.isBefore(
+      DateTime(endDate.year, endDate.month, endDate.day + 1),
+    )) {
+      dailyDeltas[currentDate] = Decimal.zero;
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+
+    for (final transaction in transactions) {
+      final date = DateTime(
+        transaction.transactionDate.year,
+        transaction.transactionDate.month,
+        transaction.transactionDate.day,
+      );
+
+      dailyDeltas[date] = dailyDeltas[date]! + transaction.amount;
+    }
+
+    // Convert to DayTransactionsDelta objects and sort by date
+    final deltas =
+        dailyDeltas.entries
+            .map(
+              (final entry) =>
+                  DayTransactionsDelta(date: entry.key, delta: entry.value),
+            )
+            .toList()
+          ..sort((final a, final b) => a.date.compareTo(b.date));
+
+    return deltas;
+  }
 }

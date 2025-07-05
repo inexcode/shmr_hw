@@ -22,12 +22,23 @@ enum SortOrder {
   }
 }
 
+class DayTransactionsDelta {
+  const DayTransactionsDelta({required this.date, required this.delta});
+
+  final DateTime date;
+  final Decimal delta;
+
+  @override
+  String toString() => 'DayTransactionsDelta(date: $date, delta: $delta)';
+}
+
 @freezed
 abstract class TransactionsState with _$TransactionsState {
   const factory TransactionsState({
     required final TransactionsStatus status,
     required final List<Transaction> transactions,
     required final List<Transaction> transactionsToday,
+    required final List<DayTransactionsDelta> transactionsDelta,
     required final DateTime startDate,
     required final DateTime endDate,
     required final SortOrder sortOrder,
@@ -49,6 +60,7 @@ abstract class TransactionsState with _$TransactionsState {
       sortOrder: SortOrder.dateDescending,
       transactions: const [],
       transactionsToday: const [],
+      transactionsDelta: const [],
     );
   }
 
