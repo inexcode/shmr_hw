@@ -144,7 +144,11 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
         transaction.transactionDate.day,
       );
 
-      dailyDeltas[date] = dailyDeltas[date]! + transaction.amount;
+      if (transaction.isIncome ?? true) {
+        dailyDeltas[date] = dailyDeltas[date]! + transaction.amount;
+      } else {
+        dailyDeltas[date] = dailyDeltas[date]! - transaction.amount;
+      }
     }
 
     // Convert to DayTransactionsDelta objects and sort by date
