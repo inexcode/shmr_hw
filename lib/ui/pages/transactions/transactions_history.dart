@@ -56,7 +56,7 @@ class TransactionsHistoryPage extends StatelessWidget {
       appBar: AppBar(
         title: categoryId != null
             ? CategoryName(categoryId: categoryId!)
-            : Text('expenses.my_history'.tr()).tr(),
+            : Text('expenses.my_history'.tr()),
         actions: [
           if (categoryId == null)
             IconButton(
