@@ -429,7 +429,7 @@ as int,
 /// @nodoc
 mixin _$TransactionsState {
 
- TransactionsStatus get status; List<Transaction> get transactions; List<Transaction> get transactionsToday; DateTime get startDate; DateTime get endDate; SortOrder get sortOrder; String? get errorMessage;
+ TransactionsStatus get status; List<Transaction> get transactions; List<Transaction> get transactionsToday; List<DayTransactionsDelta> get transactionsDelta; DateTime get startDate; DateTime get endDate; SortOrder get sortOrder; String? get errorMessage;
 /// Create a copy of TransactionsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -440,16 +440,16 @@ $TransactionsStateCopyWith<TransactionsState> get copyWith => _$TransactionsStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.transactions, transactions)&&const DeepCollectionEquality().equals(other.transactionsToday, transactionsToday)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.transactions, transactions)&&const DeepCollectionEquality().equals(other.transactionsToday, transactionsToday)&&const DeepCollectionEquality().equals(other.transactionsDelta, transactionsDelta)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(transactions),const DeepCollectionEquality().hash(transactionsToday),startDate,endDate,sortOrder,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(transactions),const DeepCollectionEquality().hash(transactionsToday),const DeepCollectionEquality().hash(transactionsDelta),startDate,endDate,sortOrder,errorMessage);
 
 @override
 String toString() {
-  return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, startDate: $startDate, endDate: $endDate, sortOrder: $sortOrder, errorMessage: $errorMessage)';
+  return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, transactionsDelta: $transactionsDelta, startDate: $startDate, endDate: $endDate, sortOrder: $sortOrder, errorMessage: $errorMessage)';
 }
 
 
@@ -460,7 +460,7 @@ abstract mixin class $TransactionsStateCopyWith<$Res>  {
   factory $TransactionsStateCopyWith(TransactionsState value, $Res Function(TransactionsState) _then) = _$TransactionsStateCopyWithImpl;
 @useResult
 $Res call({
- TransactionsStatus status, List<Transaction> transactions, List<Transaction> transactionsToday, DateTime startDate, DateTime endDate, SortOrder sortOrder, String? errorMessage
+ TransactionsStatus status, List<Transaction> transactions, List<Transaction> transactionsToday, List<DayTransactionsDelta> transactionsDelta, DateTime startDate, DateTime endDate, SortOrder sortOrder, String? errorMessage
 });
 
 
@@ -477,12 +477,13 @@ class _$TransactionsStateCopyWithImpl<$Res>
 
 /// Create a copy of TransactionsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? transactions = null,Object? transactionsToday = null,Object? startDate = null,Object? endDate = null,Object? sortOrder = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? transactions = null,Object? transactionsToday = null,Object? transactionsDelta = null,Object? startDate = null,Object? endDate = null,Object? sortOrder = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TransactionsStatus,transactions: null == transactions ? _self.transactions : transactions // ignore: cast_nullable_to_non_nullable
 as List<Transaction>,transactionsToday: null == transactionsToday ? _self.transactionsToday : transactionsToday // ignore: cast_nullable_to_non_nullable
-as List<Transaction>,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
+as List<Transaction>,transactionsDelta: null == transactionsDelta ? _self.transactionsDelta : transactionsDelta // ignore: cast_nullable_to_non_nullable
+as List<DayTransactionsDelta>,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime,endDate: null == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as SortOrder,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -497,7 +498,7 @@ as String?,
 
 
 class _TransactionsState extends TransactionsState {
-  const _TransactionsState({required this.status, required final  List<Transaction> transactions, required final  List<Transaction> transactionsToday, required this.startDate, required this.endDate, required this.sortOrder, this.errorMessage}): _transactions = transactions,_transactionsToday = transactionsToday,super._();
+  const _TransactionsState({required this.status, required final  List<Transaction> transactions, required final  List<Transaction> transactionsToday, required final  List<DayTransactionsDelta> transactionsDelta, required this.startDate, required this.endDate, required this.sortOrder, this.errorMessage}): _transactions = transactions,_transactionsToday = transactionsToday,_transactionsDelta = transactionsDelta,super._();
   
 
 @override final  TransactionsStatus status;
@@ -515,6 +516,13 @@ class _TransactionsState extends TransactionsState {
   return EqualUnmodifiableListView(_transactionsToday);
 }
 
+ final  List<DayTransactionsDelta> _transactionsDelta;
+@override List<DayTransactionsDelta> get transactionsDelta {
+  if (_transactionsDelta is EqualUnmodifiableListView) return _transactionsDelta;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_transactionsDelta);
+}
+
 @override final  DateTime startDate;
 @override final  DateTime endDate;
 @override final  SortOrder sortOrder;
@@ -530,16 +538,16 @@ _$TransactionsStateCopyWith<_TransactionsState> get copyWith => __$TransactionsS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._transactions, _transactions)&&const DeepCollectionEquality().equals(other._transactionsToday, _transactionsToday)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._transactions, _transactions)&&const DeepCollectionEquality().equals(other._transactionsToday, _transactionsToday)&&const DeepCollectionEquality().equals(other._transactionsDelta, _transactionsDelta)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_transactions),const DeepCollectionEquality().hash(_transactionsToday),startDate,endDate,sortOrder,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_transactions),const DeepCollectionEquality().hash(_transactionsToday),const DeepCollectionEquality().hash(_transactionsDelta),startDate,endDate,sortOrder,errorMessage);
 
 @override
 String toString() {
-  return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, startDate: $startDate, endDate: $endDate, sortOrder: $sortOrder, errorMessage: $errorMessage)';
+  return 'TransactionsState(status: $status, transactions: $transactions, transactionsToday: $transactionsToday, transactionsDelta: $transactionsDelta, startDate: $startDate, endDate: $endDate, sortOrder: $sortOrder, errorMessage: $errorMessage)';
 }
 
 
@@ -550,7 +558,7 @@ abstract mixin class _$TransactionsStateCopyWith<$Res> implements $TransactionsS
   factory _$TransactionsStateCopyWith(_TransactionsState value, $Res Function(_TransactionsState) _then) = __$TransactionsStateCopyWithImpl;
 @override @useResult
 $Res call({
- TransactionsStatus status, List<Transaction> transactions, List<Transaction> transactionsToday, DateTime startDate, DateTime endDate, SortOrder sortOrder, String? errorMessage
+ TransactionsStatus status, List<Transaction> transactions, List<Transaction> transactionsToday, List<DayTransactionsDelta> transactionsDelta, DateTime startDate, DateTime endDate, SortOrder sortOrder, String? errorMessage
 });
 
 
@@ -567,12 +575,13 @@ class __$TransactionsStateCopyWithImpl<$Res>
 
 /// Create a copy of TransactionsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? transactions = null,Object? transactionsToday = null,Object? startDate = null,Object? endDate = null,Object? sortOrder = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? transactions = null,Object? transactionsToday = null,Object? transactionsDelta = null,Object? startDate = null,Object? endDate = null,Object? sortOrder = null,Object? errorMessage = freezed,}) {
   return _then(_TransactionsState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as TransactionsStatus,transactions: null == transactions ? _self._transactions : transactions // ignore: cast_nullable_to_non_nullable
 as List<Transaction>,transactionsToday: null == transactionsToday ? _self._transactionsToday : transactionsToday // ignore: cast_nullable_to_non_nullable
-as List<Transaction>,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
+as List<Transaction>,transactionsDelta: null == transactionsDelta ? _self._transactionsDelta : transactionsDelta // ignore: cast_nullable_to_non_nullable
+as List<DayTransactionsDelta>,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime,endDate: null == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as SortOrder,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
