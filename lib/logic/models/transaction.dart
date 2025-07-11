@@ -85,7 +85,7 @@ abstract class TransactionRequest with _$TransactionRequest {
     accountId: accountId,
     categoryId: categoryId,
     amount: amount,
-    transactionDate: transactionDate,
+    transactionDate: transactionDate.toUtc(),
     comment: comment,
   );
 }

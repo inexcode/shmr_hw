@@ -22,4 +22,15 @@ class DriftCategoriesRepository implements CategoriesRepository {
     );
     return categories.map(Category.fromDatabase).toList();
   }
+
+  @override
+  Future<void> saveCategories({
+    required final List<Category> categories,
+  }) async {
+    await _databaseSingleton.database.saveCategories(
+      categories: categories
+          .map((final category) => category.toDatabase())
+          .toList(),
+    );
+  }
 }

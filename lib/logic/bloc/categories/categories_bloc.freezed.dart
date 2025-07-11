@@ -171,6 +171,78 @@ String toString() {
 /// @nodoc
 
 
+class LoadingWithCacheCategoriesState implements CategoriesState {
+  const LoadingWithCacheCategoriesState({required final  Map<int, Category> categories}): _categories = categories;
+  
+
+ final  Map<int, Category> _categories;
+ Map<int, Category> get categories {
+  if (_categories is EqualUnmodifiableMapView) return _categories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_categories);
+}
+
+
+/// Create a copy of CategoriesState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LoadingWithCacheCategoriesStateCopyWith<LoadingWithCacheCategoriesState> get copyWith => _$LoadingWithCacheCategoriesStateCopyWithImpl<LoadingWithCacheCategoriesState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingWithCacheCategoriesState&&const DeepCollectionEquality().equals(other._categories, _categories));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+
+@override
+String toString() {
+  return 'CategoriesState.loadingWithCache(categories: $categories)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $LoadingWithCacheCategoriesStateCopyWith<$Res> implements $CategoriesStateCopyWith<$Res> {
+  factory $LoadingWithCacheCategoriesStateCopyWith(LoadingWithCacheCategoriesState value, $Res Function(LoadingWithCacheCategoriesState) _then) = _$LoadingWithCacheCategoriesStateCopyWithImpl;
+@useResult
+$Res call({
+ Map<int, Category> categories
+});
+
+
+
+
+}
+/// @nodoc
+class _$LoadingWithCacheCategoriesStateCopyWithImpl<$Res>
+    implements $LoadingWithCacheCategoriesStateCopyWith<$Res> {
+  _$LoadingWithCacheCategoriesStateCopyWithImpl(this._self, this._then);
+
+  final LoadingWithCacheCategoriesState _self;
+  final $Res Function(LoadingWithCacheCategoriesState) _then;
+
+/// Create a copy of CategoriesState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
+  return _then(LoadingWithCacheCategoriesState(
+categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+as Map<int, Category>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
 class LoadedCategoriesState implements CategoriesState {
   const LoadedCategoriesState({required final  Map<int, Category> categories}): _categories = categories;
   
@@ -244,10 +316,19 @@ as Map<int, Category>,
 
 
 class ErrorCategoriesState implements CategoriesState {
-  const ErrorCategoriesState({required this.errorMessage});
+  const ErrorCategoriesState({required this.errorMessage, final  Map<int, Category>? categories}): _categories = categories;
   
 
  final  String errorMessage;
+ final  Map<int, Category>? _categories;
+ Map<int, Category>? get categories {
+  final value = _categories;
+  if (value == null) return null;
+  if (_categories is EqualUnmodifiableMapView) return _categories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
 
 /// Create a copy of CategoriesState
 /// with the given fields replaced by the non-null parameter values.
@@ -259,16 +340,16 @@ $ErrorCategoriesStateCopyWith<ErrorCategoriesState> get copyWith => _$ErrorCateg
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ErrorCategoriesState&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ErrorCategoriesState&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other._categories, _categories));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,errorMessage);
+int get hashCode => Object.hash(runtimeType,errorMessage,const DeepCollectionEquality().hash(_categories));
 
 @override
 String toString() {
-  return 'CategoriesState.error(errorMessage: $errorMessage)';
+  return 'CategoriesState.error(errorMessage: $errorMessage, categories: $categories)';
 }
 
 
@@ -279,7 +360,7 @@ abstract mixin class $ErrorCategoriesStateCopyWith<$Res> implements $CategoriesS
   factory $ErrorCategoriesStateCopyWith(ErrorCategoriesState value, $Res Function(ErrorCategoriesState) _then) = _$ErrorCategoriesStateCopyWithImpl;
 @useResult
 $Res call({
- String errorMessage
+ String errorMessage, Map<int, Category>? categories
 });
 
 
@@ -296,10 +377,11 @@ class _$ErrorCategoriesStateCopyWithImpl<$Res>
 
 /// Create a copy of CategoriesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? errorMessage = null,Object? categories = freezed,}) {
   return _then(ErrorCategoriesState(
 errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,
+as String,categories: freezed == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+as Map<int, Category>?,
   ));
 }
 

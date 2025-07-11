@@ -20,4 +20,9 @@ class FakeCategoriesRepository implements CategoriesRepository {
           .toList(),
     );
   }
+
+  @override
+  Future<void> saveCategories({required final List<Category> categories}) {
+    throw UnimplementedError();
+  }
 }

@@ -12,8 +12,24 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     on<LoadCategories>((final event, final emit) async {
       emit(const CategoriesState.loading());
       try {
+        final localCategories = await Repositories().localCategoriesRepository
+            .fetchCategories();
+        if (localCategories.isNotEmpty) {
+          emit(
+            CategoriesState.loadingWithCache(
+              categories: {
+                for (final category in localCategories) category.id: category,
+              },
+            ),
+          );
+        }
         final categories = await Repositories().categoriesRepository
             .fetchCategories();
+
+        await Repositories().localCategoriesRepository.saveCategories(
+          categories: categories,
+        );
+
         emit(
           CategoriesState.loaded(
             categories: {
@@ -22,7 +38,17 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
           ),
         );
       } catch (e) {
-        emit(CategoriesState.error(errorMessage: e.toString()));
+        if (state is LoadingWithCacheCategoriesState) {
+          final currentState = state as LoadingWithCacheCategoriesState;
+          emit(
+            CategoriesState.error(
+              errorMessage: e.toString(),
+              categories: currentState.categories,
+            ),
+          );
+        } else {
+          emit(CategoriesState.error(errorMessage: e.toString()));
+        }
       }
     });
 

@@ -14,6 +14,9 @@ class CategoryEmoji extends StatelessWidget {
     if (categoriesState is LoadedCategoriesState) {
       return Text(categoriesState.categories[categoryId]?.emoji ?? '❓');
     }
+    if (categoriesState is LoadingWithCacheCategoriesState) {
+      return Text(categoriesState.categories[categoryId]?.emoji ?? '❓');
+    }
     if (categoriesState is InitialCategoriesState ||
         categoriesState is LoadingCategoriesState) {
       return const CircularProgressIndicator();

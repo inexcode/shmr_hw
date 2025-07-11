@@ -18,4 +18,9 @@ class RestApiCategoriesRepository implements CategoriesRepository {
     final categories = await _client.getCategoriesByType(isIncome: isIncome);
     return categories.map(Category.fromDto).toList();
   }
+
+  @override
+  Future<void> saveCategories({required final List<Category> categories}) {
+    throw UnimplementedError("Can't save categories in REST API.");
+  }
 }

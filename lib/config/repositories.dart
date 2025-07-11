@@ -18,6 +18,9 @@ enum RepositoryType {
   db;
 
   static RepositoryType get selectedRepository {
+    return api;
+
+    // to be deleted
     final envRepository = dotenv.env['DATA_REPOSITORY'];
     if (envRepository == 'FAKE') {
       return fake;
@@ -57,9 +60,24 @@ class Repositories {
   late final CategoriesRepository _categoriesRepository;
   late final TransactionsRepository _transactionsRepository;
 
+  late final AccountsRepository _localAccountsRepository =
+      DriftAccountsRepository();
+  late final CategoriesRepository _localCategoriesRepository =
+      DriftCategoriesRepository();
+  late final TransactionsRepository _localTransactionsRepository =
+      DriftTransactionsRepository();
+
   AccountsRepository get accountsRepository => _accountsRepository;
 
   CategoriesRepository get categoriesRepository => _categoriesRepository;
 
   TransactionsRepository get transactionsRepository => _transactionsRepository;
+
+  AccountsRepository get localAccountsRepository => _localAccountsRepository;
+
+  CategoriesRepository get localCategoriesRepository =>
+      _localCategoriesRepository;
+
+  TransactionsRepository get localTransactionsRepository =>
+      _localTransactionsRepository;
 }

@@ -3,8 +3,6 @@ import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shmr_hw/logic/models/enums.dart';
-import 'package:shmr_hw/logic/models/fake_data/fake_categories.dart';
-import 'package:shmr_hw/logic/models/fake_data/fake_transactions.dart';
 
 part 'database.g.dart';
 
@@ -207,6 +205,17 @@ class Database extends _$Database {
   }) => (select(
     categories,
   )..where((final tbl) => tbl.isIncome.equals(isIncome))).get();
+
+  Future<void> saveCategories({
+    required final List<DatabaseCategory> categories,
+  }) async {
+    // Clear existing categories
+    await delete(this.categories).go();
+    // Insert new categories
+    await batch((final batch) {
+      batch.insertAll(this.categories, categories);
+    });
+  }
 
   Future<DatabaseTransactionWithCategory> createTransaction(
     final TransactionsCompanion transaction,
@@ -469,41 +478,6 @@ class Database extends _$Database {
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (final Migrator m) async {
       await m.createAll();
-      await batch((final batch) {
-        batch.insertAll(
-          categories,
-          fakeCategories.map(
-            (final category) => CategoriesCompanion.insert(
-              name: category.name,
-              emoji: category.emoji,
-              isIncome: category.isIncome,
-            ),
-          ),
-        );
-      });
-      await into(accounts).insert(
-        AccountsCompanion.insert(
-          userId: 1,
-          name: 'Main Account',
-          balance: Decimal.zero,
-          currency: 'RUB',
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-        ),
-      );
-      for (final transaction in fakeTransactions) {
-        await createTransaction(
-          TransactionsCompanion.insert(
-            accountId: transaction.accountId,
-            categoryId: transaction.categoryId,
-            amount: transaction.amount,
-            transactionDate: transaction.transactionDate,
-            createdAt: transaction.createdAt,
-            updatedAt: transaction.updatedAt,
-            comment: Value(transaction.comment),
-          ),
-        );
-      }
     },
     beforeOpen: (final details) async {
       await customStatement('PRAGMA foreign_keys = ON');

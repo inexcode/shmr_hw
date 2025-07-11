@@ -41,7 +41,8 @@
     "find_category": "Найти статью",
     "unknown_category": "Неизвестная статья",
     "no_results": "Статьи не найдены",
-    "search_hint": "Найти статью"
+    "search_hint": "Найти статью",
+    "loading_new_data": "Обновление статей..."
   },
   "sorting": {
     "sort_by": "Сортировать по",

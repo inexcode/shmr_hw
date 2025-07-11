@@ -13,6 +13,8 @@ abstract class Category with _$Category {
     required final bool isIncome,
   }) = _Category;
 
+  const Category._();
+
   factory Category.fromDto(final CategoryDto dto) => Category(
     id: dto.id,
     name: dto.name,
@@ -26,4 +28,7 @@ abstract class Category with _$Category {
     emoji: dbCategory.emoji,
     isIncome: dbCategory.isIncome,
   );
+
+  DatabaseCategory toDatabase() =>
+      DatabaseCategory(id: id, name: name, emoji: emoji, isIncome: isIncome);
 }

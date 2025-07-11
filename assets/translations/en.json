@@ -41,7 +41,8 @@
     "find_category": "Find category",
     "unknown_category": "Unknown category",
     "no_results": "No categories found",
-    "search_hint": "Find a category"
+    "search_hint": "Find a category",
+    "loading_new_data": "Updating categories…"
   },
   "sorting": {
     "sort_by": "Sort by",
