@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr_hw/config/repositories.dart';
+import 'package:shmr_hw/logic/models/enums.dart';
 import 'package:shmr_hw/logic/models/transaction.dart';
 
 part 'transactions_event.dart';
@@ -14,6 +15,34 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     on<LoadTransactions>((final event, final emit) async {
       emit(state.copyWith(status: TransactionsStatus.loading));
       try {
+        bool failedSync = false;
+        final cachedTodayTransactions = await _getTodayTransactions();
+        final cachedTransactions = await _getTransactionsForDateRange(
+          state.startDate,
+          state.endDate,
+        );
+        final cachedTransactionsDelta =
+            await _getTransactionsDeltaForLastMonth();
+        emit(
+          state.copyWith(
+            status: TransactionsStatus.loading,
+            transactions: cachedTransactions,
+            transactionsToday: cachedTodayTransactions,
+            transactionsDelta: cachedTransactionsDelta,
+            failedSync: failedSync,
+          ),
+        );
+        try {
+          failedSync = await _loadTransactionsFromCloud();
+        } catch (e) {
+          emit(
+            state.copyWith(
+              syncErrorMessage: 'Failed to sync transactions: $e',
+              failedSyncFunction: FailedSyncFunction.full,
+            ),
+          );
+          failedSync = true;
+        }
         final todayTransactions = await _getTodayTransactions();
         final transactions = await _getTransactionsForDateRange(
           state.startDate,
@@ -22,10 +51,20 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
         final transactionsDelta = await _getTransactionsDeltaForLastMonth();
         emit(
           state.copyWith(
+            status: TransactionsStatus.loading,
+            transactions: transactions,
+            transactionsToday: todayTransactions,
+            transactionsDelta: transactionsDelta,
+            failedSync: failedSync,
+          ),
+        );
+        emit(
+          state.copyWith(
             status: TransactionsStatus.loaded,
             transactions: transactions,
             transactionsToday: todayTransactions,
             transactionsDelta: transactionsDelta,
+            failedSync: failedSync,
           ),
         );
       } catch (e) {
@@ -78,23 +117,75 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       emit(state.copyWith(sortOrder: event.sortOrder));
     });
     on<CreateTransaction>((final event, final emit) async {
-      await Repositories().transactionsRepository.createTransaction(
+      await Repositories().localTransactionsRepository.createTransaction(
         request: event.transaction,
       );
-      add(const LoadTransactions());
+      add(const SyncTransactions());
     });
     on<EditTransaction>((final event, final emit) async {
-      await Repositories().transactionsRepository.updateTransaction(
+      await Repositories().localTransactionsRepository.updateTransaction(
         id: event.id,
         request: event.transaction,
       );
-      add(const LoadTransactions());
+      add(const SyncTransactions());
     });
     on<DeleteTransaction>((final event, final emit) async {
-      await Repositories().transactionsRepository.deleteTransaction(
+      await Repositories().localTransactionsRepository.deleteTransaction(
         id: event.id,
       );
-      add(const LoadTransactions());
+      add(const SyncTransactions());
+    });
+    on<SyncTransactions>((final event, final emit) async {
+      emit(state.copyWith(status: TransactionsStatus.loading));
+      try {
+        bool failedSync = false;
+
+        final todayTransactions = await _getTodayTransactions();
+        final transactions = await _getTransactionsForDateRange(
+          state.startDate,
+          state.endDate,
+        );
+        final transactionsDelta = await _getTransactionsDeltaForLastMonth();
+        emit(
+          state.copyWith(
+            status: TransactionsStatus.loading,
+            transactions: transactions,
+            transactionsToday: todayTransactions,
+            transactionsDelta: transactionsDelta,
+            failedSync: failedSync,
+          ),
+        );
+        try {
+          failedSync = await _handlePendingTransactionEvents();
+        } catch (e) {
+          failedSync = true;
+          emit(
+            state.copyWith(
+              syncErrorMessage: 'Failed to sync transactions: $e',
+              failedSyncFunction: FailedSyncFunction.transaction,
+            ),
+          );
+        }
+        emit(
+          state.copyWith(
+            status: TransactionsStatus.loaded,
+            transactions: transactions,
+            transactionsToday: todayTransactions,
+            transactionsDelta: transactionsDelta,
+            failedSync: failedSync,
+          ),
+        );
+      } catch (e) {
+        emit(
+          state.copyWith(
+            status: TransactionsStatus.error,
+            errorMessage: e.toString(),
+          ),
+        );
+      }
+    });
+    on<ClearSyncError>((final event, final emit) {
+      emit(state.copyWith(syncErrorMessage: null, failedSyncFunction: null));
     });
 
     add(const LoadTransactions());
@@ -105,11 +196,12 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   Future<List<Transaction>> _getTransactionsForDateRange(
     final DateTime startDate,
     final DateTime endDate,
-  ) async => (await Repositories().transactionsRepository.fetchTransactions(
-    accountId: accountId,
-    startDate: startDate,
-    endDate: endDate,
-  )).map(Transaction.fromResponse).toList();
+  ) async =>
+      (await Repositories().localTransactionsRepository.fetchTransactions(
+        accountId: accountId,
+        startDate: startDate,
+        endDate: endDate,
+      )).map(Transaction.fromResponse).toList();
 
   Future<List<Transaction>> _getTodayTransactions() =>
       _getTransactionsForDateRange(DateTime.now(), DateTime.now());
@@ -162,5 +254,73 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
           ..sort((final a, final b) => a.date.compareTo(b.date));
 
     return deltas;
+  }
+
+  Future<bool> _handlePendingTransactionEvents() async {
+    final pendingTransactions = await Repositories().localTransactionsRepository
+        .getPendingEvents();
+    for (final pendingTransaction in pendingTransactions) {
+      try {
+        switch (pendingTransaction.eventType) {
+          case TransactionEventType.creation:
+            final transaction = await Repositories().localTransactionsRepository
+                .getTransaction(id: pendingTransaction.transactionId);
+            await Repositories().transactionsRepository.createTransaction(
+              request: TransactionRequest.fromTransaction(
+                Transaction.fromResponse(transaction),
+              ),
+            );
+          case TransactionEventType.modification:
+            final transaction = await Repositories().localTransactionsRepository
+                .getTransaction(id: pendingTransaction.transactionId);
+            await Repositories().transactionsRepository.updateTransaction(
+              id: pendingTransaction.transactionId,
+              request: TransactionRequest.fromTransaction(
+                Transaction.fromResponse(transaction),
+              ),
+            );
+          case TransactionEventType.deletion:
+            await Repositories().transactionsRepository.deleteTransaction(
+              id: pendingTransaction.transactionId,
+            );
+        }
+        // After successful handling, remove the pending transaction
+        await Repositories().localTransactionsRepository.deleteTransactionEvent(
+          eventId: pendingTransaction.id,
+        );
+      } catch (e) {
+        throw Exception('Failed to handle pending transaction: $e');
+      }
+    }
+    return false; // All pending transactions handled successfully
+  }
+
+  Future<bool> _loadTransactionsFromCloud() async {
+    final failedSync = await _handlePendingTransactionEvents();
+    if (failedSync) {
+      return true;
+    }
+    final todayYear = DateTime.now().year;
+    final transactions = <Transaction>[];
+    try {
+      for (var year = todayYear; year >= 2000; year--) {
+        final yearTransactions = await Repositories().transactionsRepository
+            .fetchTransactions(
+              accountId: accountId,
+              startDate: DateTime(year, 1, 1),
+              endDate: DateTime(year, 12, 31),
+            );
+        transactions.addAll(yearTransactions.map(Transaction.fromResponse));
+      }
+      transactions.sort(
+        (final a, final b) => a.transactionDate.compareTo(b.transactionDate),
+      );
+      await Repositories().localTransactionsRepository.setTransactions(
+        transactions: transactions,
+      );
+    } catch (e) {
+      throw Exception('Failed to load transactions from cloud: $e');
+    }
+    return false;
   }
 }

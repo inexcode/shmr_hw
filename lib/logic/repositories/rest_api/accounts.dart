@@ -24,12 +24,6 @@ class RestApiAccountsRepository implements AccountsRepository {
   }
 
   @override
-  Future<AccountHistory> getAccountHistory({required final int id}) async {
-    final history = await _client.getAccountHistory(id);
-    return AccountHistory.fromDto(history);
-  }
-
-  @override
   Future<Account> updateAccount({
     required final int id,
     required final AccountRequest request,

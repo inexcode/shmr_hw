@@ -10,6 +10,7 @@ import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
+import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 import 'package:shmr_hw/ui/router/router.dart';
 import 'package:shmr_hw_pie_chart/shmr_hw_pie_chart.dart';
 
@@ -199,6 +200,7 @@ class _TransactionsAnalysisContent extends StatelessWidget {
           ),
         ),
         const Divider(height: 0),
+        const TransactionsLoadingStatus(),
       ],
     );
   }

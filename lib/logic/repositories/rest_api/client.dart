@@ -91,14 +91,6 @@ class RestApiClient {
     _checkCommonErrors(response);
   }
 
-  Future<AccountHistoryDtoResponse> getAccountHistory(final int id) async {
-    final response = await get('/accounts/$id/history');
-
-    _checkCommonErrors(response);
-
-    return AccountHistoryDtoResponse.fromJson(jsonDecode(response.body));
-  }
-
   Future<List<CategoryDto>> getCategories() async {
     final response = await get('/categories');
 
@@ -168,8 +160,8 @@ class RestApiClient {
   }) async {
     final queryParameters = <String, String>{
       if (startDate != null)
-        'start_date': DateFormat('yyyy-MM-dd').format(startDate),
-      if (endDate != null) 'end_date': DateFormat('yyyy-MM-dd').format(endDate),
+        'startDate': DateFormat('yyyy-MM-dd').format(startDate),
+      if (endDate != null) 'endDate': DateFormat('yyyy-MM-dd').format(endDate),
     };
 
     final response = await get(

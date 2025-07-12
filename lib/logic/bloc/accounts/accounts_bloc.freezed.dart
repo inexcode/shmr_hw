@@ -314,6 +314,38 @@ as String,
 }
 
 /// @nodoc
+
+
+class ClearAccountsSyncError implements AccountsEvent {
+  const ClearAccountsSyncError();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClearAccountsSyncError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AccountsEvent.clearSyncError()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$AccountsState {
 
 
@@ -411,7 +443,7 @@ String toString() {
 
 
 class NotSelectedAccountsState implements AccountsState {
-  const NotSelectedAccountsState({required final  List<Account> accounts}): _accounts = accounts;
+  const NotSelectedAccountsState({required final  List<Account> accounts, required this.fromCache, this.syncErrorMessage}): _accounts = accounts;
   
 
  final  List<Account> _accounts;
@@ -421,6 +453,8 @@ class NotSelectedAccountsState implements AccountsState {
   return EqualUnmodifiableListView(_accounts);
 }
 
+ final  bool fromCache;
+ final  String? syncErrorMessage;
 
 /// Create a copy of AccountsState
 /// with the given fields replaced by the non-null parameter values.
@@ -432,16 +466,16 @@ $NotSelectedAccountsStateCopyWith<NotSelectedAccountsState> get copyWith => _$No
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotSelectedAccountsState&&const DeepCollectionEquality().equals(other._accounts, _accounts));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotSelectedAccountsState&&const DeepCollectionEquality().equals(other._accounts, _accounts)&&(identical(other.fromCache, fromCache) || other.fromCache == fromCache)&&(identical(other.syncErrorMessage, syncErrorMessage) || other.syncErrorMessage == syncErrorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_accounts));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_accounts),fromCache,syncErrorMessage);
 
 @override
 String toString() {
-  return 'AccountsState.notSelected(accounts: $accounts)';
+  return 'AccountsState.notSelected(accounts: $accounts, fromCache: $fromCache, syncErrorMessage: $syncErrorMessage)';
 }
 
 
@@ -452,7 +486,7 @@ abstract mixin class $NotSelectedAccountsStateCopyWith<$Res> implements $Account
   factory $NotSelectedAccountsStateCopyWith(NotSelectedAccountsState value, $Res Function(NotSelectedAccountsState) _then) = _$NotSelectedAccountsStateCopyWithImpl;
 @useResult
 $Res call({
- List<Account> accounts
+ List<Account> accounts, bool fromCache, String? syncErrorMessage
 });
 
 
@@ -469,10 +503,12 @@ class _$NotSelectedAccountsStateCopyWithImpl<$Res>
 
 /// Create a copy of AccountsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? accounts = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? accounts = null,Object? fromCache = null,Object? syncErrorMessage = freezed,}) {
   return _then(NotSelectedAccountsState(
 accounts: null == accounts ? _self._accounts : accounts // ignore: cast_nullable_to_non_nullable
-as List<Account>,
+as List<Account>,fromCache: null == fromCache ? _self.fromCache : fromCache // ignore: cast_nullable_to_non_nullable
+as bool,syncErrorMessage: freezed == syncErrorMessage ? _self.syncErrorMessage : syncErrorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

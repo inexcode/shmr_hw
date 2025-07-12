@@ -1633,12 +1633,12 @@ class AccountStatesCompanion extends UpdateCompanion<DatabaseAccountState> {
   }
 }
 
-class $HistoryElementsTable extends HistoryElements
-    with TableInfo<$HistoryElementsTable, DatabaseHistoryElement> {
+class $TransactionEventsTable extends TransactionEvents
+    with TableInfo<$TransactionEventsTable, DatabaseTransactionEvent> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $HistoryElementsTable(this.attachedDatabase, [this._alias]);
+  $TransactionEventsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1652,69 +1652,32 @@ class $HistoryElementsTable extends HistoryElements
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _accountIdMeta = const VerificationMeta(
-    'accountId',
+  static const VerificationMeta _transactionIdMeta = const VerificationMeta(
+    'transactionId',
   );
   @override
-  late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
-    'account_id',
+  late final GeneratedColumn<int> transactionId = GeneratedColumn<int>(
+    'transaction_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES accounts (id)',
+      'REFERENCES transactions (id)',
     ),
   );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<AccountHistoryChangeType, int>
-  changeType =
+  late final GeneratedColumnWithTypeConverter<TransactionEventType, int>
+  eventType =
       GeneratedColumn<int>(
-        'change_type',
+        'event_type',
         aliasedName,
         false,
         type: DriftSqlType.int,
         requiredDuringInsert: true,
-      ).withConverter<AccountHistoryChangeType>(
-        $HistoryElementsTable.$converterchangeType,
+      ).withConverter<TransactionEventType>(
+        $TransactionEventsTable.$convertereventType,
       );
-  static const VerificationMeta _previousStateIdMeta = const VerificationMeta(
-    'previousStateId',
-  );
-  @override
-  late final GeneratedColumn<int> previousStateId = GeneratedColumn<int>(
-    'previous_state_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES account_states (id)',
-    ),
-  );
-  static const VerificationMeta _newStateIdMeta = const VerificationMeta(
-    'newStateId',
-  );
-  @override
-  late final GeneratedColumn<int> newStateId = GeneratedColumn<int>(
-    'new_state_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES account_states (id)',
-    ),
-  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -1726,36 +1689,21 @@ class $HistoryElementsTable extends HistoryElements
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    accountId,
-    name,
-    changeType,
-    previousStateId,
-    newStateId,
+    transactionId,
+    eventType,
     createdAt,
-    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'history_elements';
+  static const String $name = 'transaction_events';
   @override
   VerificationContext validateIntegrity(
-    Insertable<DatabaseHistoryElement> instance, {
+    Insertable<DatabaseTransactionEvent> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -1763,41 +1711,16 @@ class $HistoryElementsTable extends HistoryElements
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('account_id')) {
+    if (data.containsKey('transaction_id')) {
       context.handle(
-        _accountIdMeta,
-        accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_accountIdMeta);
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('previous_state_id')) {
-      context.handle(
-        _previousStateIdMeta,
-        previousStateId.isAcceptableOrUnknown(
-          data['previous_state_id']!,
-          _previousStateIdMeta,
-        ),
-      );
-    }
-    if (data.containsKey('new_state_id')) {
-      context.handle(
-        _newStateIdMeta,
-        newStateId.isAcceptableOrUnknown(
-          data['new_state_id']!,
-          _newStateIdMeta,
+        _transactionIdMeta,
+        transactionId.isAcceptableOrUnknown(
+          data['transaction_id']!,
+          _transactionIdMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_newStateIdMeta);
+      context.missing(_transactionIdMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -1807,142 +1730,97 @@ class $HistoryElementsTable extends HistoryElements
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  DatabaseHistoryElement map(Map<String, dynamic> data, {String? tablePrefix}) {
+  DatabaseTransactionEvent map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return DatabaseHistoryElement(
+    return DatabaseTransactionEvent(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      accountId: attachedDatabase.typeMapping.read(
+      transactionId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}account_id'],
+        data['${effectivePrefix}transaction_id'],
       )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      )!,
-      changeType: $HistoryElementsTable.$converterchangeType.fromSql(
+      eventType: $TransactionEventsTable.$convertereventType.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.int,
-          data['${effectivePrefix}change_type'],
+          data['${effectivePrefix}event_type'],
         )!,
       ),
-      previousStateId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}previous_state_id'],
-      ),
-      newStateId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}new_state_id'],
-      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
       )!,
     );
   }
 
   @override
-  $HistoryElementsTable createAlias(String alias) {
-    return $HistoryElementsTable(attachedDatabase, alias);
+  $TransactionEventsTable createAlias(String alias) {
+    return $TransactionEventsTable(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<AccountHistoryChangeType, int, int>
-  $converterchangeType = const EnumIndexConverter<AccountHistoryChangeType>(
-    AccountHistoryChangeType.values,
+  static JsonTypeConverter2<TransactionEventType, int, int>
+  $convertereventType = const EnumIndexConverter<TransactionEventType>(
+    TransactionEventType.values,
   );
 }
 
-class DatabaseHistoryElement extends DataClass
-    implements Insertable<DatabaseHistoryElement> {
+class DatabaseTransactionEvent extends DataClass
+    implements Insertable<DatabaseTransactionEvent> {
   final int id;
-  final int accountId;
-  final String name;
-  final AccountHistoryChangeType changeType;
-  final int? previousStateId;
-  final int newStateId;
+  final int transactionId;
+  final TransactionEventType eventType;
   final DateTime createdAt;
-  final DateTime updatedAt;
-  const DatabaseHistoryElement({
+  const DatabaseTransactionEvent({
     required this.id,
-    required this.accountId,
-    required this.name,
-    required this.changeType,
-    this.previousStateId,
-    required this.newStateId,
+    required this.transactionId,
+    required this.eventType,
     required this.createdAt,
-    required this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['account_id'] = Variable<int>(accountId);
-    map['name'] = Variable<String>(name);
+    map['transaction_id'] = Variable<int>(transactionId);
     {
-      map['change_type'] = Variable<int>(
-        $HistoryElementsTable.$converterchangeType.toSql(changeType),
+      map['event_type'] = Variable<int>(
+        $TransactionEventsTable.$convertereventType.toSql(eventType),
       );
     }
-    if (!nullToAbsent || previousStateId != null) {
-      map['previous_state_id'] = Variable<int>(previousStateId);
-    }
-    map['new_state_id'] = Variable<int>(newStateId);
     map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
-  HistoryElementsCompanion toCompanion(bool nullToAbsent) {
-    return HistoryElementsCompanion(
+  TransactionEventsCompanion toCompanion(bool nullToAbsent) {
+    return TransactionEventsCompanion(
       id: Value(id),
-      accountId: Value(accountId),
-      name: Value(name),
-      changeType: Value(changeType),
-      previousStateId: previousStateId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(previousStateId),
-      newStateId: Value(newStateId),
+      transactionId: Value(transactionId),
+      eventType: Value(eventType),
       createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
     );
   }
 
-  factory DatabaseHistoryElement.fromJson(
+  factory DatabaseTransactionEvent.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return DatabaseHistoryElement(
+    return DatabaseTransactionEvent(
       id: serializer.fromJson<int>(json['id']),
-      accountId: serializer.fromJson<int>(json['accountId']),
-      name: serializer.fromJson<String>(json['name']),
-      changeType: $HistoryElementsTable.$converterchangeType.fromJson(
-        serializer.fromJson<int>(json['changeType']),
+      transactionId: serializer.fromJson<int>(json['transactionId']),
+      eventType: $TransactionEventsTable.$convertereventType.fromJson(
+        serializer.fromJson<int>(json['eventType']),
       ),
-      previousStateId: serializer.fromJson<int?>(json['previousStateId']),
-      newStateId: serializer.fromJson<int>(json['newStateId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
   @override
@@ -1950,173 +1828,104 @@ class DatabaseHistoryElement extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'accountId': serializer.toJson<int>(accountId),
-      'name': serializer.toJson<String>(name),
-      'changeType': serializer.toJson<int>(
-        $HistoryElementsTable.$converterchangeType.toJson(changeType),
+      'transactionId': serializer.toJson<int>(transactionId),
+      'eventType': serializer.toJson<int>(
+        $TransactionEventsTable.$convertereventType.toJson(eventType),
       ),
-      'previousStateId': serializer.toJson<int?>(previousStateId),
-      'newStateId': serializer.toJson<int>(newStateId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
-  DatabaseHistoryElement copyWith({
+  DatabaseTransactionEvent copyWith({
     int? id,
-    int? accountId,
-    String? name,
-    AccountHistoryChangeType? changeType,
-    Value<int?> previousStateId = const Value.absent(),
-    int? newStateId,
+    int? transactionId,
+    TransactionEventType? eventType,
     DateTime? createdAt,
-    DateTime? updatedAt,
-  }) => DatabaseHistoryElement(
+  }) => DatabaseTransactionEvent(
     id: id ?? this.id,
-    accountId: accountId ?? this.accountId,
-    name: name ?? this.name,
-    changeType: changeType ?? this.changeType,
-    previousStateId: previousStateId.present
-        ? previousStateId.value
-        : this.previousStateId,
-    newStateId: newStateId ?? this.newStateId,
+    transactionId: transactionId ?? this.transactionId,
+    eventType: eventType ?? this.eventType,
     createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
   );
-  DatabaseHistoryElement copyWithCompanion(HistoryElementsCompanion data) {
-    return DatabaseHistoryElement(
+  DatabaseTransactionEvent copyWithCompanion(TransactionEventsCompanion data) {
+    return DatabaseTransactionEvent(
       id: data.id.present ? data.id.value : this.id,
-      accountId: data.accountId.present ? data.accountId.value : this.accountId,
-      name: data.name.present ? data.name.value : this.name,
-      changeType: data.changeType.present
-          ? data.changeType.value
-          : this.changeType,
-      previousStateId: data.previousStateId.present
-          ? data.previousStateId.value
-          : this.previousStateId,
-      newStateId: data.newStateId.present
-          ? data.newStateId.value
-          : this.newStateId,
+      transactionId: data.transactionId.present
+          ? data.transactionId.value
+          : this.transactionId,
+      eventType: data.eventType.present ? data.eventType.value : this.eventType,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('DatabaseHistoryElement(')
+    return (StringBuffer('DatabaseTransactionEvent(')
           ..write('id: $id, ')
-          ..write('accountId: $accountId, ')
-          ..write('name: $name, ')
-          ..write('changeType: $changeType, ')
-          ..write('previousStateId: $previousStateId, ')
-          ..write('newStateId: $newStateId, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('transactionId: $transactionId, ')
+          ..write('eventType: $eventType, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    accountId,
-    name,
-    changeType,
-    previousStateId,
-    newStateId,
-    createdAt,
-    updatedAt,
-  );
+  int get hashCode => Object.hash(id, transactionId, eventType, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is DatabaseHistoryElement &&
+      (other is DatabaseTransactionEvent &&
           other.id == this.id &&
-          other.accountId == this.accountId &&
-          other.name == this.name &&
-          other.changeType == this.changeType &&
-          other.previousStateId == this.previousStateId &&
-          other.newStateId == this.newStateId &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt);
+          other.transactionId == this.transactionId &&
+          other.eventType == this.eventType &&
+          other.createdAt == this.createdAt);
 }
 
-class HistoryElementsCompanion extends UpdateCompanion<DatabaseHistoryElement> {
+class TransactionEventsCompanion
+    extends UpdateCompanion<DatabaseTransactionEvent> {
   final Value<int> id;
-  final Value<int> accountId;
-  final Value<String> name;
-  final Value<AccountHistoryChangeType> changeType;
-  final Value<int?> previousStateId;
-  final Value<int> newStateId;
+  final Value<int> transactionId;
+  final Value<TransactionEventType> eventType;
   final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  const HistoryElementsCompanion({
+  const TransactionEventsCompanion({
     this.id = const Value.absent(),
-    this.accountId = const Value.absent(),
-    this.name = const Value.absent(),
-    this.changeType = const Value.absent(),
-    this.previousStateId = const Value.absent(),
-    this.newStateId = const Value.absent(),
+    this.transactionId = const Value.absent(),
+    this.eventType = const Value.absent(),
     this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
   });
-  HistoryElementsCompanion.insert({
+  TransactionEventsCompanion.insert({
     this.id = const Value.absent(),
-    required int accountId,
-    required String name,
-    required AccountHistoryChangeType changeType,
-    this.previousStateId = const Value.absent(),
-    required int newStateId,
+    required int transactionId,
+    required TransactionEventType eventType,
     required DateTime createdAt,
-    required DateTime updatedAt,
-  }) : accountId = Value(accountId),
-       name = Value(name),
-       changeType = Value(changeType),
-       newStateId = Value(newStateId),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
-  static Insertable<DatabaseHistoryElement> custom({
+  }) : transactionId = Value(transactionId),
+       eventType = Value(eventType),
+       createdAt = Value(createdAt);
+  static Insertable<DatabaseTransactionEvent> custom({
     Expression<int>? id,
-    Expression<int>? accountId,
-    Expression<String>? name,
-    Expression<int>? changeType,
-    Expression<int>? previousStateId,
-    Expression<int>? newStateId,
+    Expression<int>? transactionId,
+    Expression<int>? eventType,
     Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (accountId != null) 'account_id': accountId,
-      if (name != null) 'name': name,
-      if (changeType != null) 'change_type': changeType,
-      if (previousStateId != null) 'previous_state_id': previousStateId,
-      if (newStateId != null) 'new_state_id': newStateId,
+      if (transactionId != null) 'transaction_id': transactionId,
+      if (eventType != null) 'event_type': eventType,
       if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
 
-  HistoryElementsCompanion copyWith({
+  TransactionEventsCompanion copyWith({
     Value<int>? id,
-    Value<int>? accountId,
-    Value<String>? name,
-    Value<AccountHistoryChangeType>? changeType,
-    Value<int?>? previousStateId,
-    Value<int>? newStateId,
+    Value<int>? transactionId,
+    Value<TransactionEventType>? eventType,
     Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
   }) {
-    return HistoryElementsCompanion(
+    return TransactionEventsCompanion(
       id: id ?? this.id,
-      accountId: accountId ?? this.accountId,
-      name: name ?? this.name,
-      changeType: changeType ?? this.changeType,
-      previousStateId: previousStateId ?? this.previousStateId,
-      newStateId: newStateId ?? this.newStateId,
+      transactionId: transactionId ?? this.transactionId,
+      eventType: eventType ?? this.eventType,
       createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -2126,43 +1935,27 @@ class HistoryElementsCompanion extends UpdateCompanion<DatabaseHistoryElement> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (accountId.present) {
-      map['account_id'] = Variable<int>(accountId.value);
+    if (transactionId.present) {
+      map['transaction_id'] = Variable<int>(transactionId.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (changeType.present) {
-      map['change_type'] = Variable<int>(
-        $HistoryElementsTable.$converterchangeType.toSql(changeType.value),
+    if (eventType.present) {
+      map['event_type'] = Variable<int>(
+        $TransactionEventsTable.$convertereventType.toSql(eventType.value),
       );
-    }
-    if (previousStateId.present) {
-      map['previous_state_id'] = Variable<int>(previousStateId.value);
-    }
-    if (newStateId.present) {
-      map['new_state_id'] = Variable<int>(newStateId.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('HistoryElementsCompanion(')
+    return (StringBuffer('TransactionEventsCompanion(')
           ..write('id: $id, ')
-          ..write('accountId: $accountId, ')
-          ..write('name: $name, ')
-          ..write('changeType: $changeType, ')
-          ..write('previousStateId: $previousStateId, ')
-          ..write('newStateId: $newStateId, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('transactionId: $transactionId, ')
+          ..write('eventType: $eventType, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -2175,9 +1968,8 @@ abstract class _$Database extends GeneratedDatabase {
   late final $AccountsTable accounts = $AccountsTable(this);
   late final $TransactionsTable transactions = $TransactionsTable(this);
   late final $AccountStatesTable accountStates = $AccountStatesTable(this);
-  late final $HistoryElementsTable historyElements = $HistoryElementsTable(
-    this,
-  );
+  late final $TransactionEventsTable transactionEvents =
+      $TransactionEventsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2187,7 +1979,7 @@ abstract class _$Database extends GeneratedDatabase {
     accounts,
     transactions,
     accountStates,
-    historyElements,
+    transactionEvents,
   ];
 }
 
@@ -2530,32 +2322,6 @@ final class $$AccountsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
-
-  static MultiTypedResultKey<
-    $HistoryElementsTable,
-    List<DatabaseHistoryElement>
-  >
-  _historyElementsRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
-    db.historyElements,
-    aliasName: $_aliasNameGenerator(
-      db.accounts.id,
-      db.historyElements.accountId,
-    ),
-  );
-
-  $$HistoryElementsTableProcessedTableManager get historyElementsRefs {
-    final manager = $$HistoryElementsTableTableManager(
-      $_db,
-      $_db.historyElements,
-    ).filter((f) => f.accountId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(
-      _historyElementsRefsTable($_db),
-    );
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
 }
 
 class $$AccountsTableFilterComposer
@@ -2644,31 +2410,6 @@ class $$AccountsTableFilterComposer
           }) => $$AccountStatesTableFilterComposer(
             $db: $db,
             $table: $db.accountStates,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-
-  Expression<bool> historyElementsRefs(
-    Expression<bool> Function($$HistoryElementsTableFilterComposer f) f,
-  ) {
-    final $$HistoryElementsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyElements,
-      getReferencedColumn: (t) => t.accountId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryElementsTableFilterComposer(
-            $db: $db,
-            $table: $db.historyElements,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2803,31 +2544,6 @@ class $$AccountsTableAnnotationComposer
     );
     return f(composer);
   }
-
-  Expression<T> historyElementsRefs<T extends Object>(
-    Expression<T> Function($$HistoryElementsTableAnnotationComposer a) f,
-  ) {
-    final $$HistoryElementsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyElements,
-      getReferencedColumn: (t) => t.accountId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryElementsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.historyElements,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$AccountsTableTableManager
@@ -2846,7 +2562,6 @@ class $$AccountsTableTableManager
           PrefetchHooks Function({
             bool transactionsRefs,
             bool accountStatesRefs,
-            bool historyElementsRefs,
           })
         > {
   $$AccountsTableTableManager(_$Database db, $AccountsTable table)
@@ -2905,17 +2620,12 @@ class $$AccountsTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({
-                transactionsRefs = false,
-                accountStatesRefs = false,
-                historyElementsRefs = false,
-              }) {
+              ({transactionsRefs = false, accountStatesRefs = false}) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (transactionsRefs) db.transactions,
                     if (accountStatesRefs) db.accountStates,
-                    if (historyElementsRefs) db.historyElements,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -2962,27 +2672,6 @@ class $$AccountsTableTableManager
                               ),
                           typedResults: items,
                         ),
-                      if (historyElementsRefs)
-                        await $_getPrefetchedData<
-                          DatabaseAccount,
-                          $AccountsTable,
-                          DatabaseHistoryElement
-                        >(
-                          currentTable: table,
-                          referencedTable: $$AccountsTableReferences
-                              ._historyElementsRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$AccountsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).historyElementsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.accountId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
                     ];
                   },
                 );
@@ -3003,11 +2692,7 @@ typedef $$AccountsTableProcessedTableManager =
       $$AccountsTableUpdateCompanionBuilder,
       (DatabaseAccount, $$AccountsTableReferences),
       DatabaseAccount,
-      PrefetchHooks Function({
-        bool transactionsRefs,
-        bool accountStatesRefs,
-        bool historyElementsRefs,
-      })
+      PrefetchHooks Function({bool transactionsRefs, bool accountStatesRefs})
     >;
 typedef $$TransactionsTableCreateCompanionBuilder =
     TransactionsCompanion Function({
@@ -3072,6 +2757,32 @@ final class $$TransactionsTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $TransactionEventsTable,
+    List<DatabaseTransactionEvent>
+  >
+  _transactionEventsRefsTable(_$Database db) => MultiTypedResultKey.fromTable(
+    db.transactionEvents,
+    aliasName: $_aliasNameGenerator(
+      db.transactions.id,
+      db.transactionEvents.transactionId,
+    ),
+  );
+
+  $$TransactionEventsTableProcessedTableManager get transactionEventsRefs {
+    final manager = $$TransactionEventsTableTableManager(
+      $_db,
+      $_db.transactionEvents,
+    ).filter((f) => f.transactionId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _transactionEventsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 }
@@ -3160,6 +2871,31 @@ class $$TransactionsTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> transactionEventsRefs(
+    Expression<bool> Function($$TransactionEventsTableFilterComposer f) f,
+  ) {
+    final $$TransactionEventsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactionEvents,
+      getReferencedColumn: (t) => t.transactionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TransactionEventsTableFilterComposer(
+            $db: $db,
+            $table: $db.transactionEvents,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -3323,6 +3059,32 @@ class $$TransactionsTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> transactionEventsRefs<T extends Object>(
+    Expression<T> Function($$TransactionEventsTableAnnotationComposer a) f,
+  ) {
+    final $$TransactionEventsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.transactionEvents,
+          getReferencedColumn: (t) => t.transactionId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$TransactionEventsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.transactionEvents,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$TransactionsTableTableManager
@@ -3338,7 +3100,11 @@ class $$TransactionsTableTableManager
           $$TransactionsTableUpdateCompanionBuilder,
           (DatabaseTransaction, $$TransactionsTableReferences),
           DatabaseTransaction,
-          PrefetchHooks Function({bool accountId, bool categoryId})
+          PrefetchHooks Function({
+            bool accountId,
+            bool categoryId,
+            bool transactionEventsRefs,
+          })
         > {
   $$TransactionsTableTableManager(_$Database db, $TransactionsTable table)
     : super(
@@ -3399,60 +3165,93 @@ class $$TransactionsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({accountId = false, categoryId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (accountId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.accountId,
-                                referencedTable: $$TransactionsTableReferences
-                                    ._accountIdTable(db),
-                                referencedColumn: $$TransactionsTableReferences
-                                    ._accountIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
-                    if (categoryId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.categoryId,
-                                referencedTable: $$TransactionsTableReferences
-                                    ._categoryIdTable(db),
-                                referencedColumn: $$TransactionsTableReferences
-                                    ._categoryIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({
+                accountId = false,
+                categoryId = false,
+                transactionEventsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (transactionEventsRefs) db.transactionEvents,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (accountId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.accountId,
+                                    referencedTable:
+                                        $$TransactionsTableReferences
+                                            ._accountIdTable(db),
+                                    referencedColumn:
+                                        $$TransactionsTableReferences
+                                            ._accountIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (categoryId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.categoryId,
+                                    referencedTable:
+                                        $$TransactionsTableReferences
+                                            ._categoryIdTable(db),
+                                    referencedColumn:
+                                        $$TransactionsTableReferences
+                                            ._categoryIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (transactionEventsRefs)
+                        await $_getPrefetchedData<
+                          DatabaseTransaction,
+                          $TransactionsTable,
+                          DatabaseTransactionEvent
+                        >(
+                          currentTable: table,
+                          referencedTable: $$TransactionsTableReferences
+                              ._transactionEventsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$TransactionsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).transactionEventsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.transactionId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -3469,7 +3268,11 @@ typedef $$TransactionsTableProcessedTableManager =
       $$TransactionsTableUpdateCompanionBuilder,
       (DatabaseTransaction, $$TransactionsTableReferences),
       DatabaseTransaction,
-      PrefetchHooks Function({bool accountId, bool categoryId})
+      PrefetchHooks Function({
+        bool accountId,
+        bool categoryId,
+        bool transactionEventsRefs,
+      })
     >;
 typedef $$AccountStatesTableCreateCompanionBuilder =
     AccountStatesCompanion Function({
@@ -3513,54 +3316,6 @@ final class $$AccountStatesTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static MultiTypedResultKey<
-    $HistoryElementsTable,
-    List<DatabaseHistoryElement>
-  >
-  _previousStateIdTable(_$Database db) => MultiTypedResultKey.fromTable(
-    db.historyElements,
-    aliasName: $_aliasNameGenerator(
-      db.accountStates.id,
-      db.historyElements.previousStateId,
-    ),
-  );
-
-  $$HistoryElementsTableProcessedTableManager get previousStateId {
-    final manager = $$HistoryElementsTableTableManager(
-      $_db,
-      $_db.historyElements,
-    ).filter((f) => f.previousStateId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_previousStateIdTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-
-  static MultiTypedResultKey<
-    $HistoryElementsTable,
-    List<DatabaseHistoryElement>
-  >
-  _newStateIdTable(_$Database db) => MultiTypedResultKey.fromTable(
-    db.historyElements,
-    aliasName: $_aliasNameGenerator(
-      db.accountStates.id,
-      db.historyElements.newStateId,
-    ),
-  );
-
-  $$HistoryElementsTableProcessedTableManager get newStateId {
-    final manager = $$HistoryElementsTableTableManager(
-      $_db,
-      $_db.historyElements,
-    ).filter((f) => f.newStateId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_newStateIdTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 }
@@ -3616,56 +3371,6 @@ class $$AccountStatesTableFilterComposer
           ),
     );
     return composer;
-  }
-
-  Expression<bool> previousStateId(
-    Expression<bool> Function($$HistoryElementsTableFilterComposer f) f,
-  ) {
-    final $$HistoryElementsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyElements,
-      getReferencedColumn: (t) => t.previousStateId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryElementsTableFilterComposer(
-            $db: $db,
-            $table: $db.historyElements,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-
-  Expression<bool> newStateId(
-    Expression<bool> Function($$HistoryElementsTableFilterComposer f) f,
-  ) {
-    final $$HistoryElementsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyElements,
-      getReferencedColumn: (t) => t.newStateId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryElementsTableFilterComposer(
-            $db: $db,
-            $table: $db.historyElements,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
   }
 }
 
@@ -3765,56 +3470,6 @@ class $$AccountStatesTableAnnotationComposer
     );
     return composer;
   }
-
-  Expression<T> previousStateId<T extends Object>(
-    Expression<T> Function($$HistoryElementsTableAnnotationComposer a) f,
-  ) {
-    final $$HistoryElementsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyElements,
-      getReferencedColumn: (t) => t.previousStateId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryElementsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.historyElements,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-
-  Expression<T> newStateId<T extends Object>(
-    Expression<T> Function($$HistoryElementsTableAnnotationComposer a) f,
-  ) {
-    final $$HistoryElementsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.historyElements,
-      getReferencedColumn: (t) => t.newStateId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$HistoryElementsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.historyElements,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$AccountStatesTableTableManager
@@ -3830,11 +3485,7 @@ class $$AccountStatesTableTableManager
           $$AccountStatesTableUpdateCompanionBuilder,
           (DatabaseAccountState, $$AccountStatesTableReferences),
           DatabaseAccountState,
-          PrefetchHooks Function({
-            bool accountId,
-            bool previousStateId,
-            bool newStateId,
-          })
+          PrefetchHooks Function({bool accountId})
         > {
   $$AccountStatesTableTableManager(_$Database db, $AccountStatesTable table)
     : super(
@@ -3883,100 +3534,47 @@ class $$AccountStatesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({
-                accountId = false,
-                previousStateId = false,
-                newStateId = false,
-              }) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (previousStateId) db.historyElements,
-                    if (newStateId) db.historyElements,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (accountId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.accountId,
-                                    referencedTable:
-                                        $$AccountStatesTableReferences
-                                            ._accountIdTable(db),
-                                    referencedColumn:
-                                        $$AccountStatesTableReferences
-                                            ._accountIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
+          prefetchHooksCallback: ({accountId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (accountId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.accountId,
+                                referencedTable: $$AccountStatesTableReferences
+                                    ._accountIdTable(db),
+                                referencedColumn: $$AccountStatesTableReferences
+                                    ._accountIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
 
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (previousStateId)
-                        await $_getPrefetchedData<
-                          DatabaseAccountState,
-                          $AccountStatesTable,
-                          DatabaseHistoryElement
-                        >(
-                          currentTable: table,
-                          referencedTable: $$AccountStatesTableReferences
-                              ._previousStateIdTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$AccountStatesTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).previousStateId,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.previousStateId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                      if (newStateId)
-                        await $_getPrefetchedData<
-                          DatabaseAccountState,
-                          $AccountStatesTable,
-                          DatabaseHistoryElement
-                        >(
-                          currentTable: table,
-                          referencedTable: $$AccountStatesTableReferences
-                              ._newStateIdTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$AccountStatesTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).newStateId,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.newStateId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
+                    return state;
                   },
-                );
+              getPrefetchedDataCallback: (items) async {
+                return [];
               },
+            );
+          },
         ),
       );
 }
@@ -3993,105 +3591,52 @@ typedef $$AccountStatesTableProcessedTableManager =
       $$AccountStatesTableUpdateCompanionBuilder,
       (DatabaseAccountState, $$AccountStatesTableReferences),
       DatabaseAccountState,
-      PrefetchHooks Function({
-        bool accountId,
-        bool previousStateId,
-        bool newStateId,
-      })
+      PrefetchHooks Function({bool accountId})
     >;
-typedef $$HistoryElementsTableCreateCompanionBuilder =
-    HistoryElementsCompanion Function({
+typedef $$TransactionEventsTableCreateCompanionBuilder =
+    TransactionEventsCompanion Function({
       Value<int> id,
-      required int accountId,
-      required String name,
-      required AccountHistoryChangeType changeType,
-      Value<int?> previousStateId,
-      required int newStateId,
+      required int transactionId,
+      required TransactionEventType eventType,
       required DateTime createdAt,
-      required DateTime updatedAt,
     });
-typedef $$HistoryElementsTableUpdateCompanionBuilder =
-    HistoryElementsCompanion Function({
+typedef $$TransactionEventsTableUpdateCompanionBuilder =
+    TransactionEventsCompanion Function({
       Value<int> id,
-      Value<int> accountId,
-      Value<String> name,
-      Value<AccountHistoryChangeType> changeType,
-      Value<int?> previousStateId,
-      Value<int> newStateId,
+      Value<int> transactionId,
+      Value<TransactionEventType> eventType,
       Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
     });
 
-final class $$HistoryElementsTableReferences
+final class $$TransactionEventsTableReferences
     extends
         BaseReferences<
           _$Database,
-          $HistoryElementsTable,
-          DatabaseHistoryElement
+          $TransactionEventsTable,
+          DatabaseTransactionEvent
         > {
-  $$HistoryElementsTableReferences(
+  $$TransactionEventsTableReferences(
     super.$_db,
     super.$_table,
     super.$_typedResult,
   );
 
-  static $AccountsTable _accountIdTable(_$Database db) =>
-      db.accounts.createAlias(
-        $_aliasNameGenerator(db.historyElements.accountId, db.accounts.id),
-      );
-
-  $$AccountsTableProcessedTableManager get accountId {
-    final $_column = $_itemColumn<int>('account_id')!;
-
-    final manager = $$AccountsTableTableManager(
-      $_db,
-      $_db.accounts,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_accountIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static $AccountStatesTable _previousStateIdTable(_$Database db) =>
-      db.accountStates.createAlias(
+  static $TransactionsTable _transactionIdTable(_$Database db) =>
+      db.transactions.createAlias(
         $_aliasNameGenerator(
-          db.historyElements.previousStateId,
-          db.accountStates.id,
+          db.transactionEvents.transactionId,
+          db.transactions.id,
         ),
       );
 
-  $$AccountStatesTableProcessedTableManager? get previousStateId {
-    final $_column = $_itemColumn<int>('previous_state_id');
-    if ($_column == null) return null;
-    final manager = $$AccountStatesTableTableManager(
+  $$TransactionsTableProcessedTableManager get transactionId {
+    final $_column = $_itemColumn<int>('transaction_id')!;
+
+    final manager = $$TransactionsTableTableManager(
       $_db,
-      $_db.accountStates,
+      $_db.transactions,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_previousStateIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static $AccountStatesTable _newStateIdTable(_$Database db) =>
-      db.accountStates.createAlias(
-        $_aliasNameGenerator(
-          db.historyElements.newStateId,
-          db.accountStates.id,
-        ),
-      );
-
-  $$AccountStatesTableProcessedTableManager get newStateId {
-    final $_column = $_itemColumn<int>('new_state_id')!;
-
-    final manager = $$AccountStatesTableTableManager(
-      $_db,
-      $_db.accountStates,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_newStateIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_transactionIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -4099,9 +3644,9 @@ final class $$HistoryElementsTableReferences
   }
 }
 
-class $$HistoryElementsTableFilterComposer
-    extends Composer<_$Database, $HistoryElementsTable> {
-  $$HistoryElementsTableFilterComposer({
+class $$TransactionEventsTableFilterComposer
+    extends Composer<_$Database, $TransactionEventsTable> {
+  $$TransactionEventsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -4113,18 +3658,13 @@ class $$HistoryElementsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnWithTypeConverterFilters<
-    AccountHistoryChangeType,
-    AccountHistoryChangeType,
+    TransactionEventType,
+    TransactionEventType,
     int
   >
-  get changeType => $composableBuilder(
-    column: $table.changeType,
+  get eventType => $composableBuilder(
+    column: $table.eventType,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
@@ -4133,71 +3673,20 @@ class $$HistoryElementsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  $$AccountsTableFilterComposer get accountId {
-    final $$AccountsTableFilterComposer composer = $composerBuilder(
+  $$TransactionsTableFilterComposer get transactionId {
+    final $$TransactionsTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.accountId,
-      referencedTable: $db.accounts,
+      getCurrentColumn: (t) => t.transactionId,
+      referencedTable: $db.transactions,
       getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AccountsTableFilterComposer(
+          }) => $$TransactionsTableFilterComposer(
             $db: $db,
-            $table: $db.accounts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$AccountStatesTableFilterComposer get previousStateId {
-    final $$AccountStatesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.previousStateId,
-      referencedTable: $db.accountStates,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$AccountStatesTableFilterComposer(
-            $db: $db,
-            $table: $db.accountStates,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$AccountStatesTableFilterComposer get newStateId {
-    final $$AccountStatesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.newStateId,
-      referencedTable: $db.accountStates,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$AccountStatesTableFilterComposer(
-            $db: $db,
-            $table: $db.accountStates,
+            $table: $db.transactions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4208,9 +3697,9 @@ class $$HistoryElementsTableFilterComposer
   }
 }
 
-class $$HistoryElementsTableOrderingComposer
-    extends Composer<_$Database, $HistoryElementsTable> {
-  $$HistoryElementsTableOrderingComposer({
+class $$TransactionEventsTableOrderingComposer
+    extends Composer<_$Database, $TransactionEventsTable> {
+  $$TransactionEventsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -4222,13 +3711,8 @@ class $$HistoryElementsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get changeType => $composableBuilder(
-    column: $table.changeType,
+  ColumnOrderings<int> get eventType => $composableBuilder(
+    column: $table.eventType,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4237,71 +3721,20 @@ class $$HistoryElementsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  $$AccountsTableOrderingComposer get accountId {
-    final $$AccountsTableOrderingComposer composer = $composerBuilder(
+  $$TransactionsTableOrderingComposer get transactionId {
+    final $$TransactionsTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.accountId,
-      referencedTable: $db.accounts,
+      getCurrentColumn: (t) => t.transactionId,
+      referencedTable: $db.transactions,
       getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AccountsTableOrderingComposer(
+          }) => $$TransactionsTableOrderingComposer(
             $db: $db,
-            $table: $db.accounts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$AccountStatesTableOrderingComposer get previousStateId {
-    final $$AccountStatesTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.previousStateId,
-      referencedTable: $db.accountStates,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$AccountStatesTableOrderingComposer(
-            $db: $db,
-            $table: $db.accountStates,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$AccountStatesTableOrderingComposer get newStateId {
-    final $$AccountStatesTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.newStateId,
-      referencedTable: $db.accountStates,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$AccountStatesTableOrderingComposer(
-            $db: $db,
-            $table: $db.accountStates,
+            $table: $db.transactions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4312,9 +3745,9 @@ class $$HistoryElementsTableOrderingComposer
   }
 }
 
-class $$HistoryElementsTableAnnotationComposer
-    extends Composer<_$Database, $HistoryElementsTable> {
-  $$HistoryElementsTableAnnotationComposer({
+class $$TransactionEventsTableAnnotationComposer
+    extends Composer<_$Database, $TransactionEventsTable> {
+  $$TransactionEventsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -4324,81 +3757,26 @@ class $$HistoryElementsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<AccountHistoryChangeType, int>
-  get changeType => $composableBuilder(
-    column: $table.changeType,
-    builder: (column) => column,
-  );
+  GeneratedColumnWithTypeConverter<TransactionEventType, int> get eventType =>
+      $composableBuilder(column: $table.eventType, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  $$AccountsTableAnnotationComposer get accountId {
-    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+  $$TransactionsTableAnnotationComposer get transactionId {
+    final $$TransactionsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.accountId,
-      referencedTable: $db.accounts,
+      getCurrentColumn: (t) => t.transactionId,
+      referencedTable: $db.transactions,
       getReferencedColumn: (t) => t.id,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$AccountsTableAnnotationComposer(
+          }) => $$TransactionsTableAnnotationComposer(
             $db: $db,
-            $table: $db.accounts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$AccountStatesTableAnnotationComposer get previousStateId {
-    final $$AccountStatesTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.previousStateId,
-      referencedTable: $db.accountStates,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$AccountStatesTableAnnotationComposer(
-            $db: $db,
-            $table: $db.accountStates,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$AccountStatesTableAnnotationComposer get newStateId {
-    final $$AccountStatesTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.newStateId,
-      referencedTable: $db.accountStates,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$AccountStatesTableAnnotationComposer(
-            $db: $db,
-            $table: $db.accountStates,
+            $table: $db.transactions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4409,184 +3787,129 @@ class $$HistoryElementsTableAnnotationComposer
   }
 }
 
-class $$HistoryElementsTableTableManager
+class $$TransactionEventsTableTableManager
     extends
         RootTableManager<
           _$Database,
-          $HistoryElementsTable,
-          DatabaseHistoryElement,
-          $$HistoryElementsTableFilterComposer,
-          $$HistoryElementsTableOrderingComposer,
-          $$HistoryElementsTableAnnotationComposer,
-          $$HistoryElementsTableCreateCompanionBuilder,
-          $$HistoryElementsTableUpdateCompanionBuilder,
-          (DatabaseHistoryElement, $$HistoryElementsTableReferences),
-          DatabaseHistoryElement,
-          PrefetchHooks Function({
-            bool accountId,
-            bool previousStateId,
-            bool newStateId,
-          })
+          $TransactionEventsTable,
+          DatabaseTransactionEvent,
+          $$TransactionEventsTableFilterComposer,
+          $$TransactionEventsTableOrderingComposer,
+          $$TransactionEventsTableAnnotationComposer,
+          $$TransactionEventsTableCreateCompanionBuilder,
+          $$TransactionEventsTableUpdateCompanionBuilder,
+          (DatabaseTransactionEvent, $$TransactionEventsTableReferences),
+          DatabaseTransactionEvent,
+          PrefetchHooks Function({bool transactionId})
         > {
-  $$HistoryElementsTableTableManager(_$Database db, $HistoryElementsTable table)
-    : super(
+  $$TransactionEventsTableTableManager(
+    _$Database db,
+    $TransactionEventsTable table,
+  ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$HistoryElementsTableFilterComposer($db: db, $table: table),
+              $$TransactionEventsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$HistoryElementsTableOrderingComposer($db: db, $table: table),
+              $$TransactionEventsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$HistoryElementsTableAnnotationComposer($db: db, $table: table),
+              $$TransactionEventsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<int> accountId = const Value.absent(),
-                Value<String> name = const Value.absent(),
-                Value<AccountHistoryChangeType> changeType =
-                    const Value.absent(),
-                Value<int?> previousStateId = const Value.absent(),
-                Value<int> newStateId = const Value.absent(),
+                Value<int> transactionId = const Value.absent(),
+                Value<TransactionEventType> eventType = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-              }) => HistoryElementsCompanion(
+              }) => TransactionEventsCompanion(
                 id: id,
-                accountId: accountId,
-                name: name,
-                changeType: changeType,
-                previousStateId: previousStateId,
-                newStateId: newStateId,
+                transactionId: transactionId,
+                eventType: eventType,
                 createdAt: createdAt,
-                updatedAt: updatedAt,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required int accountId,
-                required String name,
-                required AccountHistoryChangeType changeType,
-                Value<int?> previousStateId = const Value.absent(),
-                required int newStateId,
+                required int transactionId,
+                required TransactionEventType eventType,
                 required DateTime createdAt,
-                required DateTime updatedAt,
-              }) => HistoryElementsCompanion.insert(
+              }) => TransactionEventsCompanion.insert(
                 id: id,
-                accountId: accountId,
-                name: name,
-                changeType: changeType,
-                previousStateId: previousStateId,
-                newStateId: newStateId,
+                transactionId: transactionId,
+                eventType: eventType,
                 createdAt: createdAt,
-                updatedAt: updatedAt,
               ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
                   e.readTable(table),
-                  $$HistoryElementsTableReferences(db, table, e),
+                  $$TransactionEventsTableReferences(db, table, e),
                 ),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({
-                accountId = false,
-                previousStateId = false,
-                newStateId = false,
-              }) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (accountId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.accountId,
-                                    referencedTable:
-                                        $$HistoryElementsTableReferences
-                                            ._accountIdTable(db),
-                                    referencedColumn:
-                                        $$HistoryElementsTableReferences
-                                            ._accountIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
-                        if (previousStateId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.previousStateId,
-                                    referencedTable:
-                                        $$HistoryElementsTableReferences
-                                            ._previousStateIdTable(db),
-                                    referencedColumn:
-                                        $$HistoryElementsTableReferences
-                                            ._previousStateIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
-                        if (newStateId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.newStateId,
-                                    referencedTable:
-                                        $$HistoryElementsTableReferences
-                                            ._newStateIdTable(db),
-                                    referencedColumn:
-                                        $$HistoryElementsTableReferences
-                                            ._newStateIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
+          prefetchHooksCallback: ({transactionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (transactionId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.transactionId,
+                                referencedTable:
+                                    $$TransactionEventsTableReferences
+                                        ._transactionIdTable(db),
+                                referencedColumn:
+                                    $$TransactionEventsTableReferences
+                                        ._transactionIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
 
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [];
+                    return state;
                   },
-                );
+              getPrefetchedDataCallback: (items) async {
+                return [];
               },
+            );
+          },
         ),
       );
 }
 
-typedef $$HistoryElementsTableProcessedTableManager =
+typedef $$TransactionEventsTableProcessedTableManager =
     ProcessedTableManager<
       _$Database,
-      $HistoryElementsTable,
-      DatabaseHistoryElement,
-      $$HistoryElementsTableFilterComposer,
-      $$HistoryElementsTableOrderingComposer,
-      $$HistoryElementsTableAnnotationComposer,
-      $$HistoryElementsTableCreateCompanionBuilder,
-      $$HistoryElementsTableUpdateCompanionBuilder,
-      (DatabaseHistoryElement, $$HistoryElementsTableReferences),
-      DatabaseHistoryElement,
-      PrefetchHooks Function({
-        bool accountId,
-        bool previousStateId,
-        bool newStateId,
-      })
+      $TransactionEventsTable,
+      DatabaseTransactionEvent,
+      $$TransactionEventsTableFilterComposer,
+      $$TransactionEventsTableOrderingComposer,
+      $$TransactionEventsTableAnnotationComposer,
+      $$TransactionEventsTableCreateCompanionBuilder,
+      $$TransactionEventsTableUpdateCompanionBuilder,
+      (DatabaseTransactionEvent, $$TransactionEventsTableReferences),
+      DatabaseTransactionEvent,
+      PrefetchHooks Function({bool transactionId})
     >;
 
 class $DatabaseManager {
@@ -4600,6 +3923,6 @@ class $DatabaseManager {
       $$TransactionsTableTableManager(_db, _db.transactions);
   $$AccountStatesTableTableManager get accountStates =>
       $$AccountStatesTableTableManager(_db, _db.accountStates);
-  $$HistoryElementsTableTableManager get historyElements =>
-      $$HistoryElementsTableTableManager(_db, _db.historyElements);
+  $$TransactionEventsTableTableManager get transactionEvents =>
+      $$TransactionEventsTableTableManager(_db, _db.transactionEvents);
 }

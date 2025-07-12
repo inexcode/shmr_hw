@@ -60,11 +60,11 @@ class Repositories {
   late final CategoriesRepository _categoriesRepository;
   late final TransactionsRepository _transactionsRepository;
 
-  late final AccountsRepository _localAccountsRepository =
+  late final DriftAccountsRepository _localAccountsRepository =
       DriftAccountsRepository();
   late final CategoriesRepository _localCategoriesRepository =
       DriftCategoriesRepository();
-  late final TransactionsRepository _localTransactionsRepository =
+  late final DriftTransactionsRepository _localTransactionsRepository =
       DriftTransactionsRepository();
 
   AccountsRepository get accountsRepository => _accountsRepository;
@@ -73,11 +73,12 @@ class Repositories {
 
   TransactionsRepository get transactionsRepository => _transactionsRepository;
 
-  AccountsRepository get localAccountsRepository => _localAccountsRepository;
+  DriftAccountsRepository get localAccountsRepository =>
+      _localAccountsRepository;
 
   CategoriesRepository get localCategoriesRepository =>
       _localCategoriesRepository;
 
-  TransactionsRepository get localTransactionsRepository =>
+  DriftTransactionsRepository get localTransactionsRepository =>
       _localTransactionsRepository;
 }

@@ -20,7 +20,12 @@
     "add_comment_hint": "Добавить комментарий...",
     "cant_save": "Нельзя сохранить",
     "fill_all_fields": "Пожалуйста, заполните все поля",
-    "delete": "Удалить"
+    "delete": "Удалить",
+    "offline_mode": "Офлайн режим",
+    "synchronizing": "Синхронизация...",
+    "continue_offline": "Продолжить в офлайн режиме",
+    "retry_sync": "Повторить синхронизацию",
+    "sync_error": "Ошибка синхронизации"
   },
   "currencies": {
     "russian_ruble": "Российский рубль ₽",

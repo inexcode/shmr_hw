@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:shmr_hw/logic/models/account.dart';
 import 'package:shmr_hw/logic/models/drift/database.dart';
 import 'package:shmr_hw/logic/models/drift/database_singleton.dart';
+import 'package:shmr_hw/logic/models/enums.dart';
 import 'package:shmr_hw/logic/models/transaction.dart';
 import 'package:shmr_hw/logic/repositories/abstract/transactions.dart';
 
@@ -25,7 +26,38 @@ class DriftTransactionsRepository implements TransactionsRepository {
         updatedAt: DateTime.now(),
       ),
     );
+
+    await _databaseSingleton.database.createTransactionEvent(
+      transactionId: transaction.transaction.id,
+      eventType: TransactionEventType.creation,
+    );
+
     return Transaction.fromDatabase(transaction);
+  }
+
+  @override
+  Future<void> setTransactions({
+    required final List<Transaction> transactions,
+  }) async {
+    // first, truncate the existing transactions
+    await _databaseSingleton.database.truncateTransactions();
+    final companions = transactions
+        .map(
+          (final transaction) => TransactionsCompanion.insert(
+            id: Value(transaction.id),
+            accountId: transaction.accountId,
+            categoryId: transaction.categoryId,
+            amount: transaction.amount,
+            transactionDate: transaction.transactionDate,
+            comment: Value(transaction.comment),
+            createdAt: transaction.createdAt,
+            updatedAt: transaction.updatedAt,
+          ),
+        )
+        .toList();
+    await _databaseSingleton.database.batch((final batch) {
+      batch.insertAll(_databaseSingleton.database.transactions, companions);
+    });
   }
 
   @override
@@ -60,6 +92,12 @@ class DriftTransactionsRepository implements TransactionsRepository {
             updatedAt: Value(DateTime.now()),
           ),
         );
+
+    await _databaseSingleton.database.createTransactionEvent(
+      transactionId: id,
+      eventType: TransactionEventType.modification,
+    );
+
     final account = await _databaseSingleton.database.getAccount(
       updatedTransaction.transaction.accountId,
     );
@@ -74,6 +112,11 @@ class DriftTransactionsRepository implements TransactionsRepository {
 
   @override
   Future<void> deleteTransaction({required final int id}) async {
+    await _databaseSingleton.database.createTransactionEvent(
+      transactionId: id,
+      eventType: TransactionEventType.deletion,
+    );
+
     await _databaseSingleton.database.deleteTransaction(id);
   }
 
@@ -113,5 +156,12 @@ class DriftTransactionsRepository implements TransactionsRepository {
       );
     }
     return responses;
+  }
+
+  Future<List<DatabaseTransactionEvent>> getPendingEvents() =>
+      _databaseSingleton.database.getAllPendingEvents();
+
+  Future<void> deleteTransactionEvent({required final int eventId}) async {
+    await _databaseSingleton.database.deleteTransactionEvent(eventId);
   }
 }

@@ -7,6 +7,7 @@ import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/models/category.dart';
 import 'package:shmr_hw/ui/components/category_emoji.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
+import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 
 @RoutePage()
 class CategoriesPage extends StatelessWidget {
@@ -171,15 +172,18 @@ class _CategoriesContentState extends State<CategoriesContent> {
                       ),
                       title: Text(category.name),
                       key: ValueKey('category-${category.id}'),
-                      onTap: () {
-                        widget.onTapCallback?.call(category);
-                        context.pop<Category>(category);
-                      },
+                      onTap: widget.onTapCallback != null
+                          ? () {
+                              widget.onTapCallback?.call(category);
+                              context.pop<Category>(category);
+                            }
+                          : null,
                     );
                   },
                 ),
         ),
-        if (categoriesState is LoadingWithCacheCategoriesState)
+        if (categoriesState is LoadingWithCacheCategoriesState &&
+            !categoriesState.isFailedToLoad)
           Container(
             padding: const EdgeInsets.all(8),
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -202,6 +206,9 @@ class _CategoriesContentState extends State<CategoriesContent> {
               ],
             ),
           ),
+        if (categoriesState is LoadingWithCacheCategoriesState &&
+            categoriesState.isFailedToLoad)
+          const OfflineModeIndicator(),
       ],
     );
   }

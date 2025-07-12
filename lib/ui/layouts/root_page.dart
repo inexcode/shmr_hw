@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
+import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/router/destinations.dart';
+import 'package:shmr_hw/ui/utils/error_dialog_helper.dart';
 
 @RoutePage()
 class RootPage extends StatefulWidget {
@@ -41,8 +43,8 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Future<void> dispose() async {
-    await _accelSub?.cancel();
     super.dispose();
+    await _accelSub?.cancel();
   }
 
   @override
@@ -53,7 +55,33 @@ class _RootPageState extends State<RootPage> {
     builder: (final context, final child) {
       final tabsRouter = AutoTabsRouter.of(context);
       return Scaffold(
-        body: child,
+        body: BlocListener<TransactionsBloc, TransactionsState>(
+          listenWhen: (final previous, final current) =>
+              previous.syncErrorMessage != current.syncErrorMessage &&
+              current.syncErrorMessage != null,
+          listener: (final context, final state) {
+            if (state.syncErrorMessage != null) {
+              showSyncErrorDialog(
+                context: context,
+                errorMessage: state.syncErrorMessage!,
+                onRetryCallback:
+                    state.failedSyncFunction == FailedSyncFunction.full
+                    ? () => context.read<TransactionsBloc>()
+                        ..add(const TransactionsEvent.clearSyncError())
+                        ..add(const TransactionsEvent.loadTransactions())
+                    : () => context.read<TransactionsBloc>()
+                        ..add(const TransactionsEvent.clearSyncError())
+                        ..add(const TransactionsEvent.syncTransactions()),
+                onCloseCallback: () {
+                  context.read<TransactionsBloc>().add(
+                    const TransactionsEvent.clearSyncError(),
+                  );
+                },
+              );
+            }
+          },
+          child: child,
+        ),
         bottomNavigationBar: NavigationBar(
           selectedIndex: tabsRouter.activeIndex,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,

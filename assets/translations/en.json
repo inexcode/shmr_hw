@@ -20,7 +20,12 @@
     "add_comment_hint": "Add a comment…",
     "cant_save": "Can't save",
     "fill_all_fields": "Please fill in all fields",
-    "delete": "Delete"
+    "delete": "Delete",
+    "offline_mode": "Offline mode",
+    "synchronizing": "Synchronizing…",
+    "continue_offline": "Continue in offline mode",
+    "retry_sync": "Retry synchronization",
+    "sync_error": "Synchronization error"
   },
   "currencies": {
     "russian_ruble": "Russian ruble ₽",

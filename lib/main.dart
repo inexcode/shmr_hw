@@ -7,8 +7,10 @@ import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
+import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 import 'package:shmr_hw/ui/router/router.dart';
 import 'package:shmr_hw/ui/theme.dart';
+import 'package:shmr_hw/ui/utils/error_dialog_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,22 +67,64 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
             // A simple placeholder to select an account to use
-            builder: (final context, final child) => Scaffold(
+            home: Scaffold(
               appBar: AppBar(title: const Text('Select account')),
-              body: ListView.builder(
-                itemCount: accountsState.accounts.length,
-                itemBuilder: (final context, final index) {
-                  final account = accountsState.accounts[index];
-                  return ListTile(
-                    title: Text('${account.name} [${account.id}]'),
-                    subtitle: Text('${account.balance} ${account.currency}'),
-                    onTap: () {
-                      context.read<AccountsBloc>().add(
-                        SelectAccount(account: account),
-                      );
-                    },
-                  );
-                },
+              body: Builder(
+                builder: (final context) =>
+                    BlocListener<AccountsBloc, AccountsState>(
+                      listenWhen: (final previous, final current) =>
+                          previous is NotSelectedAccountsState &&
+                          current is NotSelectedAccountsState &&
+                          previous.syncErrorMessage !=
+                              current.syncErrorMessage &&
+                          current.syncErrorMessage != null,
+                      listener: (final context, final state) {
+                        if (state is NotSelectedAccountsState) {
+                          if (state.syncErrorMessage != null) {
+                            showSyncErrorDialog(
+                              context: context,
+                              errorMessage: state.syncErrorMessage!,
+                              onRetryCallback: () =>
+                                  context.read<AccountsBloc>()
+                                    ..add(const AccountsEvent.clearSyncError())
+                                    ..add(const AccountsEvent.loadAccounts()),
+                              onCloseCallback: () {},
+                            );
+                          }
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: accountsState.accounts.length,
+                              itemBuilder: (final context, final index) {
+                                final account = accountsState.accounts[index];
+                                return ListTile(
+                                  title: Text(
+                                    '${account.name} [${account.id}]',
+                                  ),
+                                  subtitle: Text(
+                                    '${account.balance} ${account.currency}',
+                                  ),
+                                  onTap: () {
+                                    context.read<AccountsBloc>().add(
+                                      SelectAccount(account: account),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          if (accountsState.fromCache &&
+                              accountsState.syncErrorMessage != null)
+                            const OfflineModeIndicator(),
+                          if (accountsState.fromCache &&
+                              accountsState.syncErrorMessage == null)
+                            const SynchronizingIndicator(),
+                        ],
+                      ),
+                    ),
               ),
             ),
           );

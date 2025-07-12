@@ -9,6 +9,8 @@ enum AccountHistoryChangeType {
   modification,
 }
 
+enum TransactionEventType { creation, modification, deletion }
+
 class UnknownCurrencyException implements Exception {
   UnknownCurrencyException(this.message);
   final String message;
@@ -24,10 +26,13 @@ enum Currency {
 
   factory Currency.fromString(final String value) {
     switch (value.toUpperCase()) {
+      case '₽':
       case 'RUB':
         return Currency.rub;
+      case r'$':
       case 'USD':
         return Currency.usd;
+      case '€':
       case 'EUR':
         return Currency.eur;
       default:

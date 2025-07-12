@@ -6,6 +6,8 @@ abstract class AccountsState with _$AccountsState {
   const factory AccountsState.loading() = LoadingAccountsState;
   const factory AccountsState.notSelected({
     required final List<Account> accounts,
+    required final bool fromCache,
+    final String? syncErrorMessage,
   }) = NotSelectedAccountsState;
   const factory AccountsState.selected({
     required final Account selectedAccount,

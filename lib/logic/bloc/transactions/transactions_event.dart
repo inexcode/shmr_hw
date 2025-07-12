@@ -19,4 +19,6 @@ class TransactionsEvent with _$TransactionsEvent {
   }) = EditTransaction;
   const factory TransactionsEvent.deleteTransaction({required final int id}) =
       DeleteTransaction;
+  const factory TransactionsEvent.syncTransactions() = SyncTransactions;
+  const factory TransactionsEvent.clearSyncError() = ClearSyncError;
 }

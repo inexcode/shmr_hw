@@ -172,7 +172,7 @@ String toString() {
 
 
 class LoadingWithCacheCategoriesState implements CategoriesState {
-  const LoadingWithCacheCategoriesState({required final  Map<int, Category> categories}): _categories = categories;
+  const LoadingWithCacheCategoriesState({required final  Map<int, Category> categories, required this.isFailedToLoad}): _categories = categories;
   
 
  final  Map<int, Category> _categories;
@@ -182,6 +182,7 @@ class LoadingWithCacheCategoriesState implements CategoriesState {
   return EqualUnmodifiableMapView(_categories);
 }
 
+ final  bool isFailedToLoad;
 
 /// Create a copy of CategoriesState
 /// with the given fields replaced by the non-null parameter values.
@@ -193,16 +194,16 @@ $LoadingWithCacheCategoriesStateCopyWith<LoadingWithCacheCategoriesState> get co
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingWithCacheCategoriesState&&const DeepCollectionEquality().equals(other._categories, _categories));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingWithCacheCategoriesState&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.isFailedToLoad, isFailedToLoad) || other.isFailedToLoad == isFailedToLoad));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories),isFailedToLoad);
 
 @override
 String toString() {
-  return 'CategoriesState.loadingWithCache(categories: $categories)';
+  return 'CategoriesState.loadingWithCache(categories: $categories, isFailedToLoad: $isFailedToLoad)';
 }
 
 
@@ -213,7 +214,7 @@ abstract mixin class $LoadingWithCacheCategoriesStateCopyWith<$Res> implements $
   factory $LoadingWithCacheCategoriesStateCopyWith(LoadingWithCacheCategoriesState value, $Res Function(LoadingWithCacheCategoriesState) _then) = _$LoadingWithCacheCategoriesStateCopyWithImpl;
 @useResult
 $Res call({
- Map<int, Category> categories
+ Map<int, Category> categories, bool isFailedToLoad
 });
 
 
@@ -230,10 +231,11 @@ class _$LoadingWithCacheCategoriesStateCopyWithImpl<$Res>
 
 /// Create a copy of CategoriesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? categories = null,Object? isFailedToLoad = null,}) {
   return _then(LoadingWithCacheCategoriesState(
 categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as Map<int, Category>,
+as Map<int, Category>,isFailedToLoad: null == isFailedToLoad ? _self.isFailedToLoad : isFailedToLoad // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

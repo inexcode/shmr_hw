@@ -46,4 +46,11 @@ class RestApiTransactionsRepository implements TransactionsRepository {
     final transaction = await _client.updateTransaction(id, request.toDto());
     return TransactionResponse.fromDto(transaction);
   }
+
+  @override
+  Future<void> setTransactions({
+    required final List<Transaction> transactions,
+  }) {
+    throw UnimplementedError();
+  }
 }

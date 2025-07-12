@@ -19,4 +19,6 @@ abstract interface class TransactionsRepository {
     final DateTime? startDate,
     final DateTime? endDate,
   });
+
+  Future<void> setTransactions({required final List<Transaction> transactions});
 }

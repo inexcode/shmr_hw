@@ -11,4 +11,5 @@ class AccountsEvent with _$AccountsEvent {
   const factory AccountsEvent.changeCurrency({
     required final String newCurrency,
   }) = ChangeCurrency;
+  const factory AccountsEvent.clearSyncError() = ClearAccountsSyncError;
 }

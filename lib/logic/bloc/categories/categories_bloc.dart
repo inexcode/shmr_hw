@@ -20,23 +20,38 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
               categories: {
                 for (final category in localCategories) category.id: category,
               },
+              isFailedToLoad: false,
             ),
           );
         }
-        final categories = await Repositories().categoriesRepository
-            .fetchCategories();
+        try {
+          final categories = await Repositories().categoriesRepository
+              .fetchCategories();
 
-        await Repositories().localCategoriesRepository.saveCategories(
-          categories: categories,
-        );
+          await Repositories().localCategoriesRepository.saveCategories(
+            categories: categories,
+          );
 
-        emit(
-          CategoriesState.loaded(
-            categories: {
-              for (final category in categories) category.id: category,
-            },
-          ),
-        );
+          emit(
+            CategoriesState.loaded(
+              categories: {
+                for (final category in categories) category.id: category,
+              },
+            ),
+          );
+        } catch (e) {
+          if (state is LoadingWithCacheCategoriesState) {
+            final currentState = state as LoadingWithCacheCategoriesState;
+            emit(
+              CategoriesState.loadingWithCache(
+                isFailedToLoad: true,
+                categories: currentState.categories,
+              ),
+            );
+          } else {
+            emit(CategoriesState.error(errorMessage: e.toString()));
+          }
+        }
       } catch (e) {
         if (state is LoadingWithCacheCategoriesState) {
           final currentState = state as LoadingWithCacheCategoriesState;
