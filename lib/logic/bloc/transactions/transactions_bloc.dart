@@ -301,20 +301,32 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       return true;
     }
     final todayYear = DateTime.now().year;
-    final transactions = <Transaction>[];
     try {
+      final yearFutures = <Future<List<Transaction>>>[];
+
       for (var year = todayYear; year >= 2000; year--) {
-        final yearTransactions = await Repositories().transactionsRepository
+        final future = Repositories().transactionsRepository
             .fetchTransactions(
               accountId: accountId,
               startDate: DateTime(year, 1, 1),
               endDate: DateTime(year, 12, 31),
+            )
+            .then(
+              (final yearTransactions) =>
+                  yearTransactions.map(Transaction.fromResponse).toList(),
             );
-        transactions.addAll(yearTransactions.map(Transaction.fromResponse));
+        yearFutures.add(future);
       }
+
+      final yearResults = await Future.wait(yearFutures);
+
+      final transactions = <Transaction>[];
+      yearResults.forEach(transactions.addAll);
+
       transactions.sort(
         (final a, final b) => a.transactionDate.compareTo(b.transactionDate),
       );
+
       await Repositories().localTransactionsRepository.setTransactions(
         transactions: transactions,
       );

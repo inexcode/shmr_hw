@@ -9,6 +9,7 @@ import 'package:shmr_hw/logic/models/rest_api_dto/account.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/category.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/transaction.dart';
 import 'package:shmr_hw/logic/repositories/rest_api/exceptions.dart';
+import 'package:shmr_hw/logic/repositories/rest_api/worker_manager_setup.dart';
 
 class RestApiClient {
   RestApiClient({
@@ -23,6 +24,16 @@ class RestApiClient {
   final int maxRetries;
   final int baseDelayMs;
   final int maxDelayMs;
+
+  /// Initialize the worker manager for JSON deserialization
+  static Future<void> initialize() async {
+    await JsonWorkerManager.instance.initialize();
+  }
+
+  /// Dispose the worker manager
+  static Future<void> dispose() async {
+    await JsonWorkerManager.instance.dispose();
+  }
 
   static const Set<int> _retryableStatusCodes = {
     HttpStatus.internalServerError, // 500
@@ -119,10 +130,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map((final json) => AccountDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return JsonWorkerManager.instance.deserializeAccountList(response.body);
   }
 
   Future<AccountDto> createAccount(final AccountRequestDto request) async {
@@ -130,7 +138,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return AccountDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeAccount(response.body);
   }
 
   Future<AccountResponseDto> getAccountDetails(final int id) async {
@@ -138,7 +146,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return AccountResponseDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeAccountResponse(response.body);
   }
 
   Future<AccountDto> updateAccount(
@@ -149,7 +157,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return AccountDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeAccount(response.body);
   }
 
   Future<void> deleteAccount(final int id) async {
@@ -163,10 +171,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map((final json) => CategoryDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return JsonWorkerManager.instance.deserializeCategoryList(response.body);
   }
 
   Future<List<CategoryDto>> getCategoriesByType({
@@ -179,10 +184,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map((final json) => CategoryDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return JsonWorkerManager.instance.deserializeCategoryList(response.body);
   }
 
   Future<TransactionDto> createTransaction(
@@ -192,7 +194,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return TransactionDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeTransaction(response.body);
   }
 
   Future<TransactionResponseDto> getTransactionDetails(final int id) async {
@@ -200,7 +202,9 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return TransactionResponseDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeTransactionResponse(
+      response.body,
+    );
   }
 
   Future<TransactionResponseDto> updateTransaction(
@@ -211,7 +215,9 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return TransactionResponseDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeTransactionResponse(
+      response.body,
+    );
   }
 
   Future<void> deleteTransaction(final int id) async {
@@ -238,13 +244,9 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map(
-          (final json) =>
-              TransactionResponseDto.fromJson(json as Map<String, dynamic>),
-        )
-        .toList();
+    return JsonWorkerManager.instance.deserializeTransactionResponseList(
+      response.body,
+    );
   }
 
   Map<String, String> _headers() => {

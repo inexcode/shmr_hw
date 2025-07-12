@@ -31,6 +31,7 @@ dependencies:
   shmr_hw_pie_chart:
     path: ./shmr_hw_pie_chart
   skeletonizer: ^2.0.1
+  worker_manager: ^7.2.6
 
 dev_dependencies:
   auto_route_generator: ^10.2.3

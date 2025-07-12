@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,7 @@ import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
+import 'package:shmr_hw/logic/repositories/rest_api/client.dart';
 import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 import 'package:shmr_hw/ui/router/router.dart';
 import 'package:shmr_hw/ui/theme.dart';
@@ -18,6 +21,9 @@ void main() async {
   await dotenv.load(fileName: '.env');
 
   await EasyLocalization.ensureInitialized();
+
+  // Initialize the worker manager for JSON deserialization
+  await RestApiClient.initialize();
 
   runApp(const Localization(child: MyApp()));
 }
@@ -31,6 +37,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _appRouter = RootRouter();
+
+  @override
+  void dispose() {
+    // Dispose the worker manager when the app is disposed
+    unawaited(RestApiClient.dispose());
+    super.dispose();
+  }
 
   // This widget is the root of your application.
   @override

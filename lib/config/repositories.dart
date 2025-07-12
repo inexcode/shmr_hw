@@ -17,22 +17,8 @@ enum RepositoryType {
   api,
   db;
 
-  static RepositoryType get selectedRepository {
-    return api;
-
-    // to be deleted
-    final envRepository = dotenv.env['DATA_REPOSITORY'];
-    if (envRepository == 'FAKE') {
-      return fake;
-    }
-    if (envRepository == 'API') {
-      return api;
-    }
-    if (envRepository == 'DB') {
-      return db;
-    }
-    return db;
-  }
+  /// We now use api as main repo, and db as local backup.
+  static RepositoryType get selectedRepository => api;
 }
 
 class Repositories {
