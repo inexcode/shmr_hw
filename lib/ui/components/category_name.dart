@@ -20,6 +20,13 @@ class CategoryName extends StatelessWidget {
         style: style,
       );
     }
+    if (categoriesState is LoadingWithCacheCategoriesState) {
+      return Text(
+        categoriesState.categories[categoryId]?.name ??
+            'categories.unknown_category'.tr(),
+        style: style,
+      );
+    }
     if (categoriesState is InitialCategoriesState ||
         categoriesState is LoadingCategoriesState) {
       return Text('common.loading'.tr(), style: style);

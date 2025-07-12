@@ -79,8 +79,8 @@ as bool,
 /// @nodoc
 
 
-class _Category implements Category {
-  const _Category({required this.id, required this.name, required this.emoji, required this.isIncome});
+class _Category extends Category {
+  const _Category({required this.id, required this.name, required this.emoji, required this.isIncome}): super._();
   
 
 @override final  int id;

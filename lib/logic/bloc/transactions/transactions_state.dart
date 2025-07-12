@@ -22,6 +22,8 @@ enum SortOrder {
   }
 }
 
+enum FailedSyncFunction { full, transaction }
+
 class DayTransactionsDelta {
   const DayTransactionsDelta({required this.date, required this.delta});
 
@@ -42,7 +44,10 @@ abstract class TransactionsState with _$TransactionsState {
     required final DateTime startDate,
     required final DateTime endDate,
     required final SortOrder sortOrder,
+    required final bool failedSync,
     final String? errorMessage,
+    final String? syncErrorMessage,
+    final FailedSyncFunction? failedSyncFunction,
   }) = _TransactionsState;
 
   const TransactionsState._();
@@ -61,6 +66,7 @@ abstract class TransactionsState with _$TransactionsState {
       transactions: const [],
       transactionsToday: const [],
       transactionsDelta: const [],
+      failedSync: false,
     );
   }
 

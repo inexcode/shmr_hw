@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:shmr_hw/logic/models/account.dart';
 import 'package:shmr_hw/logic/models/drift/database.dart';
 import 'package:shmr_hw/logic/models/drift/database_singleton.dart';
+import 'package:shmr_hw/logic/models/enums.dart';
 import 'package:shmr_hw/logic/repositories/abstract/accounts.dart';
 
 class DriftAccountsRepository implements AccountsRepository {
@@ -30,6 +31,25 @@ class DriftAccountsRepository implements AccountsRepository {
     return Account.fromDatabase(account);
   }
 
+  Future<void> saveAccounts({required final List<Account> accounts}) async {
+    final companions = accounts
+        .map(
+          (final account) => AccountsCompanion.insert(
+            id: Value(account.id),
+            userId: account.userId,
+            name: account.name,
+            balance: account.balance,
+            currency: Currency.fromString(account.currency).name,
+            createdAt: account.createdAt,
+            updatedAt: account.updatedAt,
+          ),
+        )
+        .toList();
+    await _databaseSingleton.database.batch((final batch) {
+      batch.insertAll(_databaseSingleton.database.accounts, companions);
+    });
+  }
+
   @override
   Future<AccountDetails> getAccount({required final int id}) async {
     final account = await _databaseSingleton.database.getAccount(id);
@@ -51,22 +71,5 @@ class DriftAccountsRepository implements AccountsRepository {
       ),
     );
     return Account.fromDatabase(updatedAccount);
-  }
-
-  @override
-  Future<AccountHistory> getAccountHistory({required final int id}) async {
-    final history = await _databaseSingleton.database.getAccountHistory(id);
-    final items = history.map(AccountHistoryElement.fromDatabase).toList();
-    final lastAccountState = items.isNotEmpty
-        ? items.last.newState
-        : AccountState.empty();
-
-    return AccountHistory(
-      history: items,
-      currentBalance: lastAccountState.balance,
-      accountId: id,
-      currency: lastAccountState.currency,
-      accountName: lastAccountState.name,
-    );
   }
 }

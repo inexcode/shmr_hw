@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,54 +9,128 @@ import 'package:shmr_hw/logic/models/rest_api_dto/account.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/category.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/transaction.dart';
 import 'package:shmr_hw/logic/repositories/rest_api/exceptions.dart';
+import 'package:shmr_hw/logic/repositories/rest_api/worker_manager_setup.dart';
 
 class RestApiClient {
-  RestApiClient({this.baseUrl = 'https://shmr-finance.ru/api/v1'})
-    : _bearerToken = dotenv.env['REST_API_TOKEN'] ?? '';
+  RestApiClient({
+    this.baseUrl = 'https://shmr-finance.ru/api/v1',
+    this.maxRetries = 3,
+    this.baseDelayMs = 1000,
+    this.maxDelayMs = 30000,
+  }) : _bearerToken = dotenv.env['REST_API_TOKEN'] ?? '';
 
   final String baseUrl;
   final String _bearerToken;
+  final int maxRetries;
+  final int baseDelayMs;
+  final int maxDelayMs;
+
+  /// Initialize the worker manager for JSON deserialization
+  static Future<void> initialize() async {
+    await JsonWorkerManager.instance.initialize();
+  }
+
+  /// Dispose the worker manager
+  static Future<void> dispose() async {
+    await JsonWorkerManager.instance.dispose();
+  }
+
+  static const Set<int> _retryableStatusCodes = {
+    HttpStatus.internalServerError, // 500
+    HttpStatus.badGateway, // 502
+    HttpStatus.serviceUnavailable, // 503
+    HttpStatus.gatewayTimeout, // 504
+    HttpStatus.requestTimeout, // 408
+    429, // Too Many Requests
+  };
+
+  Future<http.Response> _executeWithRetry(
+    final Future<http.Response> Function() httpCall,
+  ) async {
+    int attempt = 0;
+
+    while (attempt <= maxRetries) {
+      try {
+        final response = await httpCall();
+
+        // If status code is retryable and we haven't exceeded max retries
+        if (_retryableStatusCodes.contains(response.statusCode) &&
+            attempt < maxRetries) {
+          final delayMs = _calculateDelay(attempt);
+          await Future.delayed(Duration(milliseconds: delayMs));
+          attempt++;
+          continue;
+        }
+
+        return response;
+      } catch (e) {
+        // For network errors (SocketException, etc.), retry if we have attempts left
+        if (attempt < maxRetries && _isRetryableException(e)) {
+          final delayMs = _calculateDelay(attempt);
+          await Future.delayed(Duration(milliseconds: delayMs));
+          attempt++;
+          continue;
+        }
+        rethrow;
+      }
+    }
+
+    // This should never be reached, but just in case
+    throw Exception('Max retries exceeded');
+  }
+
+  int _calculateDelay(final int attempt) {
+    // Exponential backoff with jitter: base * 2^attempt + random jitter
+    final exponentialDelay = baseDelayMs * pow(2, attempt).toInt();
+    final jitter = Random().nextInt(1000); // 0-999ms jitter
+    final totalDelay = exponentialDelay + jitter;
+
+    // Cap the delay at maxDelayMs
+    return totalDelay > maxDelayMs ? maxDelayMs : totalDelay;
+  }
+
+  bool _isRetryableException(final Object exception) =>
+      exception is SocketException ||
+      exception is HttpException ||
+      exception is FormatException;
 
   Future<http.Response> get(
     final String endpoint, {
     final Map<String, String>? queryParameters,
-  }) {
+  }) => _executeWithRetry(() {
     final uri = Uri.parse(
       '$baseUrl$endpoint',
     ).replace(queryParameters: queryParameters);
     return http.get(uri, headers: _headers());
-  }
+  });
 
   Future<http.Response> post(
     final String endpoint, {
     final Map<String, dynamic>? body,
-  }) {
+  }) => _executeWithRetry(() {
     final uri = Uri.parse('$baseUrl$endpoint');
     return http.post(uri, headers: _headers(), body: jsonEncode(body));
-  }
+  });
 
   Future<http.Response> put(
     final String endpoint, {
     final Map<String, dynamic>? body,
-  }) {
+  }) => _executeWithRetry(() {
     final uri = Uri.parse('$baseUrl$endpoint');
     return http.put(uri, headers: _headers(), body: jsonEncode(body));
-  }
+  });
 
-  Future<http.Response> delete(final String endpoint) {
+  Future<http.Response> delete(final String endpoint) => _executeWithRetry(() {
     final uri = Uri.parse('$baseUrl$endpoint');
     return http.delete(uri, headers: _headers());
-  }
+  });
 
   Future<List<AccountDto>> getAccounts() async {
     final response = await get('/accounts');
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map((final json) => AccountDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return JsonWorkerManager.instance.deserializeAccountList(response.body);
   }
 
   Future<AccountDto> createAccount(final AccountRequestDto request) async {
@@ -63,7 +138,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return AccountDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeAccount(response.body);
   }
 
   Future<AccountResponseDto> getAccountDetails(final int id) async {
@@ -71,7 +146,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return AccountResponseDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeAccountResponse(response.body);
   }
 
   Future<AccountDto> updateAccount(
@@ -82,7 +157,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return AccountDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeAccount(response.body);
   }
 
   Future<void> deleteAccount(final int id) async {
@@ -91,23 +166,12 @@ class RestApiClient {
     _checkCommonErrors(response);
   }
 
-  Future<AccountHistoryDtoResponse> getAccountHistory(final int id) async {
-    final response = await get('/accounts/$id/history');
-
-    _checkCommonErrors(response);
-
-    return AccountHistoryDtoResponse.fromJson(jsonDecode(response.body));
-  }
-
   Future<List<CategoryDto>> getCategories() async {
     final response = await get('/categories');
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map((final json) => CategoryDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return JsonWorkerManager.instance.deserializeCategoryList(response.body);
   }
 
   Future<List<CategoryDto>> getCategoriesByType({
@@ -120,10 +184,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map((final json) => CategoryDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return JsonWorkerManager.instance.deserializeCategoryList(response.body);
   }
 
   Future<TransactionDto> createTransaction(
@@ -133,7 +194,7 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return TransactionDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeTransaction(response.body);
   }
 
   Future<TransactionResponseDto> getTransactionDetails(final int id) async {
@@ -141,7 +202,9 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return TransactionResponseDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeTransactionResponse(
+      response.body,
+    );
   }
 
   Future<TransactionResponseDto> updateTransaction(
@@ -152,7 +215,9 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    return TransactionResponseDto.fromJson(jsonDecode(response.body));
+    return JsonWorkerManager.instance.deserializeTransactionResponse(
+      response.body,
+    );
   }
 
   Future<void> deleteTransaction(final int id) async {
@@ -168,8 +233,8 @@ class RestApiClient {
   }) async {
     final queryParameters = <String, String>{
       if (startDate != null)
-        'start_date': DateFormat('yyyy-MM-dd').format(startDate),
-      if (endDate != null) 'end_date': DateFormat('yyyy-MM-dd').format(endDate),
+        'startDate': DateFormat('yyyy-MM-dd').format(startDate),
+      if (endDate != null) 'endDate': DateFormat('yyyy-MM-dd').format(endDate),
     };
 
     final response = await get(
@@ -179,13 +244,9 @@ class RestApiClient {
 
     _checkCommonErrors(response);
 
-    final List<dynamic> jsonList = jsonDecode(response.body);
-    return jsonList
-        .map(
-          (final json) =>
-              TransactionResponseDto.fromJson(json as Map<String, dynamic>),
-        )
-        .toList();
+    return JsonWorkerManager.instance.deserializeTransactionResponseList(
+      response.body,
+    );
   }
 
   Map<String, String> _headers() => {

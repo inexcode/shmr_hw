@@ -1,7 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr_hw/logic/models/drift/database.dart';
-import 'package:shmr_hw/logic/models/enums.dart';
 import 'package:shmr_hw/logic/models/rest_api_dto/account.dart';
 import 'package:shmr_hw/logic/models/stat_item.dart';
 
@@ -121,67 +120,4 @@ abstract class AccountState with _$AccountState {
 
   factory AccountState.empty() =>
       AccountState(id: 0, name: '', balance: Decimal.zero, currency: '');
-}
-
-@freezed
-abstract class AccountHistoryElement with _$AccountHistoryElement {
-  const factory AccountHistoryElement({
-    required final int id,
-    required final int accountId,
-    required final String name,
-    required final AccountHistoryChangeType changeType,
-    required final AccountState? previousState,
-    required final AccountState newState,
-    required final DateTime changeTimestamp,
-    required final DateTime createdAt,
-  }) = _AccountHistoryElement;
-
-  factory AccountHistoryElement.fromDto(final AccountHistoryDto dto) =>
-      AccountHistoryElement(
-        id: dto.id,
-        accountId: dto.accountId,
-        name: dto.name,
-        changeType: dto.changeType,
-        previousState: dto.previousState != null
-            ? AccountState.fromDto(dto.previousState!)
-            : null,
-        newState: AccountState.fromDto(dto.newState),
-        changeTimestamp: dto.changeTimestamp,
-        createdAt: dto.createdAt,
-      );
-
-  factory AccountHistoryElement.fromDatabase(
-    final DatabaseHistoryElementWithStates dbElement,
-  ) => AccountHistoryElement(
-    id: dbElement.element.id,
-    accountId: dbElement.element.accountId,
-    name: dbElement.element.name,
-    changeType: dbElement.element.changeType,
-    previousState: dbElement.previousState != null
-        ? AccountState.fromDatabase(dbElement.previousState!)
-        : null,
-    newState: AccountState.fromDatabase(dbElement.newState),
-    changeTimestamp: dbElement.element.updatedAt,
-    createdAt: dbElement.element.createdAt,
-  );
-}
-
-@freezed
-abstract class AccountHistory with _$AccountHistory {
-  const factory AccountHistory({
-    required final int accountId,
-    required final String accountName,
-    required final String currency,
-    required final Decimal currentBalance,
-    required final List<AccountHistoryElement> history,
-  }) = _AccountHistory;
-
-  factory AccountHistory.fromDto(final AccountHistoryDtoResponse dto) =>
-      AccountHistory(
-        accountId: dto.accountId,
-        accountName: dto.accountName,
-        currency: dto.currency,
-        currentBalance: dto.currentBalance,
-        history: dto.history.map(AccountHistoryElement.fromDto).toList(),
-      );
 }

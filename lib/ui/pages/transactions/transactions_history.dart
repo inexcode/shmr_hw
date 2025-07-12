@@ -11,6 +11,7 @@ import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
 import 'package:shmr_hw/ui/components/totals_tile.dart';
 import 'package:shmr_hw/ui/components/transaction_dialog.dart';
 import 'package:shmr_hw/ui/components/transaction_tile.dart';
+import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 import 'package:shmr_hw/ui/router/router.dart';
 
 @RoutePage()
@@ -33,13 +34,18 @@ class TransactionsHistoryPage extends StatelessWidget {
     switch (transactionsState.status) {
       case TransactionsStatus.initial:
       case TransactionsStatus.loading:
-        childWidget = const Center(child: CircularProgressIndicator());
-      case TransactionsStatus.loaded:
-        childWidget = Center(
-          child: _TransactionsHistoryContent(
+        if (transactionsState.transactionsToday.isEmpty) {
+          childWidget = const Center(child: CircularProgressIndicator());
+        } else {
+          childWidget = _TransactionsHistoryContent(
             isIncome: isIncome,
             categoryId: categoryId,
-          ),
+          );
+        }
+      case TransactionsStatus.loaded:
+        childWidget = _TransactionsHistoryContent(
+          isIncome: isIncome,
+          categoryId: categoryId,
         );
       case TransactionsStatus.error:
         childWidget = Center(
@@ -213,6 +219,7 @@ class _TransactionsHistoryContent extends StatelessWidget {
           ),
         ),
         const Divider(height: 0),
+        const TransactionsLoadingStatus(),
       ],
     );
   }

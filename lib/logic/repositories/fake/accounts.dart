@@ -1,6 +1,5 @@
 import 'package:decimal/decimal.dart';
 import 'package:shmr_hw/logic/models/account.dart';
-import 'package:shmr_hw/logic/models/enums.dart';
 import 'package:shmr_hw/logic/models/stat_item.dart';
 import 'package:shmr_hw/logic/repositories/abstract/accounts.dart';
 
@@ -78,39 +77,6 @@ class FakeAccountsRepository implements AccountsRepository {
       currency: request.currency,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-    );
-  }
-
-  @override
-  Future<AccountHistory> getAccountHistory({required final int id}) async {
-    await Future.delayed(const Duration(seconds: 1));
-    return AccountHistory(
-      accountId: 1,
-      accountName: 'Основной счёт',
-      currency: 'USD',
-      currentBalance: Decimal.parse('2000.00'),
-      history: [
-        AccountHistoryElement(
-          id: 1,
-          accountId: 1,
-          name: 'name',
-          changeType: AccountHistoryChangeType.modification,
-          previousState: AccountState(
-            id: 1,
-            name: 'name',
-            balance: Decimal.parse('1000.00'),
-            currency: 'USD',
-          ),
-          newState: AccountState(
-            id: 1,
-            name: 'name',
-            balance: Decimal.parse('1000.00'),
-            currency: 'USD',
-          ),
-          changeTimestamp: DateTime.now(),
-          createdAt: DateTime.now(),
-        ),
-      ],
     );
   }
 }

@@ -12,17 +12,58 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     on<LoadCategories>((final event, final emit) async {
       emit(const CategoriesState.loading());
       try {
-        final categories = await Repositories().categoriesRepository
+        final localCategories = await Repositories().localCategoriesRepository
             .fetchCategories();
-        emit(
-          CategoriesState.loaded(
-            categories: {
-              for (final category in categories) category.id: category,
-            },
-          ),
-        );
+        if (localCategories.isNotEmpty) {
+          emit(
+            CategoriesState.loadingWithCache(
+              categories: {
+                for (final category in localCategories) category.id: category,
+              },
+              isFailedToLoad: false,
+            ),
+          );
+        }
+        try {
+          final categories = await Repositories().categoriesRepository
+              .fetchCategories();
+
+          await Repositories().localCategoriesRepository.saveCategories(
+            categories: categories,
+          );
+
+          emit(
+            CategoriesState.loaded(
+              categories: {
+                for (final category in categories) category.id: category,
+              },
+            ),
+          );
+        } catch (e) {
+          if (state is LoadingWithCacheCategoriesState) {
+            final currentState = state as LoadingWithCacheCategoriesState;
+            emit(
+              CategoriesState.loadingWithCache(
+                isFailedToLoad: true,
+                categories: currentState.categories,
+              ),
+            );
+          } else {
+            emit(CategoriesState.error(errorMessage: e.toString()));
+          }
+        }
       } catch (e) {
-        emit(CategoriesState.error(errorMessage: e.toString()));
+        if (state is LoadingWithCacheCategoriesState) {
+          final currentState = state as LoadingWithCacheCategoriesState;
+          emit(
+            CategoriesState.error(
+              errorMessage: e.toString(),
+              categories: currentState.categories,
+            ),
+          );
+        } else {
+          emit(CategoriesState.error(errorMessage: e.toString()));
+        }
       }
     });
 

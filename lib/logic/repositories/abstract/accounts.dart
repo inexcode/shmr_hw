@@ -11,6 +11,4 @@ abstract interface class AccountsRepository {
     required final int id,
     required final AccountRequest request,
   });
-
-  Future<AccountHistory> getAccountHistory({required final int id});
 }

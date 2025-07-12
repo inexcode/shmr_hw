@@ -17,19 +17,8 @@ enum RepositoryType {
   api,
   db;
 
-  static RepositoryType get selectedRepository {
-    final envRepository = dotenv.env['DATA_REPOSITORY'];
-    if (envRepository == 'FAKE') {
-      return fake;
-    }
-    if (envRepository == 'API') {
-      return api;
-    }
-    if (envRepository == 'DB') {
-      return db;
-    }
-    return db;
-  }
+  /// We now use api as main repo, and db as local backup.
+  static RepositoryType get selectedRepository => api;
 }
 
 class Repositories {
@@ -57,9 +46,25 @@ class Repositories {
   late final CategoriesRepository _categoriesRepository;
   late final TransactionsRepository _transactionsRepository;
 
+  late final DriftAccountsRepository _localAccountsRepository =
+      DriftAccountsRepository();
+  late final CategoriesRepository _localCategoriesRepository =
+      DriftCategoriesRepository();
+  late final DriftTransactionsRepository _localTransactionsRepository =
+      DriftTransactionsRepository();
+
   AccountsRepository get accountsRepository => _accountsRepository;
 
   CategoriesRepository get categoriesRepository => _categoriesRepository;
 
   TransactionsRepository get transactionsRepository => _transactionsRepository;
+
+  DriftAccountsRepository get localAccountsRepository =>
+      _localAccountsRepository;
+
+  CategoriesRepository get localCategoriesRepository =>
+      _localCategoriesRepository;
+
+  DriftTransactionsRepository get localTransactionsRepository =>
+      _localTransactionsRepository;
 }

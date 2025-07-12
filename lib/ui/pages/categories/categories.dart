@@ -7,6 +7,7 @@ import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/models/category.dart';
 import 'package:shmr_hw/ui/components/category_emoji.dart';
 import 'package:shmr_hw/ui/components/placeholders/page_placeholder.dart';
+import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 
 @RoutePage()
 class CategoriesPage extends StatelessWidget {
@@ -22,6 +23,7 @@ class CategoriesPage extends StatelessWidget {
       case InitialCategoriesState():
       case LoadingCategoriesState():
         childWidget = const Center(child: CircularProgressIndicator());
+      case LoadingWithCacheCategoriesState():
       case LoadedCategoriesState():
         childWidget = const CategoriesContent();
       case ErrorCategoriesState():
@@ -114,10 +116,18 @@ class _CategoriesContentState extends State<CategoriesContent> {
 
   @override
   Widget build(final BuildContext context) {
-    final categoriesState =
-        context.watch<CategoriesBloc>().state as LoadedCategoriesState;
+    final categoriesState = context.watch<CategoriesBloc>().state;
 
-    final filteredCategories = _filterCategories(categoriesState.categories);
+    late final List<MapEntry<int, Category>> filteredCategories;
+
+    switch (categoriesState) {
+      case LoadingWithCacheCategoriesState():
+        filteredCategories = _filterCategories(categoriesState.categories);
+      case LoadedCategoriesState():
+        filteredCategories = _filterCategories(categoriesState.categories);
+      default:
+        filteredCategories = <MapEntry<int, Category>>[];
+    }
 
     return Column(
       children: [
@@ -162,14 +172,43 @@ class _CategoriesContentState extends State<CategoriesContent> {
                       ),
                       title: Text(category.name),
                       key: ValueKey('category-${category.id}'),
-                      onTap: () {
-                        widget.onTapCallback?.call(category);
-                        context.pop<Category>(category);
-                      },
+                      onTap: widget.onTapCallback != null
+                          ? () {
+                              widget.onTapCallback?.call(category);
+                              context.pop<Category>(category);
+                            }
+                          : null,
                     );
                   },
                 ),
         ),
+        if (categoriesState is LoadingWithCacheCategoriesState &&
+            !categoriesState.isFailedToLoad)
+          Container(
+            padding: const EdgeInsets.all(8),
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  constraints: const BoxConstraints.tightFor(
+                    width: 12,
+                    height: 12,
+                  ),
+                  strokeWidth: 3,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'categories.loading_new_data'.tr(),
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
+            ),
+          ),
+        if (categoriesState is LoadingWithCacheCategoriesState &&
+            categoriesState.isFailedToLoad)
+          const OfflineModeIndicator(),
       ],
     );
   }

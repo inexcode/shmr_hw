@@ -153,4 +153,11 @@ class FakeTransactionsRepository implements TransactionsRepository {
       ),
     ];
   }
+
+  @override
+  Future<void> setTransactions({
+    required final List<Transaction> transactions,
+  }) {
+    throw UnimplementedError();
+  }
 }

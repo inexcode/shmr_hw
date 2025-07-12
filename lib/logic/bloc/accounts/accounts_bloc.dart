@@ -12,11 +12,71 @@ part 'accounts_bloc.freezed.dart';
 class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
   AccountsBloc() : super(const AccountsState.initial()) {
     on<LoadAccounts>((final event, final emit) async {
-      emit(const AccountsState.loading());
+      if (state is InitialAccountsState) {
+        emit(const AccountsState.loading());
+      }
       try {
-        final accounts = await Repositories().accountsRepository
+        final localAccounts = await Repositories().localAccountsRepository
             .fetchAccounts();
-        emit(AccountsState.notSelected(accounts: accounts));
+        if (localAccounts.isNotEmpty) {
+          emit(
+            AccountsState.notSelected(accounts: localAccounts, fromCache: true),
+          );
+        }
+        try {
+          final accounts = await Repositories().accountsRepository
+              .fetchAccounts();
+
+          final localAccountIds = localAccounts
+              .map((final acc) => acc.id)
+              .toSet();
+
+          final newAccounts = accounts
+              .where((final acc) => !localAccountIds.contains(acc.id))
+              .toList();
+
+          if (newAccounts.isNotEmpty) {
+            await Repositories().localAccountsRepository.saveAccounts(
+              accounts: newAccounts,
+            );
+          }
+          final updatedLocalAccounts = localAccounts.map((final acc) {
+            final remoteAccount = accounts.firstWhereOrNull(
+              (final remoteAcc) => remoteAcc.id == acc.id,
+            );
+            if (remoteAccount != null) {
+              return Account(
+                id: acc.id,
+                userId: acc.userId,
+                name: remoteAccount.name,
+                balance: remoteAccount.balance,
+                currency: Currency.fromString(remoteAccount.currency).name,
+                createdAt: remoteAccount.createdAt,
+                updatedAt: remoteAccount.updatedAt,
+              );
+            }
+            return acc;
+          }).toList();
+          for (final account in updatedLocalAccounts) {
+            await Repositories().localAccountsRepository.updateAccount(
+              id: account.id,
+              request: AccountRequest(
+                name: account.name,
+                currency: account.currency,
+                balance: account.balance,
+              ),
+            );
+          }
+          emit(AccountsState.notSelected(accounts: accounts, fromCache: false));
+        } catch (e) {
+          emit(
+            AccountsState.notSelected(
+              accounts: localAccounts,
+              fromCache: true,
+              syncErrorMessage: 'Failed to sync transactions: $e',
+            ),
+          );
+        }
       } catch (e) {
         emit(AccountsState.error(errorMessage: e.toString()));
       }
@@ -35,8 +95,7 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     });
     on<DeselectAccount>((final event, final emit) {
       if (state is SelectedAccountsState) {
-        final currentState = state as SelectedAccountsState;
-        emit(AccountsState.notSelected(accounts: currentState.accounts));
+        add(const LoadAccounts());
       }
     });
     on<RenameAccount>((final event, final emit) async {
@@ -63,6 +122,12 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
           ),
           emit,
         );
+      }
+    });
+    on<ClearAccountsSyncError>((final event, final emit) {
+      if (state is NotSelectedAccountsState) {
+        final currentState = state as NotSelectedAccountsState;
+        emit(currentState.copyWith(syncErrorMessage: null));
       }
     });
 
