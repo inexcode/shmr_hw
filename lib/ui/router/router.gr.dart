@@ -43,6 +43,64 @@ class CategoriesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [PinPage]
+class PinRoute extends PageRouteInfo<PinRouteArgs> {
+  PinRoute({
+    Key? key,
+    PinScreenMode mode = PinScreenMode.verify,
+    VoidCallback? onSuccess,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PinRoute.name,
+         args: PinRouteArgs(key: key, mode: mode, onSuccess: onSuccess),
+         initialChildren: children,
+       );
+
+  static const String name = 'PinRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PinRouteArgs>(
+        orElse: () => const PinRouteArgs(),
+      );
+      return PinPage(key: args.key, mode: args.mode, onSuccess: args.onSuccess);
+    },
+  );
+}
+
+class PinRouteArgs {
+  const PinRouteArgs({
+    this.key,
+    this.mode = PinScreenMode.verify,
+    this.onSuccess,
+  });
+
+  final Key? key;
+
+  final PinScreenMode mode;
+
+  final VoidCallback? onSuccess;
+
+  @override
+  String toString() {
+    return 'PinRouteArgs{key: $key, mode: $mode, onSuccess: $onSuccess}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PinRouteArgs) return false;
+    return key == other.key &&
+        mode == other.mode &&
+        onSuccess == other.onSuccess;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ mode.hashCode ^ onSuccess.hashCode;
+}
+
+/// generated route for
 /// [RootPage]
 class RootRoute extends PageRouteInfo<void> {
   const RootRoute({List<PageRouteInfo>? children})

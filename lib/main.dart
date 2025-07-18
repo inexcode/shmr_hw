@@ -9,11 +9,13 @@ import 'package:shmr_hw/config/localization.dart';
 import 'package:shmr_hw/config/preferences/preferences_provider.dart';
 import 'package:shmr_hw/config/preferences/shared_preferences_store.dart';
 import 'package:shmr_hw/config/preferences/theme_notifier.dart';
+import 'package:shmr_hw/config/security/authentication_service.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/logic/repositories/rest_api/client.dart';
+import 'package:shmr_hw/ui/components/authentication_guard.dart';
 import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 import 'package:shmr_hw/ui/router/router.dart';
 import 'package:shmr_hw/ui/utils/error_dialog_helper.dart';
@@ -41,11 +43,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _appRouter = RootRouter();
   late final ThemeNotifier _themeNotifier;
+  late final AuthenticationService _authenticationService;
 
   @override
   void initState() {
     super.initState();
     _themeNotifier = ThemeNotifier(SharedPreferencesStore());
+    _authenticationService = AuthenticationService();
+    unawaited(_authenticationService.initialize());
   }
 
   @override
@@ -59,15 +64,22 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(final BuildContext context) => PreferencesProvider(
     preferencesStore: SharedPreferencesStore(),
-    child: ChangeNotifierProvider<ThemeNotifier>.value(
-      value: _themeNotifier,
+    child: MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>.value(value: _themeNotifier),
+        ChangeNotifierProvider<AuthenticationService>.value(
+          value: _authenticationService,
+        ),
+      ],
       child: Consumer<ThemeNotifier>(
         builder: (final context, final themeNotifier, final child) =>
-            _ThemeAwareApp(
-              appRouter: _appRouter,
-              themeMode: themeNotifier.themeMode,
-              lightTheme: themeNotifier.lightTheme,
-              darkTheme: themeNotifier.darkTheme,
+            AuthenticationGuard(
+              child: _ThemeAwareApp(
+                appRouter: _appRouter,
+                themeMode: themeNotifier.themeMode,
+                lightTheme: themeNotifier.lightTheme,
+                darkTheme: themeNotifier.darkTheme,
+              ),
             ),
       ),
     ),

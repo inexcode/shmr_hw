@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shmr_hw/ui/layouts/root_page.dart';
 import 'package:shmr_hw/ui/pages/account/account.dart';
 import 'package:shmr_hw/ui/pages/categories/categories.dart';
+import 'package:shmr_hw/ui/pages/security/pin_page.dart';
 import 'package:shmr_hw/ui/pages/settings/settings.dart';
 import 'package:shmr_hw/ui/pages/transactions/transactions.dart';
 import 'package:shmr_hw/ui/pages/transactions/transactions_analysis.dart';
@@ -18,6 +19,8 @@ class RootRouter extends RootStackRouter {
 
   @override
   final List<AutoRoute> routes = [
+    // PIN security route - standalone
+    AutoRoute(page: PinRoute.page, path: '/pin'),
     AutoRoute(
       page: RootRoute.page,
       path: '/',
