@@ -16,7 +16,6 @@ import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/logic/repositories/rest_api/client.dart';
 import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 import 'package:shmr_hw/ui/router/router.dart';
-import 'package:shmr_hw/ui/theme.dart';
 import 'package:shmr_hw/ui/utils/error_dialog_helper.dart';
 
 void main() async {

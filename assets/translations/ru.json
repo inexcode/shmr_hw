@@ -25,7 +25,8 @@
     "synchronizing": "Синхронизация...",
     "continue_offline": "Продолжить в офлайн режиме",
     "retry_sync": "Повторить синхронизацию",
-    "sync_error": "Ошибка синхронизации"
+    "sync_error": "Ошибка синхронизации",
+    "apply": "Применить"
   },
   "currencies": {
     "russian_ruble": "Российский рубль ₽",
@@ -80,7 +81,11 @@
   "settings": {
     "title": "Настройки",
     "dark_mode": "Тёмная тема",
-    "primary_color": "Основной цвет",
+    "primary_color": {
+      "title": "Основной цвет",
+      "default": "По умолчанию",
+      "custom": "Свой цвет"
+    },
     "sounds": "Звуки",
     "haptics": "Хаптики",
     "code_password": "Код-пароль",

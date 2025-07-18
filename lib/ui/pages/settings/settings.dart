@@ -163,14 +163,11 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: _showColorPicker,
           ),
           const Divider(height: 0),
-          ListTile(
-            title: Text('settings.sounds'.tr()),
-            trailing: const Icon(Icons.arrow_right),
-          ),
-          const Divider(height: 0),
-          ListTile(
+          SwitchListTile(
             title: Text('settings.haptics'.tr()),
-            trailing: const Icon(Icons.arrow_right),
+            value: themeNotifier.isHapticFeedbackEnabled,
+            onChanged: (final bool newValue) =>
+                themeNotifier.setHapticFeedback(isEnabled: newValue),
           ),
           const Divider(height: 0),
           ListTile(

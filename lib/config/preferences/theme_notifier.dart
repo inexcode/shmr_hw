@@ -12,9 +12,11 @@ class ThemeNotifier extends ChangeNotifier {
   final PreferencesStore _preferencesStore;
   ThemeMode _themeMode = ThemeMode.system;
   Color _primaryColor = ThemeColors.toxicGreen;
+  bool _isHapticFeedbackEnabled = true;
 
   ThemeMode get themeMode => _themeMode;
   Color get primaryColor => _primaryColor;
+  bool get isHapticFeedbackEnabled => _isHapticFeedbackEnabled;
 
   bool get isDefaultColor => _primaryColor == ThemeColors.toxicGreen;
 
@@ -27,6 +29,8 @@ class ThemeNotifier extends ChangeNotifier {
   Future<void> _loadThemeSettings() async {
     _themeMode = await _preferencesStore.getThemeMode();
     _primaryColor = await _preferencesStore.getPrimaryColor();
+    _isHapticFeedbackEnabled = await _preferencesStore
+        .isHapticFeedbackEnabled();
     notifyListeners();
   }
 
@@ -71,5 +75,15 @@ class ThemeNotifier extends ChangeNotifier {
         shape: const CircleBorder(),
       ),
     );
+  }
+
+  Future<void> setHapticFeedback({required final bool isEnabled}) async {
+    if (_isHapticFeedbackEnabled != isEnabled) {
+      _isHapticFeedbackEnabled = isEnabled;
+      await _preferencesStore.setHapticFeedback(
+        hapticFeedbackEnabled: isEnabled,
+      );
+      notifyListeners();
+    }
   }
 }

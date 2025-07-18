@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:shmr_hw/config/preferences/preferences_provider.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/ui/router/destinations.dart';
@@ -85,7 +87,15 @@ class _RootPageState extends State<RootPage> {
         bottomNavigationBar: NavigationBar(
           selectedIndex: tabsRouter.activeIndex,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-          onDestinationSelected: tabsRouter.setActiveIndex,
+          onDestinationSelected:
+              (final int index, {final bool notify = true}) async {
+                tabsRouter.setActiveIndex(index, notify: notify);
+                if (await PreferencesProvider.storeOf(
+                  context,
+                ).isHapticFeedbackEnabled()) {
+                  await HapticFeedback.lightImpact();
+                }
+              },
           destinations: [
             for (final destination in rootDestinations)
               NavigationDestination(

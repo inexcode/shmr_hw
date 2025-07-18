@@ -51,15 +51,6 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
         final transactionsDelta = await _getTransactionsDeltaForLastMonth();
         emit(
           state.copyWith(
-            status: TransactionsStatus.loading,
-            transactions: transactions,
-            transactionsToday: todayTransactions,
-            transactionsDelta: transactionsDelta,
-            failedSync: failedSync,
-          ),
-        );
-        emit(
-          state.copyWith(
             status: TransactionsStatus.loaded,
             transactions: transactions,
             transactionsToday: todayTransactions,
