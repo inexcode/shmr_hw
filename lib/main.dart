@@ -67,6 +67,8 @@ class _MyAppState extends State<MyApp> {
             _ThemeAwareApp(
               appRouter: _appRouter,
               themeMode: themeNotifier.themeMode,
+              lightTheme: themeNotifier.lightTheme,
+              darkTheme: themeNotifier.darkTheme,
             ),
       ),
     ),
@@ -74,10 +76,17 @@ class _MyAppState extends State<MyApp> {
 }
 
 class _ThemeAwareApp extends StatelessWidget {
-  const _ThemeAwareApp({required this.appRouter, required this.themeMode});
+  const _ThemeAwareApp({
+    required this.appRouter,
+    required this.themeMode,
+    required this.lightTheme,
+    required this.darkTheme,
+  });
 
   final RootRouter appRouter;
   final ThemeMode themeMode;
+  final ThemeData lightTheme;
+  final ThemeData darkTheme;
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
@@ -89,8 +98,8 @@ class _ThemeAwareApp extends StatelessWidget {
         if (accountsState is LoadingAccountsState ||
             accountsState is InitialAccountsState) {
           return MaterialApp(
-            theme: themeData,
-            darkTheme: darkThemeData,
+            theme: lightTheme,
+            darkTheme: darkTheme,
             themeMode: themeMode,
             home: const Scaffold(
               body: Center(child: CircularProgressIndicator()),
@@ -100,8 +109,8 @@ class _ThemeAwareApp extends StatelessWidget {
 
         if (accountsState is ErrorAccountsState) {
           return MaterialApp(
-            theme: themeData,
-            darkTheme: darkThemeData,
+            theme: lightTheme,
+            darkTheme: darkTheme,
             themeMode: themeMode,
             home: Scaffold(
               body: Center(child: Text('Error: ${accountsState.errorMessage}')),
@@ -112,8 +121,8 @@ class _ThemeAwareApp extends StatelessWidget {
         if (accountsState is NotSelectedAccountsState) {
           return MaterialApp(
             title: 'Finance Tracker',
-            theme: themeData,
-            darkTheme: darkThemeData,
+            theme: lightTheme,
+            darkTheme: darkTheme,
             themeMode: themeMode,
             locale: context.locale,
             supportedLocales: context.supportedLocales,
@@ -199,8 +208,8 @@ class _ThemeAwareApp extends StatelessWidget {
             ],
             child: MaterialApp.router(
               title: 'Finance Tracker',
-              theme: themeData,
-              darkTheme: darkThemeData,
+              theme: lightTheme,
+              darkTheme: darkTheme,
               themeMode: themeMode,
               routerConfig: appRouter.config(),
               locale: context.locale,
@@ -211,8 +220,8 @@ class _ThemeAwareApp extends StatelessWidget {
         }
 
         return MaterialApp(
-          theme: themeData,
-          darkTheme: darkThemeData,
+          theme: lightTheme,
+          darkTheme: darkTheme,
           themeMode: themeMode,
           home: Scaffold(
             body: Center(child: Text('Unexpected state: $accountsState')),

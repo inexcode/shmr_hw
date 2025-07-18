@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:shmr_hw/config/preferences/theme_notifier.dart';
+import 'package:shmr_hw/ui/theme.dart';
 
 @RoutePage()
 class SettingsPage extends StatefulWidget {
@@ -70,6 +72,72 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void _showColorPicker() {
+    final themeNotifier = context.read<ThemeNotifier>();
+    Color selectedColor = themeNotifier.primaryColor;
+
+    showDialog<void>(
+      context: context,
+      builder: (final BuildContext context) => AlertDialog(
+        title: Text('settings.primary_color.title'.tr()),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Default color option
+              ListTile(
+                leading: const CircleAvatar(
+                  backgroundColor: ThemeColors.toxicGreen,
+                  radius: 16,
+                ),
+                title: Text('settings.primary_color.default'.tr()),
+                trailing: themeNotifier.isDefaultColor
+                    ? const Icon(Icons.check)
+                    : null,
+                onTap: () {
+                  themeNotifier.setPrimaryColor(ThemeColors.toxicGreen);
+                  Navigator.pop(context);
+                },
+              ),
+              const Divider(),
+              // Color picker
+              ColorPicker(
+                pickerColor: selectedColor,
+                onColorChanged: (final Color color) {
+                  selectedColor = color;
+                },
+                pickerAreaHeightPercent: 0.8,
+                enableAlpha: false,
+                displayThumbColor: true,
+                paletteType: PaletteType.hslWithHue,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('common.cancel'.tr()),
+          ),
+          TextButton(
+            onPressed: () {
+              themeNotifier.setPrimaryColor(selectedColor);
+              Navigator.pop(context);
+            },
+            child: Text('common.apply'.tr()),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getPrimaryColorDisplayName(final Color color) {
+    if (color == ThemeColors.toxicGreen) {
+      return 'settings.primary_color.default'.tr();
+    }
+    return 'settings.primary_color.custom'.tr();
+  }
+
   @override
   Widget build(final BuildContext context) => Scaffold(
     appBar: AppBar(title: Text('settings.title'.tr())),
@@ -84,8 +152,15 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const Divider(height: 0),
           ListTile(
-            title: Text('settings.primary_color'.tr()),
-            trailing: const Icon(Icons.arrow_right),
+            title: Text('settings.primary_color.title'.tr()),
+            subtitle: Text(
+              _getPrimaryColorDisplayName(themeNotifier.primaryColor),
+            ),
+            trailing: CircleAvatar(
+              backgroundColor: themeNotifier.primaryColor,
+              radius: 16,
+            ),
+            onTap: _showColorPicker,
           ),
           const Divider(height: 0),
           ListTile(

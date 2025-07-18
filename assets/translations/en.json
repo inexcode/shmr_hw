@@ -25,7 +25,8 @@
     "synchronizing": "Synchronizing…",
     "continue_offline": "Continue in offline mode",
     "retry_sync": "Retry synchronization",
-    "sync_error": "Synchronization error"
+    "sync_error": "Synchronization error",
+    "apply": "Apply"
   },
   "currencies": {
     "russian_ruble": "Russian ruble ₽",
@@ -80,7 +81,11 @@
   "settings": {
     "title": "Settings",
     "dark_mode": "Dark mode",
-    "primary_color": "Primary color",
+    "primary_color": {
+        "title": "Primary color",
+        "default": "Default",
+      "custom": "Custom"
+    },
     "sounds": "Sounds",
     "haptics": "Haptics",
     "code_password": "Passcode",
