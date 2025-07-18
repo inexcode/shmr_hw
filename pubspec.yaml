@@ -20,14 +20,18 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
+  flutter_colorpicker: ^1.1.0
   flutter_dotenv: ^5.2.1
   flutter_native_splash: ^2.4.6
+  flutter_secure_storage: ^4.2.1
   freezed_annotation: ^3.0.0
   fuzzywuzzy: ^1.2.0
   http: ^1.4.0
   json_annotation: ^4.9.0
+  local_auth: ^2.3.0
   path_provider: ^2.1.5
   sensors_plus: ^6.1.1
+  shared_preferences: ^2.5.3
   shmr_hw_pie_chart:
     path: ./shmr_hw_pie_chart
   skeletonizer: ^2.0.1
