@@ -4,7 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:shmr_hw/config/localization.dart';
+import 'package:shmr_hw/config/preferences/preferences_provider.dart';
+import 'package:shmr_hw/config/preferences/shared_preferences_store.dart';
+import 'package:shmr_hw/config/preferences/theme_notifier.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
@@ -37,6 +41,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _appRouter = RootRouter();
+  late final ThemeNotifier _themeNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _themeNotifier = ThemeNotifier(SharedPreferencesStore());
+  }
 
   @override
   void dispose() {
@@ -46,6 +57,28 @@ class _MyAppState extends State<MyApp> {
   }
 
   // This widget is the root of your application.
+  @override
+  Widget build(final BuildContext context) => PreferencesProvider(
+    preferencesStore: SharedPreferencesStore(),
+    child: ChangeNotifierProvider<ThemeNotifier>.value(
+      value: _themeNotifier,
+      child: Consumer<ThemeNotifier>(
+        builder: (final context, final themeNotifier, final child) =>
+            _ThemeAwareApp(
+              appRouter: _appRouter,
+              themeMode: themeNotifier.themeMode,
+            ),
+      ),
+    ),
+  );
+}
+
+class _ThemeAwareApp extends StatelessWidget {
+  const _ThemeAwareApp({required this.appRouter, required this.themeMode});
+
+  final RootRouter appRouter;
+  final ThemeMode themeMode;
+
   @override
   Widget build(final BuildContext context) => BlocProvider(
     create: (final context) => AccountsBloc(),
@@ -57,6 +90,8 @@ class _MyAppState extends State<MyApp> {
             accountsState is InitialAccountsState) {
           return MaterialApp(
             theme: themeData,
+            darkTheme: darkThemeData,
+            themeMode: themeMode,
             home: const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             ),
@@ -66,6 +101,8 @@ class _MyAppState extends State<MyApp> {
         if (accountsState is ErrorAccountsState) {
           return MaterialApp(
             theme: themeData,
+            darkTheme: darkThemeData,
+            themeMode: themeMode,
             home: Scaffold(
               body: Center(child: Text('Error: ${accountsState.errorMessage}')),
             ),
@@ -76,6 +113,8 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             title: 'Finance Tracker',
             theme: themeData,
+            darkTheme: darkThemeData,
+            themeMode: themeMode,
             locale: context.locale,
             supportedLocales: context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
@@ -161,7 +200,9 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp.router(
               title: 'Finance Tracker',
               theme: themeData,
-              routerConfig: _appRouter.config(),
+              darkTheme: darkThemeData,
+              themeMode: themeMode,
+              routerConfig: appRouter.config(),
               locale: context.locale,
               supportedLocales: context.supportedLocales,
               localizationsDelegates: context.localizationDelegates,
@@ -171,6 +212,8 @@ class _MyAppState extends State<MyApp> {
 
         return MaterialApp(
           theme: themeData,
+          darkTheme: darkThemeData,
+          themeMode: themeMode,
           home: Scaffold(
             body: Center(child: Text('Unexpected state: $accountsState')),
           ),

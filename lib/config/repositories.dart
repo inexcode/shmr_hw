@@ -1,4 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shmr_hw/logic/repositories/abstract/accounts.dart';
 import 'package:shmr_hw/logic/repositories/abstract/categories.dart';
 import 'package:shmr_hw/logic/repositories/abstract/transactions.dart';

@@ -86,7 +86,13 @@
     "code_password": "Passcode",
     "synchronization": "Synchronization",
     "language": "Language",
-    "about": "About"
+    "about": "About",
+    "theme_mode": {
+      "title": "Theme mode",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
   },
   "exceptions": {
     "unauthorized": "Unauthorized. ${message}",

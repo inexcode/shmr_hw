@@ -86,7 +86,13 @@
     "code_password": "Код-пароль",
     "synchronization": "Синхронизация",
     "language": "Язык",
-    "about": "О программе"
+    "about": "О программе",
+    "theme_mode": {
+      "title": "Режим темы",
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    }
   },
   "exceptions": {
     "unauthorized": "Неавторизованный доступ. ${message}",
