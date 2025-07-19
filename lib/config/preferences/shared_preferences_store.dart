@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shmr_hw/config/localization.dart';
 import 'package:shmr_hw/config/preferences/preferences_store.dart';
 import 'package:shmr_hw/ui/theme.dart';
 
@@ -63,14 +64,24 @@ class SharedPreferencesStore implements PreferencesStore {
   }
 
   @override
-  Future<void> setLanguageCode(final String languageCode) async {
+  Future<void> setActiveLocale(final Locale locale) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_languageCodeKey, languageCode);
+    await prefs.setString(_languageCodeKey, locale.toString());
   }
 
   @override
-  Future<String> getLanguageCode() async {
+  Future<Locale> getActiveLocale() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_languageCodeKey) ?? 'system';
+    final String? storedLocaleCode = prefs.getString(_languageCodeKey);
+    if (storedLocaleCode != null) {
+      return Locale(storedLocaleCode);
+    }
+    return Localization.systemLocale;
+  }
+
+  @override
+  Future<void> resetLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_languageCodeKey);
   }
 }

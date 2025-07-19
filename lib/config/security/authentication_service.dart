@@ -11,7 +11,9 @@ class AuthenticationService extends ChangeNotifier {
 
   /// Initialize the authentication service and check if PIN is required
   Future<void> initialize() async {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      return;
+    }
 
     try {
       final isPinSet = await PinService.isPinSet();

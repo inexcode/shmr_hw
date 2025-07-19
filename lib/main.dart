@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:shmr_hw/config/localization.dart';
+import 'package:shmr_hw/config/preferences/language_notifier.dart';
 import 'package:shmr_hw/config/preferences/preferences_provider.dart';
 import 'package:shmr_hw/config/preferences/shared_preferences_store.dart';
 import 'package:shmr_hw/config/preferences/theme_notifier.dart';
@@ -70,15 +71,31 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<AuthenticationService>.value(
           value: _authenticationService,
         ),
+        ChangeNotifierProvider<LanguageNotifier>.value(
+          value: LanguageNotifier(
+            preferencesStore: SharedPreferencesStore(),
+            setDelegateLocale: EasyLocalization.of(context)!.setLocale,
+            resetDelegateLocale: EasyLocalization.of(context)!.resetLocale,
+            getDelegateLocale: () => EasyLocalization.of(context)!.locale,
+            getSupportedLocales: () =>
+                EasyLocalization.of(context)!.supportedLocales,
+          ),
+        ),
       ],
-      child: Consumer<ThemeNotifier>(
-        builder: (final context, final themeNotifier, final child) =>
-            AuthenticationGuard(
+      child: Consumer2<ThemeNotifier, LanguageNotifier>(
+        builder:
+            (
+              final context,
+              final themeNotifier,
+              final languageNotifier,
+              final child,
+            ) => AuthenticationGuard(
               child: _ThemeAwareApp(
                 appRouter: _appRouter,
                 themeMode: themeNotifier.themeMode,
                 lightTheme: themeNotifier.lightTheme,
                 darkTheme: themeNotifier.darkTheme,
+                languageNotifier: languageNotifier,
               ),
             ),
       ),
@@ -92,12 +109,14 @@ class _ThemeAwareApp extends StatelessWidget {
     required this.themeMode,
     required this.lightTheme,
     required this.darkTheme,
+    required this.languageNotifier,
   });
 
   final RootRouter appRouter;
   final ThemeMode themeMode;
   final ThemeData lightTheme;
   final ThemeData darkTheme;
+  final LanguageNotifier languageNotifier;
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
@@ -112,6 +131,9 @@ class _ThemeAwareApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: themeMode,
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
             home: const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             ),
@@ -123,6 +145,9 @@ class _ThemeAwareApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: themeMode,
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
             home: Scaffold(
               body: Center(child: Text('Error: ${accountsState.errorMessage}')),
             ),
@@ -234,6 +259,9 @@ class _ThemeAwareApp extends StatelessWidget {
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: themeMode,
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
           home: Scaffold(
             body: Center(child: Text('Unexpected state: $accountsState')),
           ),

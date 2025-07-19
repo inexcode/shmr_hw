@@ -13,7 +13,9 @@ abstract interface class PreferencesStore {
 
   Future<bool> isHapticFeedbackEnabled();
 
-  Future<void> setLanguageCode(final String languageCode);
+  Future<void> setActiveLocale(final Locale locale);
 
-  Future<String> getLanguageCode();
+  Future<Locale> getActiveLocale();
+
+  Future<void> resetLocale();
 }
