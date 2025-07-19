@@ -25,7 +25,8 @@
     "synchronizing": "Синхронизация...",
     "continue_offline": "Продолжить в офлайн режиме",
     "retry_sync": "Повторить синхронизацию",
-    "sync_error": "Ошибка синхронизации"
+    "sync_error": "Ошибка синхронизации",
+    "apply": "Применить"
   },
   "currencies": {
     "russian_ruble": "Российский рубль ₽",
@@ -80,13 +81,23 @@
   "settings": {
     "title": "Настройки",
     "dark_mode": "Тёмная тема",
-    "primary_color": "Основной цвет",
+    "primary_color": {
+      "title": "Основной цвет",
+      "default": "По умолчанию",
+      "custom": "Свой цвет"
+    },
     "sounds": "Звуки",
     "haptics": "Хаптики",
     "code_password": "Код-пароль",
     "synchronization": "Синхронизация",
     "language": "Язык",
-    "about": "О программе"
+    "about": "О программе",
+    "theme_mode": {
+      "title": "Режим темы",
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    }
   },
   "exceptions": {
     "unauthorized": "Неавторизованный доступ. ${message}",
@@ -94,5 +105,38 @@
     "not_found": "Не найдено. ${message}",
     "conflict": "Конфликт данных. ${message}",
     "internal_server_error": "Внутренняя ошибка сервера. ${message}"
+  },
+  "security": {
+    "pin": {
+      "setup_title": "Установка PIN-кода",
+      "setup_subtitle": "Создайте 4-значный PIN-код",
+      "confirm_title": "Подтвердите PIN-код",
+      "confirm_subtitle": "Введите PIN-код еще раз для подтверждения",
+      "enter_title": "Введите PIN-код",
+      "enter_subtitle": "Введите PIN-код для доступа к приложению",
+      "error_incorrect": "Неверный PIN-код. Попробуйте еще раз.",
+      "error_mismatch": "PIN-коды не совпадают. Попробуйте еще раз.",
+      "error_generic": "Что-то пошло не так. Попробуйте еще раз.",
+      "status_enabled": "Защита PIN-кодом включена",
+      "status_disabled": "Защита PIN-кодом отключена",
+      "options_title": "Настройки PIN-кода",
+      "setup_option": "Установить PIN-код",
+      "change_option": "Изменить PIN-код",
+      "remove_option": "Удалить PIN-код",
+      "remove_title": "Удаление PIN-кода",
+      "remove_subtitle": "Вы уверены, что хотите удалить защиту PIN-кодом?"
+    },
+    "biometric": {
+      "face_id": "Face ID",
+      "fingerprint": "Отпечаток пальца",
+      "iris": "Сканер радужки",
+      "biometric": "Биометрия",
+      "fallback_title": "Использовать PIN-код",
+      "sign_in_title": "Войдите в приложение",
+      "status_enabled": "Биометрическая разблокировка включена",
+      "status_disabled": "Биометрическая разблокировка отключена",
+      "pin_required": "Сначала необходимо установить PIN-код",
+      "error_toggle": "Не удалось изменить настройки биометрии"
+    }
   }
 }

@@ -60,7 +60,9 @@ class TotalsTile extends StatelessWidget {
         ],
       ],
     ),
-    tileColor: greenBackground ? ThemeColors.lightGreen : null,
+    tileColor: greenBackground
+        ? Theme.of(context).colorScheme.primaryContainer
+        : null,
     onTap: onTap,
   );
 }

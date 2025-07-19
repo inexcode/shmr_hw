@@ -4,15 +4,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:shmr_hw/config/localization.dart';
+import 'package:shmr_hw/config/preferences/language_notifier.dart';
+import 'package:shmr_hw/config/preferences/preferences_provider.dart';
+import 'package:shmr_hw/config/preferences/shared_preferences_store.dart';
+import 'package:shmr_hw/config/preferences/theme_notifier.dart';
+import 'package:shmr_hw/config/security/authentication_service.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
 import 'package:shmr_hw/logic/bloc/categories/categories_bloc.dart';
 import 'package:shmr_hw/logic/bloc/transactions/transactions_bloc.dart';
 import 'package:shmr_hw/logic/repositories/rest_api/client.dart';
+import 'package:shmr_hw/ui/components/authentication_guard.dart';
 import 'package:shmr_hw/ui/components/transactions_loading_status.dart';
 import 'package:shmr_hw/ui/router/router.dart';
-import 'package:shmr_hw/ui/theme.dart';
 import 'package:shmr_hw/ui/utils/error_dialog_helper.dart';
 
 void main() async {
@@ -37,6 +43,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _appRouter = RootRouter();
+  late final ThemeNotifier _themeNotifier;
+  late final AuthenticationService _authenticationService;
+
+  @override
+  void initState() {
+    super.initState();
+    _themeNotifier = ThemeNotifier(SharedPreferencesStore());
+    _authenticationService = AuthenticationService();
+    unawaited(_authenticationService.initialize());
+  }
 
   @override
   void dispose() {
@@ -47,6 +63,62 @@ class _MyAppState extends State<MyApp> {
 
   // This widget is the root of your application.
   @override
+  Widget build(final BuildContext context) => PreferencesProvider(
+    preferencesStore: SharedPreferencesStore(),
+    child: MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>.value(value: _themeNotifier),
+        ChangeNotifierProvider<AuthenticationService>.value(
+          value: _authenticationService,
+        ),
+        ChangeNotifierProvider<LanguageNotifier>.value(
+          value: LanguageNotifier(
+            preferencesStore: SharedPreferencesStore(),
+            setDelegateLocale: EasyLocalization.of(context)!.setLocale,
+            resetDelegateLocale: EasyLocalization.of(context)!.resetLocale,
+            getDelegateLocale: () => EasyLocalization.of(context)!.locale,
+            getSupportedLocales: () =>
+                EasyLocalization.of(context)!.supportedLocales,
+          ),
+        ),
+      ],
+      child: Consumer2<ThemeNotifier, LanguageNotifier>(
+        builder:
+            (
+              final context,
+              final themeNotifier,
+              final languageNotifier,
+              final child,
+            ) => AuthenticationGuard(
+              child: _ThemeAwareApp(
+                appRouter: _appRouter,
+                themeMode: themeNotifier.themeMode,
+                lightTheme: themeNotifier.lightTheme,
+                darkTheme: themeNotifier.darkTheme,
+                languageNotifier: languageNotifier,
+              ),
+            ),
+      ),
+    ),
+  );
+}
+
+class _ThemeAwareApp extends StatelessWidget {
+  const _ThemeAwareApp({
+    required this.appRouter,
+    required this.themeMode,
+    required this.lightTheme,
+    required this.darkTheme,
+    required this.languageNotifier,
+  });
+
+  final RootRouter appRouter;
+  final ThemeMode themeMode;
+  final ThemeData lightTheme;
+  final ThemeData darkTheme;
+  final LanguageNotifier languageNotifier;
+
+  @override
   Widget build(final BuildContext context) => BlocProvider(
     create: (final context) => AccountsBloc(),
     child: BlocBuilder<AccountsBloc, AccountsState>(
@@ -56,7 +128,12 @@ class _MyAppState extends State<MyApp> {
         if (accountsState is LoadingAccountsState ||
             accountsState is InitialAccountsState) {
           return MaterialApp(
-            theme: themeData,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeMode,
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
             home: const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             ),
@@ -65,7 +142,12 @@ class _MyAppState extends State<MyApp> {
 
         if (accountsState is ErrorAccountsState) {
           return MaterialApp(
-            theme: themeData,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeMode,
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
             home: Scaffold(
               body: Center(child: Text('Error: ${accountsState.errorMessage}')),
             ),
@@ -75,7 +157,9 @@ class _MyAppState extends State<MyApp> {
         if (accountsState is NotSelectedAccountsState) {
           return MaterialApp(
             title: 'Finance Tracker',
-            theme: themeData,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeMode,
             locale: context.locale,
             supportedLocales: context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
@@ -160,8 +244,10 @@ class _MyAppState extends State<MyApp> {
             ],
             child: MaterialApp.router(
               title: 'Finance Tracker',
-              theme: themeData,
-              routerConfig: _appRouter.config(),
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: themeMode,
+              routerConfig: appRouter.config(),
               locale: context.locale,
               supportedLocales: context.supportedLocales,
               localizationsDelegates: context.localizationDelegates,
@@ -170,7 +256,12 @@ class _MyAppState extends State<MyApp> {
         }
 
         return MaterialApp(
-          theme: themeData,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeMode,
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
           home: Scaffold(
             body: Center(child: Text('Unexpected state: $accountsState')),
           ),

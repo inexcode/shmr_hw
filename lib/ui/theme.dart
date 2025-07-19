@@ -24,8 +24,29 @@ final ThemeData themeData = ThemeData(
   ),
 );
 
+final ThemeData darkThemeData = ThemeData(
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: ThemeColors.toxicGreen,
+    brightness: Brightness.dark,
+  ),
+  useMaterial3: true,
+  navigationBarTheme: const NavigationBarThemeData(
+    indicatorColor: ThemeColors.darkGreen,
+  ),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: ThemeColors.darkGreen,
+    centerTitle: true,
+  ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: ThemeColors.toxicGreen,
+    foregroundColor: Colors.white,
+    shape: CircleBorder(),
+  ),
+);
+
 abstract final class ThemeColors {
   static const Color lightGreen = Color.fromARGB(255, 212, 250, 230);
+  static const Color darkGreen = Color.fromARGB(255, 34, 80, 59);
   static const Color toxicGreen = Color.fromARGB(255, 42, 232, 129);
   static const Color lightRed = Color.fromARGB(255, 228, 105, 98);
 }

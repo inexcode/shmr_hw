@@ -25,7 +25,8 @@
     "synchronizing": "Synchronizing…",
     "continue_offline": "Continue in offline mode",
     "retry_sync": "Retry synchronization",
-    "sync_error": "Synchronization error"
+    "sync_error": "Synchronization error",
+    "apply": "Apply"
   },
   "currencies": {
     "russian_ruble": "Russian ruble ₽",
@@ -80,13 +81,23 @@
   "settings": {
     "title": "Settings",
     "dark_mode": "Dark mode",
-    "primary_color": "Primary color",
+    "primary_color": {
+        "title": "Primary color",
+        "default": "Default",
+      "custom": "Custom"
+    },
     "sounds": "Sounds",
     "haptics": "Haptics",
     "code_password": "Passcode",
     "synchronization": "Synchronization",
     "language": "Language",
-    "about": "About"
+    "about": "About",
+    "theme_mode": {
+      "title": "Theme mode",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
   },
   "exceptions": {
     "unauthorized": "Unauthorized. ${message}",
@@ -94,5 +105,38 @@
     "not_found": "Not found. ${message}",
     "conflict": "Conflict. ${message}",
     "internal_server_error": "Internal server error. ${message}"
+  },
+  "security": {
+    "pin": {
+      "setup_title": "Set up PIN",
+      "setup_subtitle": "Create a 4-digit PIN",
+      "confirm_title": "Confirm PIN",
+      "confirm_subtitle": "Enter your PIN again to confirm",
+      "enter_title": "Enter PIN",
+      "enter_subtitle": "Enter your PIN to access the app",
+      "error_incorrect": "Incorrect PIN. Please try again.",
+      "error_mismatch": "PINs don't match. Please try again.",
+      "error_generic": "Something went wrong. Please try again.",
+      "status_enabled": "PIN protection is enabled",
+      "status_disabled": "PIN protection is disabled",
+      "options_title": "PIN Options",
+      "setup_option": "Set up PIN",
+      "change_option": "Change PIN",
+      "remove_option": "Remove PIN",
+      "remove_title": "Remove PIN",
+      "remove_subtitle": "Are you sure you want to remove PIN protection?"
+    },
+    "biometric": {
+      "face_id": "Face ID",
+      "fingerprint": "Fingerprint",
+      "iris": "Iris",
+      "biometric": "Biometric",
+      "fallback_title": "Use PIN",
+      "sign_in_title": "Sign in to Finance Tracker",
+      "status_enabled": "Biometric unlock is enabled",
+      "status_disabled": "Biometric unlock is disabled",
+      "pin_required": "PIN must be set up first",
+      "error_toggle": "Failed to toggle biometric setting"
+    }
   }
 }
