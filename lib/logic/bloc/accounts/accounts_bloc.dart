@@ -1,31 +1,35 @@
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:shmr_hw/config/repositories.dart';
 import 'package:shmr_hw/logic/models/account.dart';
 import 'package:shmr_hw/logic/models/enums.dart';
+import 'package:shmr_hw/logic/repositories/abstract/accounts.dart';
+import 'package:shmr_hw/logic/repositories/drift/accounts.dart';
 
 part 'accounts_event.dart';
 part 'accounts_state.dart';
 part 'accounts_bloc.freezed.dart';
 
 class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
-  AccountsBloc() : super(const AccountsState.initial()) {
+  AccountsBloc({
+    required final AccountsRepository accountsRepository,
+    required final DriftAccountsRepository localAccountsRepository,
+  }) : _accountsRepository = accountsRepository,
+       _localAccountsRepository = localAccountsRepository,
+       super(const AccountsState.initial()) {
     on<LoadAccounts>((final event, final emit) async {
       if (state is InitialAccountsState) {
         emit(const AccountsState.loading());
       }
       try {
-        final localAccounts = await Repositories().localAccountsRepository
-            .fetchAccounts();
+        final localAccounts = await _localAccountsRepository.fetchAccounts();
         if (localAccounts.isNotEmpty) {
           emit(
             AccountsState.notSelected(accounts: localAccounts, fromCache: true),
           );
         }
         try {
-          final accounts = await Repositories().accountsRepository
-              .fetchAccounts();
+          final accounts = await _accountsRepository.fetchAccounts();
 
           final localAccountIds = localAccounts
               .map((final acc) => acc.id)
@@ -36,9 +40,7 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
               .toList();
 
           if (newAccounts.isNotEmpty) {
-            await Repositories().localAccountsRepository.saveAccounts(
-              accounts: newAccounts,
-            );
+            await _localAccountsRepository.saveAccounts(accounts: newAccounts);
           }
           final updatedLocalAccounts = localAccounts.map((final acc) {
             final remoteAccount = accounts.firstWhereOrNull(
@@ -58,7 +60,7 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
             return acc;
           }).toList();
           for (final account in updatedLocalAccounts) {
-            await Repositories().localAccountsRepository.updateAccount(
+            await _localAccountsRepository.updateAccount(
               id: account.id,
               request: AccountRequest(
                 name: account.name,
@@ -130,9 +132,9 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
         emit(currentState.copyWith(syncErrorMessage: null));
       }
     });
-
-    add(const LoadAccounts());
   }
+  final AccountsRepository _accountsRepository;
+  final DriftAccountsRepository _localAccountsRepository;
 
   Future<void> _updateAccount(
     final AccountRequest request,
@@ -141,7 +143,7 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     final currentState = state as SelectedAccountsState;
     emit(currentState.copyWith(isUpdating: true));
 
-    final account = await Repositories().accountsRepository.updateAccount(
+    final account = await _accountsRepository.updateAccount(
       id: currentState.selectedAccount.id,
       request: request,
     );

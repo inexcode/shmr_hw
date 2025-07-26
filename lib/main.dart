@@ -10,6 +10,7 @@ import 'package:shmr_hw/config/preferences/language_notifier.dart';
 import 'package:shmr_hw/config/preferences/preferences_provider.dart';
 import 'package:shmr_hw/config/preferences/shared_preferences_store.dart';
 import 'package:shmr_hw/config/preferences/theme_notifier.dart';
+import 'package:shmr_hw/config/repositories.dart';
 import 'package:shmr_hw/config/security/authentication_service.dart';
 import 'package:shmr_hw/logic/bloc/accounts/accounts_bloc.dart';
 import 'package:shmr_hw/logic/bloc/balance_spoiler/balance_spoiler_bloc.dart';
@@ -120,7 +121,10 @@ class _ThemeAwareApp extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
-    create: (final context) => AccountsBloc(),
+    create: (final context) => AccountsBloc(
+      accountsRepository: Repositories().accountsRepository,
+      localAccountsRepository: Repositories().localAccountsRepository,
+    )..add(const LoadAccounts()),
     child: BlocBuilder<AccountsBloc, AccountsState>(
       builder: (final context, final state) {
         final accountsState = context.watch<AccountsBloc>().state;

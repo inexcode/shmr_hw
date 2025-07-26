@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "82.0.0"
+  alchemist:
+    dependency: "direct dev"
+    description:
+      name: alchemist
+      sha256: "4c5f5146b7539eb9a53211d81489f09f08fc3821f754a370f493477a9ef9e390"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.1"
   analyzer:
     dependency: transitive
     description:
@@ -89,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0-dev.6"
+  bloc_test:
+    dependency: "direct dev"
+    description:
+      name: bloc_test
+      sha256: "1dd549e58be35148bc22a9135962106aa29334bc1e3f285994946a1057b29d7b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -321,6 +337,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.4"
+  diff_match_patch:
+    dependency: transitive
+    description:
+      name: diff_match_patch
+      sha256: "2efc9e6e8f449d0abe15be240e2c2a3bcd977c8d126cfd70598aee60af35c0a4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
   drift:
     dependency: "direct main"
     description:
@@ -789,6 +813,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  mocktail:
+    dependency: "direct dev"
+    description:
+      name: mocktail
+      sha256: "890df3f9688106f25755f26b1c60589a92b3ab91a22b8b224947ad041bf172d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   nested:
     dependency: transitive
     description:
@@ -1372,4 +1404,4 @@ packages:
     version: "3.1.3"
 sdks:
   dart: ">=3.8.1 <4.0.0"
-  flutter: ">=3.31.0-0.0.pre"
+  flutter: ">=3.32.0"
